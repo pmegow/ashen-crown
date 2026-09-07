@@ -1379,6 +1379,19 @@ function runEngineTests(R){
     if(cleanTxt("Quiet. [COMPANION_SKILL_SUCCESS:Daeris|Stealth] Done.").indexOf("COMPANION_SKILL")!==-1)return "the tag must be stripped from prose";
     if(TAG_STRIP_NAMES.indexOf("COMPANION_SKILL_SUCCESS")<0)return "strip registry";
   });
+  t("#358 the hero's backstory rides PARTY HISTORIES every turn: present with no companions, first when companions follow, absent when blank; in the stable half, never the volatile",function(){
+    makeWorld();worldState.npcs=[];worldState.character.backstory="Orphaned into a graveyard; the dead raised him.";
+    var sp=buildSysPrompt(),i=sp.stable.indexOf("PARTY HISTORIES");if(i<0)return "no block for a solo hero with a past";
+    var blk=sp.stable.slice(i,sp.stable.indexOf("\n\n",i));
+    if(blk.indexOf("- "+worldState.character.name+" (the player): Orphaned into a graveyard")<0)return "hero line: "+blk;
+    if(sp.volatile.indexOf("Orphaned into a graveyard")>=0)return "the backstory must not also ride the volatile half";
+    worldState.npcs.push({name:"Daeris",status:"alive",rel:"companion",partyMember:true,met:1,charSheet:{name:"Daeris",cls:"Cleric",level:3,hp:20,maxHp:20,stats:{STR:9,DEX:12,CON:13,INT:14,WIS:17,CHA:12},backstory:"A temple foundling.",skills:initSkills(),abilities:[],spells:[],inventory:[],conditions:[],relationships:[]}});
+    sp=buildSysPrompt();i=sp.stable.indexOf("PARTY HISTORIES");blk=sp.stable.slice(i,sp.stable.indexOf("\n\n",i));
+    var h=blk.indexOf("(the player)"),d=blk.indexOf("- Daeris: A temple foundling.");if(h<0||d<0||h>d)return "the player must come first: "+blk;
+    worldState.character.backstory="";sp=buildSysPrompt();i=sp.stable.indexOf("PARTY HISTORIES");blk=sp.stable.slice(i,sp.stable.indexOf("\n\n",i));
+    if(blk.indexOf("(the player)")>=0)return "a blank hero backstory adds no line";
+    worldState.npcs=[];if(buildPartyHistoriesBlock()!=="")return "no past anywhere → no block";
+  });
   t("#348 curve change keeps every character at their level: a Lv17 with 131,190 XP (Ammut at t2419) loads as Lv17 with XP floored to the new gate, companions likewise; nobody de-levels and nobody levels up on load",function(){
     makeWorld();var c=worldState.character;c.level=17;c.xp=131190;
     worldState.npcs.push({name:"Daeris",partyMember:true,status:"steady",charSheet:{name:"Daeris",cls:"Cleric",level:16,xp:114240,hp:60,maxHp:60,stats:{},abilities:[],spells:[],inventory:[]}});

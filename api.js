@@ -585,14 +585,18 @@ function buildMarketNote(){
 // here may read HP, location, splitLoc or the turn. ""-clean when no living companion carries any of
 // the four fields, so legacy saves and companion-less campaigns stay byte-identical.
 function buildPartyHistoriesBlock(){
-  if(!worldState||!worldState.npcs||!worldState.npcs.length)return"";
-  var party=livingPartyCompanions(),L=[],i;
+  if(!worldState)return"";
+  var party=(worldState.npcs&&worldState.npcs.length)?livingPartyCompanions():[],L=[],i;
+  /* #358: the HERO's backstory rides here too — it used to reach the GM once, at turn zero (the opening
+     and the skeleton), while every companion got theirs every turn (#341); a library update to the hero's
+     past changed nothing the GM could see. Trait/flaw/motivation stay on the identity line (volatile). */
+  var hero=worldState.character||{};if(hero.backstory)L.push("- "+hero.name+" (the player): "+hero.backstory);
   for(i=0;i<party.length;i++){var cs=party[i].charSheet||{};
     if(!(cs.backstory||cs.trait||cs.flaw||cs.motivation))continue;
     var pers="";if(cs.trait)pers+=" trait — "+cs.trait+";";if(cs.flaw)pers+=" flaw — "+cs.flaw+";";if(cs.motivation)pers+=" motivation — "+cs.motivation+";";
     L.push("- "+party[i].name+": "+(cs.backstory||"(no recorded history)")+(pers?"\n  Personality:"+pers:""));}
   if(!L.length)return"";
-  return "PARTY HISTORIES — who each companion was before this story and what drives them (authored canon; a companion's own wants, remarks and refusals grow from THIS, never from invention):\n"+L.join("\n")+"\n\n";
+  return "PARTY HISTORIES — who each of the party was before this story and what drives them (authored canon — the player first, then each companion; a character's own wants, remarks and refusals grow from THIS, never from invention):\n"+L.join("\n")+"\n\n";
 }
 // ── #330 companions with agendas — the four asks ───────────────────────────────────────────
 // ① the recruitment ask is RETIRED (owner ruling 2026-09-05, #347): it fired once for every companion who
