@@ -3083,10 +3083,11 @@ function restSpells(fromTag){
   // site for both rest paths: the topbar Rest button calls here directly, and the GM's
   // [REST:long] tag handler calls restSpells() — so neither path can double-roll. The same
   // response's [TIME_ADVANCE:] tags are absorbed by the tag handler (the 28h-sleep guard).
+  var _sleepMode=(typeof clockSleepMode==="function")?clockSleepMode():"dawn";/* #346: read BEFORE the roll — daylight rests sleep eight hours, evening rests roll to dawn */
   var _slept=(typeof clockSleepRoll==="function")?clockSleepRoll():0;
   if(typeof updateSpPanel==="function")updateSpPanel();/* typeof: the headless engine harness has no panels */
   saveCore();
-  if(typeof showToast==="function")showToast((_slept?("Rested until dawn — "+clockFmt()+". Healed, mana restored."):"Healed, mana restored.")+(_landed?" "+_landed+" level"+(_landed>1?"s":"")+" claimed.":""));
+  if(typeof showToast==="function")showToast((_slept?((_sleepMode==="fixed"?"Rested eight hours — ":"Rested until dawn — ")+clockFmt()+". Healed, mana restored."):"Healed, mana restored.")+(_landed?" "+_landed+" level"+(_landed>1?"s":"")+" claimed.":""));
   if(!fromTag&&typeof takeCheckpoint==="function")takeCheckpoint("rest");/* #300: the button path takes the camp now; the tag path queued it for commit */
   return _slept;
 }

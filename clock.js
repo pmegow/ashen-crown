@@ -179,15 +179,29 @@ function parseStrictFutureDuration(str){
 }
 
 // #89: an overnight sleep — roll forward to the next Day boundary, which IS dawn (see header).
-// Returns the minutes added (1..1440): bedding down 10 minutes before dawn sleeps 10 minutes
-// ("the rest of the night"); sleeping AT dawn exactly sleeps a full day to the next dawn
-// (1440-0=1440 — the boundary case falls out of the formula, no special case). Monotonic by
-// construction (the roll is always ≥1). ONE call site per rest path: restSpells() owns it, so
-// the Rest button and the GM's [REST:long] tag (whose handler calls restSpells) can never
-// double-roll.
+// Returns the minutes added (1..1440): in the evening window, bedding down 10 minutes before dawn
+// sleeps 10 minutes ("the rest of the night"); in daylight the roll is a flat eight hours (#346 —
+// sleeping AT dawn used to sleep a whole day; it now wakes at 2 pm). Monotonic by construction
+// (the roll is always ≥1). ONE call site per rest path: restSpells() owns it, so the Rest button
+// and the GM's [REST:long] tag (whose handler calls restSpells) can never double-roll.
+// #346 (owner ruling 2026-09-05, evening-anchored): WHEN the rest begins decides how long it lasts. A rest
+// that begins in the evening window (18:00 through 03:59 clock time) keeps the #89 roll to the next dawn;
+// one that begins in daylight (04:00 through 17:59) sleeps a fixed eight hours instead (6:37 am → 2:37 pm) —
+// the t37 case, where a dawn nap rolled a whole day away. clockSleepMode() decides, clockSleepRoll() applies;
+// both read the same instant, so the toast and the mut can name the mode before the roll.
+var SLEEP_FIXED_MIN=8*MIN_PER_HOUR,SLEEP_EVENING_FROM=18,SLEEP_EVENING_TO=4;
+function clockSleepMode(){
+  var c=clockEnsure();if(!c)return "dawn";
+  /* #142's sanctioned door: when a reconcile skip is armed (the GM declared a later time of day the engine
+     refused to jump to, and the heal note demanded a [REST:long]), the rest exists to REACH that dawn — so it
+     rolls to dawn whatever the hour. Without this a 3:15 pm heal would wake at 11:15 pm still mislabelled. */
+  if(typeof worldState!=="undefined"&&worldState&&worldState.reconcileSkip)return "dawn";
+  var h=(((c.min%MIN_PER_DAY)/MIN_PER_HOUR)+DAWN_HOUR)%24;/* clock hour of day, fractional — DAWN_HOUR (helpers.js) is the #89 zero */
+  return (h>=SLEEP_EVENING_FROM||h<SLEEP_EVENING_TO)?"dawn":"fixed";
+}
 function clockSleepRoll(){
   var c=clockEnsure();if(!c)return 0;
-  var r=MIN_PER_DAY-(c.min%MIN_PER_DAY);
+  var r=(clockSleepMode()==="dawn")?MIN_PER_DAY-(c.min%MIN_PER_DAY):SLEEP_FIXED_MIN;
   c.min+=r;
   return r;
 }

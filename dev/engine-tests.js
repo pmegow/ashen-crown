@@ -4998,7 +4998,7 @@ function runEngineTests(R){
   });
   t("commitGmTurn measures the REAL clock delta, so a [REST:long] dawn roll is counted too",function(){
     makeWorld();
-    worldState.clock={min:100,schedule:[]};
+    worldState.clock={min:800,schedule:[]};/* #346: 7:20 pm — the evening window, where the rest rolls to dawn */
     var pre=clockNow();
     applyMuts("You bed down. [TIME_ADVANCE:45m]");
     var delta=clockNow()-pre;
@@ -13288,14 +13288,14 @@ function runEngineTests(R){
   // (dropping it, passing 0) can no longer leave the battery green.
   t("#105b WIRING: the real turn path stamps .ta from the measured clock delta (dawn roll included)",function(){
     makeWorld();
-    worldState.clock={min:100,schedule:[]};
+    worldState.clock={min:800,schedule:[]};/* #346: 7:20 pm — evening, so the rest rolls to dawn */
     commitGmTurn("You search the wreck. [TIME_ADVANCE:45m]",{userMsg:"u",playerTxt:"p"});
     var en=worldState.transcript[worldState.transcript.length-1];
     if(en.ta!==45)return ".ta after TIME_ADVANCE: "+en.ta+" (want 45)";
-    if(en.ck!==145)return ".ck after TIME_ADVANCE: "+en.ck+" (want 145)";
+    if(en.ck!==845)return ".ck after TIME_ADVANCE: "+en.ck+" (want 845)";
     commitGmTurn("You sleep until morning. [REST:long]",{userMsg:"u2",playerTxt:"p2"});
     var en2=worldState.transcript[worldState.transcript.length-1];
-    return en2.ta===(1440-145)?true:".ta after the REST dawn roll: "+en2.ta+" (want "+(1440-145)+")";
+    return en2.ta===(1440-845)?true:".ta after the REST dawn roll: "+en2.ta+" (want "+(1440-845)+")";
   });
 
   t("#168 bookkeeping WIRING: a pure-tag turn persists a typed clock receipt but creates no story, voice, or action UI",function(){
@@ -15064,18 +15064,43 @@ t("genderLabel: F→Female, NB→Non-binary, else Male (incl. unset)",function()
     return clockNow()===150?true:"expected 150m, got "+clockNow();
   });
   // ── #89 (v1.433): sleep rolls to the start of the next Day — and the Day boundary IS dawn ──
-  t("#89: clockSleepRoll rolls to the next Day boundary; AT the boundary sleeps a full day", function(){
-    makeWorld(); clockAdvance(400);                        // mid-Day-0
-    if(clockSleepRoll()!==1040)return "roll from 400 should add 1040";
+  t("#89/#346: an EVENING rest rolls to the next Day boundary; a DAYLIGHT rest (dawn included) sleeps a fixed eight hours", function(){
+    makeWorld(); clockAdvance(800);                        // 7:20 pm, Day 0 — the evening window
+    if(clockSleepRoll()!==640)return "roll from 800 (7:20 pm) should add 640 to dawn";
     if(clockNow()!==1440)return "should land exactly on the Day 1 boundary: "+clockNow();
-    if(clockSleepRoll()!==1440)return "sleeping AT dawn should sleep a full day (the boundary case)";
-    if(clockNow()!==2880)return "second roll should land on Day 2: "+clockNow();
-    makeWorld();                                           // fresh campaign, min=0
-    if(clockSleepRoll()!==1440||clockNow()!==1440)return "sleep at campaign start (min=0 IS dawn) should roll a full day";
+    if(clockSleepRoll()!==480)return "sleeping AT dawn now sleeps eight hours (#346 — it used to sleep a whole day)";
+    if(clockNow()!==1920)return "the dawn nap should wake at 2 pm Day 1 (1920): "+clockNow();
+    makeWorld();                                           // fresh campaign, min=0 IS dawn
+    if(clockSleepRoll()!==480||clockNow()!==480)return "sleep at campaign start (dawn) sleeps eight hours, not a day";
+    return true;
+  });
+  t("#346 the t37 case and the window boundaries: D2 6:37 am → D2 2:37 pm; 5:59 pm → eight hours; 6:00 pm → dawn; 3:59 am → dawn; 4:00 am → eight hours; the REST tag's mut names the mode; absorption still holds in daylight", function(){
+    makeWorld(); clockEnsure(); worldState.clock.min=MIN_PER_DAY+37;      // Day 2 (index 1), 6:37 am
+    if(clockSleepMode()!=="fixed")return "6:37 am is daylight";
+    var r=clockSleepRoll(),p=clockParts(clockNow());if(r!==480||p.d!==1||p.h!==8||p.m!==37)return "6:37 am rest must wake 2:37 pm the same day (8h37 after dawn): "+JSON.stringify(p)+" r="+r;
+    makeWorld(); clockEnsure(); worldState.clock.min=719;                 // 5:59 pm
+    if(clockSleepMode()!=="fixed"||clockSleepRoll()!==480)return "5:59 pm is still daylight → eight hours";
+    makeWorld(); clockEnsure(); worldState.clock.min=720;                 // 6:00 pm — the evening window opens
+    if(clockSleepMode()!=="dawn"||clockSleepRoll()!==720)return "6:00 pm rolls to dawn";
+    makeWorld(); clockEnsure(); worldState.clock.min=1319;                // 3:59 am
+    if(clockSleepMode()!=="dawn"||clockSleepRoll()!==121)return "3:59 am rolls the rest of the night";
+    makeWorld(); clockEnsure(); worldState.clock.min=1320;                // 4:00 am — the window closes
+    if(clockSleepMode()!=="fixed"||clockSleepRoll()!==480)return "4:00 am sleeps eight hours";
+    makeWorld(); clockAdvance(400);                        // 12:40 pm
+    var R=applyMuts("You doze in the shade. [REST:long]");var m=(R&&R.muts?R.muts:[]).join(" | ");
+    if(clockNow()!==880||m.indexOf("slept eight hours")<0)return "daylight REST must sleep eight hours and say so: "+clockNow()+" / "+m;
+    makeWorld(); clockAdvance(800);
+    R=applyMuts("You make camp. [REST:long]");m=(R&&R.muts?R.muts:[]).join(" | ");
+    if(clockNow()!==1440||m.indexOf("slept until dawn")<0)return "evening REST must still roll to dawn and say so: "+clockNow()+" / "+m;
+    makeWorld(); clockAdvance(400);
+    R=applyMuts("You sleep. [TIME_ADVANCE:8h] [REST:long]");
+    if(clockNow()!==880)return "the 28h-sleep guard must absorb TIME_ADVANCE in daylight too: "+clockNow();
+    makeWorld(); clockAdvance(400); worldState.reconcileSkip={label:"dawn",turn:1};/* #142's door: a demanded heal rest reaches dawn even in daylight */
+    if(clockSleepMode()!=="dawn")return "an armed reconcile skip must make the rest roll to dawn";
     return true;
   });
   t("#89: [REST:long] via applyMuts rolls to dawn, restores spells, and says so in muts", function(){
-    makeWorld(); clockAdvance(400);
+    makeWorld(); clockAdvance(800);                        // #346: an evening rest — the dawn-roll contract
     worldState.character.spells[0].used=true;              // Tess's Faerie Fire, expended
     var R=applyMuts("You make camp for the night. [REST:long]");
     if(clockNow()!==1440)return "clock should land on the Day 1 boundary, got "+clockNow();
@@ -15084,7 +15109,7 @@ t("genderLabel: F→Female, NB→Non-binary, else Male (incl. unset)",function()
     return m.indexOf("slept until dawn")>=0?true:"muts silent about the dawn roll: "+m;
   });
   t("#89: [TIME_ADVANCE:] in the SAME response as [REST:long] is ABSORBED (the 28h-sleep guard)", function(){
-    makeWorld(); clockAdvance(400);
+    makeWorld(); clockAdvance(800);                        // #346: evening — the dawn case; the daylight case is pinned in the #346 test
     var R=applyMuts("You sleep. [TIME_ADVANCE:8h] [REST:long]");
     if(clockNow()!==1440)return "expected exactly the dawn boundary (1440) — an 8h add before the roll overshoots to the NEXT dawn: "+clockNow();
     var m=(R&&R.muts?R.muts:[]).join(" | ");
@@ -15093,10 +15118,10 @@ t("genderLabel: F→Female, NB→Non-binary, else Male (incl. unset)",function()
   t("#89: a rest that jumps past a scheduled deadline still fires it (C3 composition)", function(){
     makeWorld(); clockAdvance(400);
     scheduleAdd("Ambush at midnight","2h");                // due at 520
-    applyMuts("Camp. [REST:long]");                        // rolls to 1440, straight past 520
+    applyMuts("Camp. [REST:long]");                        // #346: a 12:40 pm rest sleeps eight hours → 880, straight past 520
     var due=scheduleDue();
     if(due.length!==1||due[0].label!=="Ambush at midnight")return "slept-past event did not fire";
-    return due[0].elapsed===920?true:"elapsed wrong: "+due[0].elapsed;
+    return due[0].elapsed===360?true:"elapsed wrong: "+due[0].elapsed;
   });
   t("#89 review verdict: a malformed giant TIME_ADVANCE clamps LOUDLY at 30 days", function(){
     makeWorld();
@@ -15112,8 +15137,8 @@ t("genderLabel: F→Female, NB→Non-binary, else Male (incl. unset)",function()
     makeWorld(); clockAdvance(400);
     worldState.character.spells=null;                      // a Warrior — the old early-return bug
     var slept=restSpells();
-    if(slept!==1040)return "roll not returned: "+slept;
-    return clockNow()===1440?true:"spell-less rest did not move the clock: "+clockNow();
+    if(slept!==480)return "roll not returned: "+slept;/* #346: a 12:40 pm rest sleeps eight hours */
+    return clockNow()===880?true:"spell-less rest did not move the clock: "+clockNow();
   });
   t("tags: [SCHEDULE:]/[SCHEDULE_RESOLVED:] round-trip through applyMuts", function(){
     makeWorld(); clockAdvance(100);
