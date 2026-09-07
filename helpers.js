@@ -757,6 +757,11 @@ function manaSpellCost(sp){
   if(e&&typeof e.tier==="number"&&isFinite(e.tier))return e.tier;
   return (typeof sp.lvl==="number"&&isFinite(sp.lvl)&&sp.lvl>0)?sp.lvl:0;
 }
+/* #361: THE one used-spell gate. Since #110 `used` means "cast since rest" for every spell, but only a
+   RACIAL 1/day spell is actually unavailable while used — everything else pays mana and stays castable.
+   Every surface that asks "can this spell be cast right now?" reads this, never `used` alone (the character
+   preview and Table Talk were still reading the slot-era meaning). */
+function spellUnavailable(sp){return !!(sp&&sp.racial&&sp.used);}
 function manaMax(c){
   if(!c||!c.spells||!c.spells.length)return 0;
   var base=0,i;

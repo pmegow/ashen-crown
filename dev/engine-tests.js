@@ -1409,6 +1409,12 @@ function runEngineTests(R){
     applyMuts("[GOLD:-1.5]");if(worldState.character.gold!==24)return "the integer prefix still applies: "+worldState.character.gold;
     applyMuts("[GOLD:+3 gp]");if(worldState.character.gold!==27)return "positive control";
   });
+  t("#361 one used-spell gate: only a used RACIAL 1/day spell is unavailable; the character preview, Table Talk and the default rule all read it (the slot-era consumers are gone)",function(){
+    if(spellUnavailable({nm:"Fire Bolt",used:true})||spellUnavailable({nm:"Faerie Fire",racial:true,used:false})||!spellUnavailable({nm:"Faerie Fire",racial:true,used:true})||spellUnavailable(null))return "gate";
+    var ub=__fsForTests.readFileSync(__rootForTests+"/ui-browsers.js","utf8");if(ub.indexOf("filter(function(s){return!spellUnavailable(s);})")<0||ub.indexOf("filter(function(s){return!s.used;})")>=0)return "the preview must read the gate, not `used`";
+    var tt=__fsForTests.readFileSync(__rootForTests+"/table-talk.js","utf8");if(tt.indexOf("spellUnavailable(c.spells[i])")<0||/c\.spells\[i\]\.used\?" \(used\)"/.test(tt))return "Table Talk must read the gate";
+    var rule=DEFAULT_RULES.join("\n");if(/SPELLS AVAILABLE list|expended slots/.test(rule)||!/RACIAL 1\/day spell marked used CANNOT be cast again before a long rest/.test(rule)||!/Every other spell costs mana/.test(rule))return "slot-era wording survives in the default rules";
+  });
   t("#348 curve change keeps every character at their level: a Lv17 with 131,190 XP (Ammut at t2419) loads as Lv17 with XP floored to the new gate, companions likewise; nobody de-levels and nobody levels up on load",function(){
     makeWorld();var c=worldState.character;c.level=17;c.xp=131190;
     worldState.npcs.push({name:"Daeris",partyMember:true,status:"steady",charSheet:{name:"Daeris",cls:"Cleric",level:16,xp:114240,hp:60,maxHp:60,stats:{},abilities:[],spells:[],inventory:[]}});

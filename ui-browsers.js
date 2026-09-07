@@ -383,7 +383,7 @@ function showCharImportPreview(char, onAccept, onCancel){
     return "<div style='text-align:center;'><div style='font-size:10px;color:var(--t2);'>"+s+"</div><div style='font-size:14px;color:var(--t0);font-weight:bold;'>"+(stats[s]||"—")+"</div></div>";
   }).join("");
   var abilities=(char.abilities||[]).slice(0,4).map(function(a){return "<div style='font-size:11px;color:var(--t1);margin-bottom:3px;'><span style='color:var(--acc);'>"+escHtml(a.nm)+"</span> — "+escHtml(a.ds)+"</div>";}).join("");
-  var spells=(char.spells||[]).filter(function(s){return!s.used;}).slice(0,6).map(function(s){return escHtml(s.nm);}).join(", ");
+  var spells=(char.spells||[]).filter(function(s){return!spellUnavailable(s);}).slice(0,6).map(function(s){return escHtml(s.nm);}).join(", ");/* #361: only a used RACIAL 1/day spell is unavailable (slot-era filter hid every cast spell) */
   var inv=escHtml((char.inventory||[]).join(", ")||"Nothing");
   var langs=(char.languages||[]).map(function(l){return escHtml(l.name)+(l.broken?" (broken)":"");}).join(", ")||"Common";
   /* #14: wireClose:false — × and Cancel share the custom doCancel (fires onCancel) */
