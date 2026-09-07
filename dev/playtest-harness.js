@@ -93,11 +93,18 @@ function __ptChoose(acts, st, prev){
   if(st.deathStage)return {text:"Why did the bell ring twice?",kind:"death-question"};
   if(st.downed)return prevKind==="downed-struggle"?{text:"Yield — let go and trust whoever finds you",kind:"downed-yield"}:{text:"Struggle — fight for consciousness, crawl, cling to life",kind:"downed-struggle"};
   if(!st.combat&&typeof st.hp==="number"&&typeof st.maxHp==="number"&&st.hp<st.maxHp/3&&prevKind!=="rest")return {text:"I make camp and rest until I am recovered.",kind:"rest"};
-  if(st.consumables&&st.consumables.length&&typeof st.hp==="number"&&st.hp<st.maxHp&&prevKind!=="use")return {text:"I use my "+st.consumables[0]+".",kind:"use"};
+  /* #363: one use per item per run, and a [NO_CHANGE:] answer to a use retires that item too — the #226 mature
+     arm burned 10 of 20 turns on "I use my travel rations" because rations never heal and the engine kept the
+     entry, so hp<maxHp stayed true forever. The suppressed branch is reported as `skipped` so the audit sees it. */
+  var used=st.used||{};if(prevKind==="use"&&st.lastNoChange&&prev.item)used[prev.item]=true;
+  var cons=(st.consumables||[]).filter(function(c){return !used[c];});
+  var wantUse=(st.consumables&&st.consumables.length&&typeof st.hp==="number"&&st.hp<st.maxHp&&prevKind!=="use");
+  if(wantUse&&cons.length)return {text:"I use my "+cons[0]+".",kind:"use",item:cons[0]};
+  var skipped=(wantUse&&!cons.length)?"use":null;
   if(st.offered&&st.offered.length&&st.turn>0&&st.turn%8===0&&prevKind!=="accept")return {text:"I accept the offer: "+st.offered[st.offered.length-1]+".",kind:"accept"};
   var pool=acts.filter(function(a){return a&&a!==prevText;});
-  if(!pool.length)return {text:acts[0]||"I take stock of my surroundings and press on.",kind:"random"};
-  return {text:pool[Math.floor(Math.random()*pool.length)],kind:"random"};
+  if(!pool.length)return {text:acts[0]||"I take stock of my surroundings and press on.",kind:"random",skipped:skipped};
+  return {text:pool[Math.floor(Math.random()*pool.length)],kind:"random",skipped:skipped};
 }
 if(typeof module!=="undefined"&&module.exports)module.exports={choose:__ptChoose};
 if(typeof window!=="undefined")(function(){
@@ -122,12 +129,13 @@ if(typeof window!=="undefined")(function(){
   }
   function sleep(ms){return new Promise(function(r){setTimeout(r,ms);});}
   // #306: the state digest the scripted layer reads, and the previous pick (kind + text).
-  window.__ptChoose=__ptChoose;window.__ptPrev={text:"",kind:""};
+  window.__ptChoose=__ptChoose;window.__ptPrev={text:"",kind:""};window.__ptUsed={};/* #363: items used this run */
   function ptState(){var w=(typeof worldState!=="undefined")?worldState:null;if(!w||!w.character)return {};var c=w.character,cons=[],i;
     if(typeof itemLookup==="function")for(i=0;i<(c.inventory||[]).length;i++){var e=itemLookup(c.inventory[i]);if(e&&e.category==="consumable"&&e.effect&&e.effect!=="N/A")cons.push((typeof _invBase==="function")?_invBase(c.inventory[i]):c.inventory[i]);}
     var off=[];for(i=0;i<(w.questLog||[]).length;i++)if(w.questLog[i]&&w.questLog[i].status==="offered")off.push(w.questLog[i].title);
-    return {hp:c.hp,maxHp:c.maxHp,combat:!!w.combat,downed:!!w.downed,deathStage:(w.deathScene&&w.deathScene.stage)||null,consumables:cons,offered:off,turn:w.turn||0};}
-  function ptPick(acts){var ch=__ptChoose(acts,ptState(),window.__ptPrev);window.__ptPrev=ch;var t=ch.text;if(ch.kind==="random"&&typeof toFirstPerson==="function")t=toFirstPerson(t);return {text:t,kind:ch.kind};}
+    var lastRaw=window.__pt.raw.length?String(window.__pt.raw[window.__pt.raw.length-1].raw||""):"";
+    return {hp:c.hp,maxHp:c.maxHp,combat:!!w.combat,downed:!!w.downed,deathStage:(w.deathScene&&w.deathScene.stage)||null,consumables:cons,offered:off,turn:w.turn||0,used:window.__ptUsed,lastNoChange:lastRaw.indexOf("[NO_CHANGE")>=0};}/* #363 */
+  function ptPick(acts){var ch=__ptChoose(acts,ptState(),window.__ptPrev);window.__ptPrev=ch;if(ch.kind==="use"&&ch.item)window.__ptUsed[ch.item]=true;/* #363 */var t=ch.text;if(ch.kind==="random"&&typeof toFirstPerson==="function")t=toFirstPerson(t);return {text:t,kind:ch.kind,skipped:ch.skipped||null};}
   function isBusy(){return typeof busy!=="undefined" && busy;}
   async function waitIdle(maxMs){var start=Date.now();while(isBusy() && Date.now()-start<maxMs) await sleep(300);}
   async function waitForActions(maxMs){
@@ -157,7 +165,7 @@ if(typeof window!=="undefined")(function(){
         await waitIdle(90000);
         if(worldState.turn > before){
           var narEls = document.querySelectorAll('#story-narrative .msg.narrator');
-          window.__pt.log.push({ turn: worldState.turn, action: actionText, kind: _pick.kind, narration: narEls.length?narEls[narEls.length-1].textContent:'', hp: worldState.character.hp, maxHp: worldState.character.maxHp, gold: worldState.character.gold, xp: worldState.character.xp, combat: worldState.combat?{engaged:worldState.combat.engaged||null,foes:(worldState.combat.foes||[]).map(function(f){return {name:f.name,hp:f.hp,down:f.down||null};})}:null, sessionTokensApprox:(typeof sessionTokens==='function')?sessionTokens():null, t:Date.now() });
+          window.__pt.log.push({ turn: worldState.turn, action: actionText, kind: _pick.kind, skipped: _pick.skipped||null,/* #363 */ narration: narEls.length?narEls[narEls.length-1].textContent:'', hp: worldState.character.hp, maxHp: worldState.character.maxHp, gold: worldState.character.gold, xp: worldState.character.xp, combat: worldState.combat?{engaged:worldState.combat.engaged||null,foes:(worldState.combat.foes||[]).map(function(f){return {name:f.name,hp:f.hp,down:f.down||null};})}:null, sessionTokensApprox:(typeof sessionTokens==='function')?sessionTokens():null, t:Date.now() });
           persist();
         } else {
           window.__pt.errors.push({turn: worldState.turn, message: 'turn did not advance — backing off'});
