@@ -1,0 +1,490 @@
+{
+ "meta": {
+  "model": "claude-sonnet-5",
+  "usageCostCumulative": 208.3200450500003,
+  "registerSlips": [
+   {
+    "turn": 2102,
+    "word": "ledger"
+   }
+  ],
+  "noteLog": [
+   {
+    "t": 2097,
+    "n": [
+     "buildWhispersNote"
+    ],
+    "c": 2324,
+    "d": [
+     {
+      "n": "buildMarketNote",
+      "reason": "characters",
+      "c": 449
+     }
+    ]
+   },
+   {
+    "t": 2098,
+    "n": [
+     "buildMarketNote"
+    ],
+    "c": 1290,
+    "d": []
+   },
+   {
+    "t": 2100,
+    "n": [
+     "buildConsumableNudge"
+    ],
+    "c": 1479,
+    "d": []
+   },
+   {
+    "t": 2101,
+    "n": [
+     "buildConsumableNudge"
+    ],
+    "c": 1482,
+    "d": []
+   },
+   {
+    "t": 2102,
+    "n": [
+     "buildRegisterNote"
+    ],
+    "c": 1183,
+    "d": []
+   },
+   {
+    "t": 2104,
+    "n": [
+     "buildLocationFilingNudge"
+    ],
+    "c": 1266,
+    "d": []
+   },
+   {
+    "t": 2106,
+    "n": [
+     "buildPresenceAudit",
+     "buildMoodAudit"
+    ],
+    "c": 2137,
+    "d": [
+     {
+      "n": "buildSceneCastNote",
+      "reason": "characters",
+      "c": 496
+     }
+    ]
+   },
+   {
+    "t": 2107,
+    "n": [
+     "buildSceneCastNote"
+    ],
+    "c": 1337,
+    "d": []
+   },
+   {
+    "t": 2109,
+    "n": [
+     "buildFutureResolveNudge"
+    ],
+    "c": 1513,
+    "d": []
+   },
+   {
+    "t": 2111,
+    "n": [
+     "buildRelationshipAudit"
+    ],
+    "c": 2651,
+    "d": [],
+    "overBudget": true
+   },
+   {
+    "t": 2112,
+    "n": [
+     "buildWhispersNote"
+    ],
+    "c": 2395,
+    "d": []
+   },
+   {
+    "t": 2113,
+    "n": [
+     "buildUndefinedItemNudge"
+    ],
+    "c": 1491,
+    "d": []
+   },
+   {
+    "t": 2114,
+    "n": [
+     "buildQuestEscalation"
+    ],
+    "c": 1272,
+    "d": []
+   },
+   {
+    "t": 2115,
+    "n": [
+     "buildConsumableNudge"
+    ],
+    "c": 1479,
+    "d": []
+   }
+  ],
+  "ver": "v1.847",
+  "fixture": "testRuns/fixtures/todo-226-mature-t2097.tnd",
+  "startTurn": 2097,
+  "endTurn": 2117,
+  "fixtureUsageCumulative": 206.36162385000026
+ },
+ "log": [
+  {
+   "turn": 2098,
+   "action": "I use my travel rations (2 days).",
+   "kind": "use",
+   "narration": "Turn 2098 | Day 20, 1:31 amYou tear into the dried meat and hard bread, chewing without much ceremony, the forge heat drying the sweat on your neck as fast as the work raises it. Wyla pauses at her anvil long enough to jerk her chin toward the shuttered window, where the boy who watches her street for coin has slipped a folded scrap through the gap.\"Word's already crawling through the Shore District. Half of it's wrong, course. Say some hedge-wizard cracked my floor open himself trying to steal my secrets, and some sellsword held the mob off with a glowing blade while I worked. Nobody's got the sense to say 'demon' when 'demon' is exactly what it was.\"She spits into the coals and goes back to her tongs, unbothered, the fourth bracelet glowing gold and stubborn in the grip of her hammer.🔊Ask Wyla who's spreading the story.Keep working the bellows.Check the shuttered window yourself.Use your travel rations (2 days).",
+   "hp": 76,
+   "maxHp": 96,
+   "gold": 9634,
+   "xp": 106720,
+   "combat": null,
+   "sessionTokensApprox": 875,
+   "t": 1788821073913
+  },
+  {
+   "turn": 2099,
+   "action": "Ask Wyla who's spreading the story.",
+   "kind": "random",
+   "narration": "Turn 2099 | Day 20, 1:41 amYou wipe the crumbs from your mouth and ask her plain. Wyla doesn't even look up from the anvil, hammer falling in that same unbroken rhythm.\"Dockhands, mostly. Fish-gutters who heard it from a fish-gutter who heard it from somebody's cousin. That's how it always goes here, truth walks in one door and comes out six mouths later wearing somebody else's coat. My boy heard three versions before breakfast. Don't matter who started it. Matters that nobody's said 'Wyla Ashvane's shop, go rob it' yet, and that's the only rumor I care about.\"She holds the fourth bracelet up to the firelight, turning it, watching the rune catch the glow and hold it like a coal.\"This one's near enough finished I could weep. Sing that last verse again, whatever tongue it's in. It's working.\"🔊Sing the closing verse.Keep pumping the bellows.Ask how much longer until dawn.Use your travel rations (2 days).",
+   "hp": 76,
+   "maxHp": 96,
+   "gold": 9634,
+   "xp": 106720,
+   "combat": null,
+   "sessionTokensApprox": 1496,
+   "t": 1788821081725
+  },
+  {
+   "turn": 2100,
+   "action": "I use my travel rations (2 days).",
+   "kind": "use",
+   "narration": "Turn 2100 | Day 20, 1:41 amThe engine flags nothing to charge, no matching item, no wares to touch. You reach for the rations anyway from habit, then remember the pouch is already empty, the last of it gone into your belly not an hour past. There's nothing left to eat but the forge-heat and the work ahead of you.Wyla's hammer doesn't pause for your hunger. The fourth bracelet glows sullen gold on the anvil, close enough to finished that she's stopped blinking, sweat dripping off her chin in fat drops that hiss against hot stone.\"Bellows, Ammut. Food can wait. This can't.\"🔊Return to the bellows.Ask Frizwick to spell you.Check on Daeris's ward.Use your travel rations (2 days).",
+   "hp": 76,
+   "maxHp": 96,
+   "gold": 9634,
+   "xp": 106720,
+   "combat": null,
+   "sessionTokensApprox": 1681,
+   "t": 1788821087343
+  },
+  {
+   "turn": 2101,
+   "action": "Return to the bellows.",
+   "kind": "random",
+   "narration": "Turn 2101 | Day 20, 2:11 amYou set your shoulder back into the bellows and drive them hard, the leather throat of the thing groaning as it drinks air and breathes it back out in a gout of white heat. Sparks spiral up past your face like a swarm of dying stars, and the fourth bracelet answers, its gold deepening to something fierce and molten under Wyla's tongs. Your arms have long since passed aching and gone numb, but the rhythm carries you, that same wordless fey tune rising unbidden from your throat again, and Daeris's ward flares warm at your back like a hand pressed there to steady you.\"Hold it a little longer. I can feel it wanting to slip, just at the edges. Not tonight. Not this close.\"The metal screams faintly as Wyla plunges it into the quenching bath, and steam engulfs her in a shroud that glows faintly gold before fading to grey.🔊Ask if the bracelet is finished.Keep the bellows going.Watch the shuttered window with Morwen.Use your travel rations (2 days).",
+   "hp": 76,
+   "maxHp": 96,
+   "gold": 9634,
+   "xp": 106720,
+   "combat": null,
+   "sessionTokensApprox": 2305,
+   "t": 1788821094021
+  },
+  {
+   "turn": 2102,
+   "action": "I use my travel rations (2 days).",
+   "kind": "use",
+   "narration": "Turn 2102 | Day 20, 2:11 amThe engine's own note settles that one; the blasting charge you spent tearing the breach wide open at the shaft, gone in fire and thunder, finally strikes itself from the ledger of things still in your pack.As for rations, there's nothing left. Your belly reminds you of it plainly, a dull ache beneath the heat and smoke, but the pouch at your hip holds only crumbs and lint. Whatever you reach for, it isn't food.🔊Return to the bellows.Ask Frizwick for anything to eat.Push through the hunger and keep working.Use your travel rations (2 days).",
+   "hp": 76,
+   "maxHp": 96,
+   "gold": 9634,
+   "xp": 106720,
+   "combat": null,
+   "sessionTokensApprox": 2835,
+   "t": 1788821097982
+  },
+  {
+   "turn": 2103,
+   "action": "Ask Frizwick for anything to eat.",
+   "kind": "random",
+   "narration": "Turn 2103 | Day 20, 2:21 amYou catch Frizwick's eye over the bellows and jerk your chin toward your own hollow gut. She grins, teeth flashing white through soot, and digs one-handed into her satchel without breaking rhythm at the shutter she guards.\"Last of the hard bread. Don't say I never gave you anything.\"She tosses it underhand and you snatch it from the air, tearing into it standing at the bellows, chewing fast between breaths of forge-wind. It's stale as old bone and tastes faintly of tallow from her kit, but your stomach stops its complaining, and that's enough for now.🔊Return to the bellows.Ask how much longer Wyla needs.Check the shuttered street with Morwen.Use your travel rations (2 days).",
+   "hp": 76,
+   "maxHp": 96,
+   "gold": 9634,
+   "xp": 106720,
+   "combat": null,
+   "sessionTokensApprox": 479,
+   "t": 1788821112396
+  },
+  {
+   "turn": 2104,
+   "action": "I use my travel rations (2 days).",
+   "kind": "use",
+   "narration": "Turn 2104 | Day 20, 2:21 amYou pat the empty pouch at your hip again, more out of exhausted habit than hope. Nothing there but dust and the ghost of meals long since eaten on the road behind you. The bread sits heavy enough in your belly for now, and the forge doesn't care whether you've eaten your fill or not.Wyla's tongs ring against the anvil, sharp and insistent, calling you back before you can dwell on it further.\"Bellows are dying, Ammut. Gold doesn't forgive a cold breath.\"🔊Return to the bellows.Ask Daeris how the ward holds.Steal a look at the finished bracelets.Use your travel rations (2 days).",
+   "hp": 76,
+   "maxHp": 96,
+   "gold": 9634,
+   "xp": 106720,
+   "combat": null,
+   "sessionTokensApprox": 657,
+   "t": 1788821117118
+  },
+  {
+   "turn": 2105,
+   "action": "Use my travel rations (2 days).",
+   "kind": "random",
+   "narration": "Turn 2105 | Day 20, 2:21 amYou've nothing left in the pouch, and the forge holds you same as before, smoke and heat and the ring of hammer on gold. There's no food to find in an empty sack no matter how many times your hand goes looking.The bellows wait, leather throat gone slack without your arm behind it.🔊Return to the bellows.Ask Wyla how close the bracelet is.Watch the shuttered window with Morwen.Use your travel rations (2 days).",
+   "hp": 76,
+   "maxHp": 96,
+   "gold": 9634,
+   "xp": 106720,
+   "combat": null,
+   "sessionTokensApprox": 1103,
+   "t": 1788821120587
+  },
+  {
+   "turn": 2106,
+   "action": "I use my travel rations (2 days).",
+   "kind": "use",
+   "narration": "Turn 2106 | Day 20, 2:21 amYour hand finds the same flat, empty pouch a fourth time. There is no conjuring bread from canvas and dust. Whatever hunger gnaws at you, it will have to wait on Wyla's fire same as everything else tonight.\"You're going to wear a hole in that bag, love. It's empty. I already gave you the last of mine.\"The forge roars on, indifferent to empty stomachs, and the fourth bracelet still glows unfinished on the anvil.🔊Return to the bellows.Push through and keep working.Ask how much longer until dawn.Use your travel rations (2 days).",
+   "hp": 76,
+   "maxHp": 96,
+   "gold": 9634,
+   "xp": 106720,
+   "combat": null,
+   "sessionTokensApprox": 1259,
+   "t": 1788821124875
+  },
+  {
+   "turn": 2107,
+   "action": "Use my travel rations (2 days).",
+   "kind": "random",
+   "narration": "Turn 2107 | Day 20, 2:21 amYou dig into the pouch a fifth time and find only what you found before, nothing. The hunger sits low and dull now, an old companion rather than a fresh complaint, and there's no rooting it out of empty leather. Wyla's forge doesn't care for empty stomachs. It only wants breath and fire.\"That's the fifth time you've gone digging in that bag. Nothing's grown in there since the last four.\"🔊Return to the bellows.Push through the hunger and keep working.Ask how much longer until dawn.Use your travel rations (2 days).",
+   "hp": 76,
+   "maxHp": 96,
+   "gold": 9634,
+   "xp": 106720,
+   "combat": null,
+   "sessionTokensApprox": 1972,
+   "t": 1788821129383
+  },
+  {
+   "turn": 2108,
+   "action": "I use my travel rations (2 days).",
+   "kind": "use",
+   "narration": "Turn 2108 | Day 20, 2:21 amNothing has changed in your pouch since the last time your fingers found the bottom of it. The forge still roars, the fourth bracelet still glows unfinished, and your stomach still has to wait its turn behind Wyla's fire.🔊Return to the bellows.Push through the hunger and keep working.Ask how much longer until dawn.Use your travel rations (2 days).",
+   "hp": 76,
+   "maxHp": 96,
+   "gold": 9634,
+   "xp": 106720,
+   "combat": null,
+   "sessionTokensApprox": 2424,
+   "t": 1788821132561
+  },
+  {
+   "turn": 2109,
+   "action": "Return to the bellows.",
+   "kind": "random",
+   "narration": "Turn 2109 | Day 20, 3:21 amYou throw yourself back into the work, shoulder against leather, driving the bellows in long hard strokes that make the coals scream white. Wyla bends low over the anvil, tongs gripping the fourth bracelet as it drinks the last of its heat, and her hammer falls in a rhythm that has stopped needing thought. Sweat runs down your spine in rivers and your arms shake with a fatigue that has gone past pain into something almost peaceful, a machine's certainty that the work will end because it must.\"There. There, damn you, hold that color.\"The gold steadies under her eye, neither too bright nor too dull, and she plunges it hissing into the quenching bath. Steam rolls up thick and pale, and for the first time all night her shoulders drop from around her ears.\"That's the fourth. That's all of them.\"🔊Ask to see all four bracelets.Thank Wyla and rest.Ask about the journey north.Use your travel rations (2 days).",
+   "hp": 76,
+   "maxHp": 96,
+   "gold": 9634,
+   "xp": 106720,
+   "combat": null,
+   "sessionTokensApprox": 2701,
+   "t": 1788821146535
+  },
+  {
+   "turn": 2110,
+   "action": "I use my travel rations (2 days).",
+   "kind": "use",
+   "narration": "Turn 2110 | Day 20, 3:21 amStill nothing but dust in the pouch. The bracelets are done, cooling now on Wyla's bench in a neat gleaming row, but the road itself hasn't started under your boots yet. Hunger gnaws at you same as before, patient and mean, waiting on food that isn't there.🔊Ask to see all four bracelets.Thank Wyla and rest.Ask about the journey north.Use your travel rations (2 days).",
+   "hp": 76,
+   "maxHp": 96,
+   "gold": 9634,
+   "xp": 106720,
+   "combat": null,
+   "sessionTokensApprox": 502,
+   "t": 1788821157797
+  },
+  {
+   "turn": 2111,
+   "action": "Ask about the journey north.",
+   "kind": "random",
+   "narration": "Turn 2111 | Day 20, 3:36 amYou lean against the cooling forge wall, arms like wet rope, and ask Wyla what she knows of the road beyond her shop door, beyond Magnimar, beyond anything a smith's hammer can fix.\"The Kodars don't forgive mistakes. I've heard men who went up after ore or glory and came back wrong in the head, if they came back holding anything but frostbite.\"She wipes soot from her brow with a wrist already black with it, nodding toward the four bracelets cooling in their neat row.\"Those will keep the cold out of your blood. They won't keep the mountain from wanting you dead. That part's between you and whatever's up there.\"Morwen speaks up from her post at the shuttered window, not turning from the dark street she's watched all night.\"The maps hold beyond the Storval Stairs. After that we go by star and guesswork, same as anyone who's tried this before us. Which is to say, badly.\"Daeris lets her ward finally rest, the frost-lattice over the sealed breach humming low and steady without her voice to feed it, and allows herself a rare thin smile.\"Badly is still further than most manage. We rest. We eat. We go.\"🔊Take the four bracelets and prepare to depart.Find food before anything else.Ask Wyla one last question.Use your travel rations (2 days).",
+   "hp": 76,
+   "maxHp": 96,
+   "gold": 9634,
+   "xp": 106720,
+   "combat": null,
+   "sessionTokensApprox": 875,
+   "t": 1788821167293
+  },
+  {
+   "turn": 2112,
+   "action": "I use my travel rations (2 days).",
+   "kind": "use",
+   "narration": "Turn 2112 | Day 20, 3:36 amThe pouch is still empty. Whatever you're hoping to find in there tonight, it isn't food.🔊Take the four bracelets and prepare to depart.Find food before anything else.Ask Wyla one last question.Use your travel rations (2 days).",
+   "hp": 76,
+   "maxHp": 96,
+   "gold": 9634,
+   "xp": 106720,
+   "combat": null,
+   "sessionTokensApprox": 1615,
+   "t": 1788821169754
+  },
+  {
+   "turn": 2113,
+   "action": "Take the four bracelets and prepare to depart.",
+   "kind": "random",
+   "narration": "Turn 2113 | Day 20, 3:36 amWyla wraps each bracelet in oiled cloth, one by one, and sets them into your palm like a woman handing over her own children. Her hands shake a little, not from the cold.\"Careful with those. Ember-runed, blood-bound, and they cost me more sleep than gold, though gold's what I got, so no complaints.\"She straightens, wipes her hands on her apron, and jerks her chin toward the shuttered door as if she can already hear something laughing out past the Shore District's rooftops.\"Half the dock rats are already telling each other I wrestled a devil bare-handed while some fool sang love songs at a bellows. Let them talk. Long as nobody says my name too loud near the wrong ears.\"You tuck the four bracelets away, cold iron and colder promise, and something in your chest settles into the shape of a decision already made. The mountain is waiting. It has been waiting for ten thousand years. It can wait a little longer while you gather your wives and your steel and walk out to meet it.🔊Say farewell to Wyla and leave the forge.Find food in the Shore District.Rally Frizwick, Daeris, and Morwen to depart.Use your travel rations (2 days).",
+   "hp": 76,
+   "maxHp": 96,
+   "gold": 9634,
+   "xp": 106760,
+   "combat": null,
+   "sessionTokensApprox": 2626,
+   "t": 1788821179628
+  },
+  {
+   "turn": 2114,
+   "action": "I use my travel rations (2 days).",
+   "kind": "use",
+   "narration": "Turn 2114 | Day 20, 3:36 amThe pouch at your hip gives up nothing new. Whatever you're eating tonight, it isn't out of that bag, the rations bled dry somewhere back in the long grinding nights at Wyla's forge. Your stomach growls its old complaint and you ignore it a while longer, the mountain road ahead a better reason to move than to sit and mourn a meal.🔊Find food in the Shore District.Say farewell to Wyla and leave the forge.Rally the others to depart north.Use your travel rations (2 days).",
+   "hp": 76,
+   "maxHp": 96,
+   "gold": 9634,
+   "xp": 106760,
+   "combat": null,
+   "sessionTokensApprox": 591,
+   "t": 1788821196765
+  },
+  {
+   "turn": 2115,
+   "action": "Find food in the Shore District.",
+   "kind": "random",
+   "narration": "Turn 2115 | Day 20, 3:36 amThe Shore District smells of brine and tar and frying fish, gulls screaming over the wharves like they own the sky. You follow your nose down a crooked lane to a stall where a broad-shouldered woman turns skewers of charred mackerel over coals, the smoke curling black against the grey morning.She catches sight of you and her eyebrows climb. Word travels fast on the docks, faster than any horse could carry it.\"You're him, then. The one they say fought the devil at the smith's place, bellows-boy turned demon-slayer.\" She flips a skewer, grinning gap-toothed. \"Six coppers a stick. Extra for the story, if it's a good one.\"You dig into your purse and she loads your hands with hot fish and flatbread, more than enough to silence the hollow ache that's dogged you since the forge.🔊Trade her a story for extra food.Head back to rally the others.Ask if she's heard anything else.Use your travel rations (2 days).",
+   "hp": 76,
+   "maxHp": 96,
+   "gold": 9632,
+   "xp": 106760,
+   "combat": null,
+   "sessionTokensApprox": 1216,
+   "t": 1788821204339
+  },
+  {
+   "turn": 2116,
+   "action": "I use my travel rations (2 days).",
+   "kind": "use",
+   "narration": "Turn 2116 | Day 20, 3:36 amYou tear into the mackerel and flatbread standing right there at the stall, grease running down your knuckles, the ache in your gut finally answered. It's gone in a dozen ravenous bites, the first real meal since the forge swallowed every hour you had to give it.The Fish Vendor watches you eat like she's watching a starving dog, equal parts amused and a little concerned.\"Gods below, when's the last time you ate a proper meal? Go on, get back to your people before you fall over in my stall.\"🔊Buy more food for the road.Head back to rally the others.Ask if she's heard anything else.Use your travel rations (2 days).",
+   "hp": 76,
+   "maxHp": 96,
+   "gold": 9632,
+   "xp": 106760,
+   "combat": null,
+   "sessionTokensApprox": 1756,
+   "t": 1788821209502
+  },
+  {
+   "turn": 2117,
+   "action": "Head back to rally the others.",
+   "kind": "random",
+   "narration": "Turn 2117 | Day 20, 3:56 amYou wipe the grease from your hands and turn from the stall, the gulls wheeling overhead as the Shore District's morning bustle closes around you. The forge is not far, and your legs know the way better than your mind does after three nights of no sleep worth the name.Frizwick is first to spot you, leaning in the ruined doorway of Wyla's shop with her arms crossed and a look that says she's been waiting to move for an hour. Morwen straightens from her post at the window, rolling one shoulder to work out a night's stiffness, and Daeris rises last, her ward finally quiet, the frost-lattice humming on without her voice to feed it.\"Finally. I was starting to think you'd married the fish woman too.\"\"The maps run out past the Storval Stairs. After that we walk on star and guesswork same as everyone who's tried this before us.\" She says it plainly, no comfort offered, none needed.\"Then we'd best not waste the light we have.\" Daeris settles her pack on her shoulder, iron clasp pin catching the grey morning sun. \"North Road first, then the long climb.\"The four of you step out into the salt wind together, Kodar-bound, four cold-warded bracelets and a mountain's ancient patience waiting somewhere past the edge of every map you own.🔊Set out north along the North Road.Buy last supplies before leaving Magnimar.Say a final word to Wyla.Use your travel rations (2 days).",
+   "hp": 76,
+   "maxHp": 96,
+   "gold": 9632,
+   "xp": 106760,
+   "combat": null,
+   "sessionTokensApprox": 2135,
+   "t": 1788821221930
+  }
+ ],
+ "errors": [],
+ "raw": [
+  {
+   "turn": 2098,
+   "raw": "[ITEM_LOST:travel rations]\n[TIME_ADVANCE:20m]\n[WHISPER:that some sorcerer's hand tore a crack in the earth open beneath a Shore District smith's floor, and a hired blade held the mob back with witchlight while she worked through the night]\n\nYou tear into the dried meat and hard bread, chewing without much ceremony, the forge heat drying the sweat on your neck as fast as the work raises it. Wyla pauses at her anvil long enough to jerk her chin toward the shuttered window, where the boy who watches her street for coin has slipped a folded scrap through the gap.\n\n[SAY:Wyla Ashvane]\"Word's already crawling through the Shore District. Half of it's wrong, course. Say some hedge-wizard cracked my floor open himself trying to steal my secrets, and some sellsword held the mob off with a glowing blade while I worked. Nobody's got the sense to say 'demon' when 'demon' is exactly what it was.\"\n\nShe spits into the coals and goes back to her tongs, unbothered, the fourth bracelet glowing gold and stubborn in the grip of her hammer.\n\n[SUGGEST:Ask Wyla who's spreading the story|Keep working the bellows|Check the shuttered window yourself]"
+  },
+  {
+   "turn": 2099,
+   "raw": "[WARES:Warded ring (anti-magic, blood-keyed)|350 gp|Wyla Ashvane can craft another to blood-binding, given time and coin]\n[WARES:Cold-warded bracelet|450 gp|Wyla Ashvane's mountain-tempered work, ember-runed against elemental cold]\n[TIME_ADVANCE:10m]\n\nYou wipe the crumbs from your mouth and ask her plain. Wyla doesn't even look up from the anvil, hammer falling in that same unbroken rhythm.\n\n[SAY:Wyla Ashvane]\"Dockhands, mostly. Fish-gutters who heard it from a fish-gutter who heard it from somebody's cousin. That's how it always goes here, truth walks in one door and comes out six mouths later wearing somebody else's coat. My boy heard three versions before breakfast. Don't matter who started it. Matters that nobody's said 'Wyla Ashvane's shop, go rob it' yet, and that's the only rumor I care about.\"\n\nShe holds the fourth bracelet up to the firelight, turning it, watching the rune catch the glow and hold it like a coal.\n\n[SAY:Wyla Ashvane]\"This one's near enough finished I could weep. Sing that last verse again, whatever tongue it's in. It's working.\"\n\n[SUGGEST:Sing the closing verse|Keep pumping the bellows|Ask how much longer until dawn]"
+  },
+  {
+   "turn": 2100,
+   "raw": "The engine flags nothing to charge, no matching item, no wares to touch. You reach for the rations anyway from habit, then remember the pouch is already empty, the last of it gone into your belly not an hour past. There's nothing left to eat but the forge-heat and the work ahead of you.\n\nWyla's hammer doesn't pause for your hunger. The fourth bracelet glows sullen gold on the anvil, close enough to finished that she's stopped blinking, sweat dripping off her chin in fat drops that hiss against hot stone.\n\n[SAY:Wyla Ashvane]\"Bellows, Ammut. Food can wait. This can't.\"\n\n[NO_CHANGE:no travel rations remain to consume]\n\n[SUGGEST:Return to the bellows|Ask Frizwick to spell you|Check on Daeris's ward]"
+  },
+  {
+   "turn": 2101,
+   "raw": "[ITEM_KEPT:Travel rations]\n[TIME_ADVANCE:30m]\n\nYou set your shoulder back into the bellows and drive them hard, the leather throat of the thing groaning as it drinks air and breathes it back out in a gout of white heat. Sparks spiral up past your face like a swarm of dying stars, and the fourth bracelet answers, its gold deepening to something fierce and molten under Wyla's tongs. Your arms have long since passed aching and gone numb, but the rhythm carries you, that same wordless fey tune rising unbidden from your throat again, and Daeris's ward flares warm at your back like a hand pressed there to steady you.\n\n[SAY:Daeris]\"Hold it a little longer. I can feel it wanting to slip, just at the edges. Not tonight. Not this close.\"\n\nThe metal screams faintly as Wyla plunges it into the quenching bath, and steam engulfs her in a shroud that glows faintly gold before fading to grey.\n\n[SUGGEST:Ask if the bracelet is finished|Keep the bellows going|Watch the shuttered window with Morwen]"
+  },
+  {
+   "turn": 2102,
+   "raw": "[ITEM_LOST:Blasting charge]\n\nThe engine's own note settles that one; the blasting charge you spent tearing the breach wide open at the shaft, gone in fire and thunder, finally strikes itself from the ledger of things still in your pack.\n\nAs for rations, there's nothing left. Your belly reminds you of it plainly, a dull ache beneath the heat and smoke, but the pouch at your hip holds only crumbs and lint. Whatever you reach for, it isn't food.\n\n[NO_CHANGE:no travel rations remain to consume]\n\n[SUGGEST:Return to the bellows|Ask Frizwick for anything to eat|Push through the hunger and keep working]"
+  },
+  {
+   "turn": 2103,
+   "raw": "[TIME_ADVANCE:10m]\n\nYou catch Frizwick's eye over the bellows and jerk your chin toward your own hollow gut. She grins, teeth flashing white through soot, and digs one-handed into her satchel without breaking rhythm at the shutter she guards.\n\n[SAY:Frizwick]\"Last of the hard bread. Don't say I never gave you anything.\"\n\nShe tosses it underhand and you snatch it from the air, tearing into it standing at the bellows, chewing fast between breaths of forge-wind. It's stale as old bone and tastes faintly of tallow from her kit, but your stomach stops its complaining, and that's enough for now.\n\n[SUGGEST:Return to the bellows|Ask how much longer Wyla needs|Check the shuttered street with Morwen]"
+  },
+  {
+   "turn": 2104,
+   "raw": "[NO_CHANGE:no travel rations remain to consume, hunger already answered by Frizwick's bread]\n\nYou pat the empty pouch at your hip again, more out of exhausted habit than hope. Nothing there but dust and the ghost of meals long since eaten on the road behind you. The bread sits heavy enough in your belly for now, and the forge doesn't care whether you've eaten your fill or not.\n\nWyla's tongs ring against the anvil, sharp and insistent, calling you back before you can dwell on it further.\n\n[SAY:Wyla Ashvane]\"Bellows are dying, Ammut. Gold doesn't forgive a cold breath.\"\n\n[SUGGEST:Return to the bellows|Ask Daeris how the ward holds|Steal a look at the finished bracelets]"
+  },
+  {
+   "turn": 2105,
+   "raw": "[NO_CHANGE:already inside Wyla's forge, no new location; no travel rations remain to consume]\n\nYou've nothing left in the pouch, and the forge holds you same as before, smoke and heat and the ring of hammer on gold. There's no food to find in an empty sack no matter how many times your hand goes looking.\n\nThe bellows wait, leather throat gone slack without your arm behind it.\n\n[SUGGEST:Return to the bellows|Ask Wyla how close the bracelet is|Watch the shuttered window with Morwen]"
+  },
+  {
+   "turn": 2106,
+   "raw": "[NO_CHANGE:no travel rations remain; nothing further to consume]\n\nYour hand finds the same flat, empty pouch a fourth time. There is no conjuring bread from canvas and dust. Whatever hunger gnaws at you, it will have to wait on Wyla's fire same as everything else tonight.\n\n[SAY:Frizwick]\"You're going to wear a hole in that bag, love. It's empty. I already gave you the last of mine.\"\n\nThe forge roars on, indifferent to empty stomachs, and the fourth bracelet still glows unfinished on the anvil.\n\n[SUGGEST:Return to the bellows|Push through and keep working|Ask how much longer until dawn]"
+  },
+  {
+   "turn": 2107,
+   "raw": "[NPC:Frizwick|hungry, wry and worn|]\n[NPC:Morwen Zethran|watchful, exhausted vigil|]\n[NO_CHANGE:no travel rations remain; all three party members present in the forge]\n\nYou dig into the pouch a fifth time and find only what you found before, nothing. The hunger sits low and dull now, an old companion rather than a fresh complaint, and there's no rooting it out of empty leather. Wyla's forge doesn't care for empty stomachs. It only wants breath and fire.\n\n[SAY:Wyla Ashvane]\"That's the fifth time you've gone digging in that bag. Nothing's grown in there since the last four.\"\n\n[SUGGEST:Return to the bellows|Push through the hunger and keep working|Ask how much longer until dawn]"
+  },
+  {
+   "turn": 2108,
+   "raw": "[SCENE_CAST:Frizwick, Daeris, Morwen Zethran, Wyla Ashvane]\n[NO_CHANGE:no travel rations remain to consume]\n\nNothing has changed in your pouch since the last time your fingers found the bottom of it. The forge still roars, the fourth bracelet still glows unfinished, and your stomach still has to wait its turn behind Wyla's fire.\n\n[SUGGEST:Return to the bellows|Push through the hunger and keep working|Ask how much longer until dawn]"
+  },
+  {
+   "turn": 2109,
+   "raw": "[TIME_ADVANCE:1h]\n\nYou throw yourself back into the work, shoulder against leather, driving the bellows in long hard strokes that make the coals scream white. Wyla bends low over the anvil, tongs gripping the fourth bracelet as it drinks the last of its heat, and her hammer falls in a rhythm that has stopped needing thought. Sweat runs down your spine in rivers and your arms shake with a fatigue that has gone past pain into something almost peaceful, a machine's certainty that the work will end because it must.\n\n[SAY:Wyla Ashvane]\"There. There, damn you, hold that color.\"\n\nThe gold steadies under her eye, neither too bright nor too dull, and she plunges it hissing into the quenching bath. Steam rolls up thick and pale, and for the first time all night her shoulders drop from around her ears.\n\n[SAY:Wyla Ashvane]\"That's the fourth. That's all of them.\"\n\n[QUEST_STEP:The Pinnacle of Avarice|Collect the cold-warded bracelets from Wyla Ashvane and march north to the Kodar Mountains|false]\n\n[SUGGEST:Ask to see all four bracelets|Thank Wyla and rest|Ask about the journey north]"
+  },
+  {
+   "turn": 2110,
+   "raw": "[NO_CHANGE:no travel rations remain; the road north has not yet actually begun, only the bracelets are finished]\n\nStill nothing but dust in the pouch. The bracelets are done, cooling now on Wyla's bench in a neat gleaming row, but the road itself hasn't started under your boots yet. Hunger gnaws at you same as before, patient and mean, waiting on food that isn't there.\n\n[SUGGEST:Ask to see all four bracelets|Thank Wyla and rest|Ask about the journey north]"
+  },
+  {
+   "turn": 2111,
+   "raw": "[TIME_ADVANCE:15m]\n\nYou lean against the cooling forge wall, arms like wet rope, and ask Wyla what she knows of the road beyond her shop door, beyond Magnimar, beyond anything a smith's hammer can fix.\n\n[SAY:Wyla Ashvane]\"The Kodars don't forgive mistakes. I've heard men who went up after ore or glory and came back wrong in the head, if they came back holding anything but frostbite.\"\n\nShe wipes soot from her brow with a wrist already black with it, nodding toward the four bracelets cooling in their neat row.\n\n[SAY:Wyla Ashvane]\"Those will keep the cold out of your blood. They won't keep the mountain from wanting you dead. That part's between you and whatever's up there.\"\n\nMorwen speaks up from her post at the shuttered window, not turning from the dark street she's watched all night.\n\n[SAY:Morwen Zethran]\"The maps hold beyond the Storval Stairs. After that we go by star and guesswork, same as anyone who's tried this before us. Which is to say, badly.\"\n\nDaeris lets her ward finally rest, the frost-lattice over the sealed breach humming low and steady without her voice to feed it, and allows herself a rare thin smile.\n\n[SAY:Daeris]\"Badly is still further than most manage. We rest. We eat. We go.\"\n\n[QUEST_STEP:The Pinnacle of Avarice|Collect the cold-warded bracelets from Wyla Ashvane and march north to the Kodar Mountains|true]\n\n[SUGGEST:Take the four bracelets and prepare to depart|Find food before anything else|Ask Wyla one last question]"
+  },
+  {
+   "turn": 2112,
+   "raw": "[NO_CHANGE:no travel rations remain; all bonds current and unchanged]\n\nThe pouch is still empty. Whatever you're hoping to find in there tonight, it isn't food.\n\n[SUGGEST:Take the four bracelets and prepare to depart|Find food before anything else|Ask Wyla one last question]"
+  },
+  {
+   "turn": 2113,
+   "raw": "[WHISPER:Word on the docks says a mad blacksmith woman fought off some kind of demon single-handed while her lover worked the bellows all night for love of her]\n\nWyla wraps each bracelet in oiled cloth, one by one, and sets them into your palm like a woman handing over her own children. Her hands shake a little, not from the cold.\n\n[SAY:Wyla Ashvane]\"Careful with those. Ember-runed, blood-bound, and they cost me more sleep than gold, though gold's what I got, so no complaints.\"\n\nShe straightens, wipes her hands on her apron, and jerks her chin toward the shuttered door as if she can already hear something laughing out past the Shore District's rooftops.\n\n[SAY:Wyla Ashvane]\"Half the dock rats are already telling each other I wrestled a devil bare-handed while some fool sang love songs at a bellows. Let them talk. Long as nobody says my name too loud near the wrong ears.\"\n\nYou tuck the four bracelets away, cold iron and colder promise, and something in your chest settles into the shape of a decision already made. The mountain is waiting. It has been waiting for ten thousand years. It can wait a little longer while you gather your wives and your steel and walk out to meet it.\n\n[ITEM_GAINED:Cold-warded bracelet]\n[ITEM_GAINED:Cold-warded bracelet]\n[ITEM_GAINED:Cold-warded bracelet]\n[ITEM_GAINED:Cold-warded bracelet]\n[QUEST_STEP:The Pinnacle of Avarice|Collect the cold-warded bracelets from Wyla Ashvane and march north to the Kodar Mountains|true]\n[XP:40]\n\n[SUGGEST:Say farewell to Wyla and leave the forge|Find food in the Shore District|Rally Frizwick, Daeris, and Morwen to depart]"
+  },
+  {
+   "turn": 2114,
+   "raw": "[ITEM_DEF:cold-warded bracelet|category=armor|effect=Ember-runed and blood-bound to the wearer; wards the blood against elemental cold, preventing frostbite and cold-based exhaustion even at the Kodar Mountains' murderous altitudes. No protection against the mountain's other perils.|uses=passive while worn|value=450 gp]\n\nThe pouch at your hip gives up nothing new. Whatever you're eating tonight, it isn't out of that bag, the rations bled dry somewhere back in the long grinding nights at Wyla's forge. Your stomach growls its old complaint and you ignore it a while longer, the mountain road ahead a better reason to move than to sit and mourn a meal.\n\n[NO_CHANGE:travel rations remain empty, no consumption occurs]\n\n[SUGGEST:Find food in the Shore District|Say farewell to Wyla and leave the forge|Rally the others to depart north]"
+  },
+  {
+   "turn": 2115,
+   "raw": "[QUEST_STEP:The Pinnacle of Avarice|Ascend the Pinnacle of Avarice and confront Karzoug, Runelord of Greed, in his seat of power]\n\nThe Shore District smells of brine and tar and frying fish, gulls screaming over the wharves like they own the sky. You follow your nose down a crooked lane to a stall where a broad-shouldered woman turns skewers of charred mackerel over coals, the smoke curling black against the grey morning.\n\nShe catches sight of you and her eyebrows climb. Word travels fast on the docks, faster than any horse could carry it.\n\n[NPC:Fish Vendor|curious, amused|acquaintance]\n[NPC_PRONOUN:Fish Vendor|she/her]\n\n[SAY:Fish Vendor]\"You're him, then. The one they say fought the devil at the smith's place, bellows-boy turned demon-slayer.\" She flips a skewer, grinning gap-toothed. \"Six coppers a stick. Extra for the story, if it's a good one.\"\n\nYou dig into your purse and she loads your hands with hot fish and flatbread, more than enough to silence the hollow ache that's dogged you since the forge.\n\n[GOLD:-2]\n[ITEM_GAINED:travel rations]\n[ITEM_GAINED:travel rations]\n\n[SUGGEST:Trade her a story for extra food|Head back to rally the others|Ask if she's heard anything else]"
+  },
+  {
+   "turn": 2116,
+   "raw": "[ITEM_LOST:travel rations]\n\nYou tear into the mackerel and flatbread standing right there at the stall, grease running down your knuckles, the ache in your gut finally answered. It's gone in a dozen ravenous bites, the first real meal since the forge swallowed every hour you had to give it.\n\nThe Fish Vendor watches you eat like she's watching a starving dog, equal parts amused and a little concerned.\n\n[SAY:Fish Vendor]\"Gods below, when's the last time you ate a proper meal? Go on, get back to your people before you fall over in my stall.\"\n\n[SUGGEST:Buy more food for the road|Head back to rally the others|Ask if she's heard anything else]"
+  },
+  {
+   "turn": 2117,
+   "raw": "You wipe the grease from your hands and turn from the stall, the gulls wheeling overhead as the Shore District's morning bustle closes around you. The forge is not far, and your legs know the way better than your mind does after three nights of no sleep worth the name.\n\nFrizwick is first to spot you, leaning in the ruined doorway of Wyla's shop with her arms crossed and a look that says she's been waiting to move for an hour. Morwen straightens from her post at the window, rolling one shoulder to work out a night's stiffness, and Daeris rises last, her ward finally quiet, the frost-lattice humming on without her voice to feed it.\n\n[SAY:Frizwick]\"Finally. I was starting to think you'd married the fish woman too.\"\n\n[SAY:Morwen Zethran]\"The maps run out past the Storval Stairs. After that we walk on star and guesswork same as everyone who's tried this before us.\" She says it plainly, no comfort offered, none needed.\n\n[SAY:Daeris]\"Then we'd best not waste the light we have.\" Daeris settles her pack on her shoulder, iron clasp pin catching the grey morning sun. \"North Road first, then the long climb.\"\n\n[LOCATION_LEAVE:Wyla Ashvane's forge]\n[TIME_ADVANCE:20m]\n\nThe four of you step out into the salt wind together, Kodar-bound, four cold-warded bracelets and a mountain's ancient patience waiting somewhere past the edge of every map you own.\n\n[SUBLOCATION_LEAVE]\n\n[SUGGEST:Set out north along the North Road|Buy last supplies before leaving Magnimar|Say a final word to Wyla]"
+  }
+ ]
+}

@@ -1,0 +1,588 @@
+{
+ "meta": {
+  "model": "gemini-3.7-flash",
+  "ver": "v1.847",
+  "fixture": "testRuns/fixtures/todo-226-mature-t2097.tnd",
+  "startTurn": 2097,
+  "endTurn": 2117,
+  "fixtureUsageCumulative": 206.36162385000026,
+  "usageCostCumulative": 206.9363046000003,
+  "registerSlips": [],
+  "noteLog": [
+   {
+    "t": 2097,
+    "n": [
+     "buildWhispersNote"
+    ],
+    "c": 2275,
+    "d": [
+     {
+      "n": "buildMarketNote",
+      "reason": "characters",
+      "c": 449
+     }
+    ]
+   },
+   {
+    "t": 2098,
+    "n": [
+     "buildMarketNote"
+    ],
+    "c": 1290,
+    "d": []
+   },
+   {
+    "t": 2100,
+    "n": [
+     "buildUndefinedItemNudge"
+    ],
+    "c": 1501,
+    "d": []
+   },
+   {
+    "t": 2102,
+    "n": [
+     "buildConsumableNudge"
+    ],
+    "c": 1479,
+    "d": []
+   },
+   {
+    "t": 2103,
+    "n": [
+     "buildQuestEscalation",
+     "buildConsumableNudge"
+    ],
+    "c": 1915,
+    "d": []
+   },
+   {
+    "t": 2104,
+    "n": [
+     "buildMarketNote",
+     "buildSceneCastNote"
+    ],
+    "c": 1812,
+    "d": []
+   },
+   {
+    "t": 2106,
+    "n": [
+     "buildPresenceAudit",
+     "buildFutureResolveNudge",
+     "buildRecurringNameNudge"
+    ],
+    "c": 2443,
+    "d": [
+     {
+      "n": "buildMoodAudit",
+      "reason": "characters",
+      "c": 726
+     }
+    ]
+   },
+   {
+    "t": 2110,
+    "n": [
+     "buildLocationStateNudge",
+     "buildMoodAudit"
+    ],
+    "c": 1936,
+    "d": []
+   },
+   {
+    "t": 2111,
+    "n": [
+     "buildRelationshipAudit"
+    ],
+    "c": 2651,
+    "d": [
+     {
+      "n": "buildSceneCastNote",
+      "reason": "characters",
+      "c": 521
+     }
+    ],
+    "overBudget": true
+   },
+   {
+    "t": 2112,
+    "n": [
+     "buildWhispersNote"
+    ],
+    "c": 2213,
+    "d": []
+   },
+   {
+    "t": 2113,
+    "n": [
+     "buildStayBehindNudge"
+    ],
+    "c": 1254,
+    "d": []
+   },
+   {
+    "t": 2114,
+    "n": [
+     "buildRecurringNameNudge"
+    ],
+    "c": 1273,
+    "d": []
+   },
+   {
+    "t": 2115,
+    "n": [
+     "buildHoursNote"
+    ],
+    "c": 1317,
+    "d": []
+   }
+  ],
+  "hp": "110/110",
+  "xp": 106860,
+  "npcs": 63,
+  "quests": [
+   "The Pinnacle of Avarice"
+  ]
+ },
+ "log": [
+  {
+   "turn": 2098,
+   "action": "I use my travel rations (2 days).",
+   "kind": "use",
+   "narration": "Turn 2098 | Day 20, 1:31 amYou tear into the hard salt meat and coarse bread with ravenous hunger, washing the ash and soot from your throat with a draught of cool water. The heavy labor at the bellows has hollowed your belly, but the dry meat restores iron to your limbs and heat to your blood. Across the glowing hearth, Wyla wipes sweat and grime from her soot-streaked brow with the back of an iron-burned forearm.\"A courier who brought my flux whispered a wild tale from the lower docks. Word is spread that a mad half-fey fiend is butchering horrors in the alleys while singing ancient heathen dirges.\"She snorts, plunging the glowing fourth bracelet into a vat of hissing brine. Steam billows thick and white into the rafters, carrying the sharp tang of tempered star-metal. \"Told him he was a fool, but hearing you chant over my fire, maybe the docks aren't so far off.\"Morwen turns from her vigil at the window slit, her blade catching the hearth's dying embers.\"Let them whisper. Fear keeps the curious away from our backs until the gold is cold.\"🔊Inspect the quenched bracelets.Check Daeris's frost ward.Rest before the dawn.Use your travel rations (2 days).",
+   "hp": 76,
+   "maxHp": 96,
+   "gold": 9634,
+   "xp": 106720,
+   "combat": null,
+   "sessionTokensApprox": 932,
+   "t": 1788821328417
+  },
+  {
+   "turn": 2099,
+   "action": "Rest before the dawn.",
+   "kind": "random",
+   "narration": "Turn 2099 | Day 21, 6:00 amYou collapse onto the heavy woolen bedrolls stacked against the dry wall of the workshop. The heat of the dying hearth radiates against your back while Morwen and Frizwick stretch out close beside you, their weapons unsheathed within reach of open palms. Daeris sinks down against your chest with a long breath, letting the iron weight of her vigilance slip away into the dark. For hours, the rhythmic breath of the four of you fills the smithy. Sleep comes swift and deep, a black tide washing away the ache of the bellows and the salt stench of subterranean blood.Dawn breaks over the ocean, spilling thin grey light through the shutter cracks. The forge fire smolders low in its bed of white ash, but on the cooling stone anvil, four bands of dark tempered metal gleam with quiet, finished power. Wyla sits slumped on a wooden stool, watching the steam curl from the quench tub with bleary satisfaction.\"They are set. The mountain cold will find no blood to freeze while you wear these.\"🔊Take and inspect the four bracelets.Equip the bracelets on the party.Prepare to march north toward the Kodar Mountains.",
+   "hp": 110,
+   "maxHp": 110,
+   "gold": 9634,
+   "xp": 106720,
+   "combat": null,
+   "sessionTokensApprox": 1588,
+   "t": 1788821330959
+  },
+  {
+   "turn": 2100,
+   "action": "Equip the bracelets on the party.",
+   "kind": "random",
+   "narration": "Turn 2100 | Day 21, 6:15 amYou take the heavy bands of dark metal from the cooling anvil. The iron feels alive, humming with a slow, deep warmth that settles against your skin like a banked hearth. You snap the first bracelet over your own left forearm, feeling the ember-runes bite with a brief, clean heat. You step to Morwen and lock the second clasp around her wrist. She nods once, flexing her fingers as the warmth rushes through her veins. Frizwick holds out her arm with a grin, and the band seats firm against her leather bracer. Lastly, you clasp the final bracelet upon Daeris. She touches the dark gold with a soft intake of breath, her eyes steady on yours. The heat in the metal sings against your blood. The murderous frost of the high peaks will find no purchase here.\"The wards are set. Karzoug waits in the clouds, and the road to Xin-Shalast lies open.\"🔊Thank Wyla and leave the shop.Mount up and ride out the North Gate.Inspect your weapons and gear before the long march.Do something reckless.",
+   "hp": 110,
+   "maxHp": 110,
+   "gold": 9634,
+   "xp": 106720,
+   "combat": null,
+   "sessionTokensApprox": 2016,
+   "t": 1788821336408
+  },
+  {
+   "turn": 2101,
+   "action": "Thank Wyla and leave the shop.",
+   "kind": "random",
+   "narration": "Turn 2101 | Day 21, 6:35 am\"You forged true work, smith. When the wizard-king falls, your fire helped strike the blow.\"Wyla grunts through her exhaustion, nodding toward the shattered timbers and the blackened floorboards. \"Just kill the bastard so my stone stops screaming. Now get out before the city watch smells the soot.\"You lead your three wives out into the crisp sea air of Magnimar. Dawn glints grey upon the salt water, but the iron bands on your wrists hum with banked fury. Behind you, the city begins to wake, unaware of the doom gathering in the northern clouds. You swing into your saddles, iron clattering against leather, and turn your mounts toward the north road.🔊Ride hard for the North Gate.Stop briefly to buy extra horse feed.Consult Morwen's map of the high pass.",
+   "hp": 110,
+   "maxHp": 110,
+   "gold": 9634,
+   "xp": 106720,
+   "combat": null,
+   "sessionTokensApprox": 2664,
+   "t": 1788821338416
+  },
+  {
+   "turn": 2102,
+   "action": "Consult Morwen's map of the high pass.",
+   "kind": "random",
+   "narration": "Turn 2102 | Day 21, 6:45 amYou rein in your mare beside Morwen. The beast snorts, its breath fogging the chill coastal air. Morwen unrolls the stiff vellum across her pommel with gloved fingers. Her gaze traces the black charcoal lines carving north through the jagged spine of the Kodar range. \"Past the Storval Stairs, the earth turns to jagged glass and perpetual winter. The lower route through the river valleys is choked with giant patrols, but this high notch bypasses their camps entirely.\"Her fingernail taps a narrow gap flanked by twin fangs of granite. Beyond it, the vellum bears a single jagged spiral inked in dark crimson, marking the lost heights where the wizard-king sleeps.\"The bracelets will guard our blood from the freezing air, but not the stone giants' clubs.\"\"Then we run fast and cut deep.\"🔊Spur your horses north toward the road.Check the party's winter rations and gear.Lead the way through the city gates.",
+   "hp": 110,
+   "maxHp": 110,
+   "gold": 9634,
+   "xp": 106720,
+   "combat": null,
+   "sessionTokensApprox": 263,
+   "t": 1788821343939
+  },
+  {
+   "turn": 2103,
+   "action": "Check the party's winter rations and gear.",
+   "kind": "random",
+   "narration": "Turn 2103 | Day 21, 7:00 amYou dismount to test the heavy cinch on each beast. Under the saddlebags lie bundles of thick wool, grease-treated skins, and alpine iron. You pat the sacks of parched grain, hard smoked meat, and mountain salt. There is enough fuel and food to keep four fighters alive across the frozen wastes.\"The grain is dry, and the mountain ropes will bite stone without snapping.\"\"And the blades are sharp enough to shave a giant's beard.\"You haul yourself back into the stirrups and settle your grip on the reins. Your mares stamp the cobblestones, eager to run.🔊Spur your horses north through the gates.Ride toward the North Road at an easy trot.Give your companions the signal to charge.",
+   "hp": 110,
+   "maxHp": 110,
+   "gold": 9634,
+   "xp": 106720,
+   "combat": null,
+   "sessionTokensApprox": 841,
+   "t": 1788821345732
+  },
+  {
+   "turn": 2104,
+   "action": "Give my companions the signal to charge.",
+   "kind": "random",
+   "narration": "Turn 2104 | Day 21, 8:00 amYou drive your heels into the mare's flanks. The beast leaps forward with a savage whinny, iron horseshoes throwing sparks from the Magnimar stones. Behind you, your three wives surge into motion. Morwen crouches low over her saddle, cold eyes fixed ahead, while Daeris rides with iron discipline and Frizwick lets out a sharp, wild whoop of battle-glee. The heavy oak timbers of the North Gate blur past in a roar of dust and shouting guards. You strike the open highway at a blistering gallop, the cold coastal wind lashing your faces. Ahead, the horizon fractures into the jagged teeth of the Kodar range, where the wizard-king waits in his throne of greed.🔊Push the horses hard toward the mountains.Ease to a steady trot to save the mounts.Keep watch for giant scouts along the road.",
+   "hp": 110,
+   "maxHp": 110,
+   "gold": 9634,
+   "xp": 106720,
+   "combat": null,
+   "sessionTokensApprox": 1582,
+   "t": 1788821347707
+  },
+  {
+   "turn": 2105,
+   "action": "Keep watch for giant scouts along the road.",
+   "kind": "random",
+   "narration": "Turn 2105 | Day 21, 10:00 amPerception checkd20: 28 -- successYour gaze cuts the broken hills like a hawk hunting over stone. The scrub grass gives way to boulder-strewn ridges where the Kodar foothills begin their thrust into the sky. High on an eastern ridge, fresh rockfall catches your eye, grey scars pale against the dark shale. Huge tracks gouge the mud near a dry creek bed, each stride wide enough to span a wagon. \"Giant spoor on the ridge. A patrol moved south two hours ago, scouting the low road.\"Frizwick slips a thumb-pick into her palm and checks her short sword, eyes gleaming with feral heat. Morwen leans low over her horse's neck, reading the shattered scree above.\"They watch the main trade artery. If we take the high ravine trail now, we ride beneath their line of sight before they wheel back.\"\"Then we ride hard. Let their scouts find empty dust.\"🔊Veer into the high ravine trail.Ride ahead to ambush the giant patrol.Send Frizwick forward to scout the ridge.",
+   "hp": 110,
+   "maxHp": 110,
+   "gold": 9634,
+   "xp": 106720,
+   "combat": null,
+   "sessionTokensApprox": 2326,
+   "t": 1788821351265
+  },
+  {
+   "turn": 2106,
+   "action": "Send Frizwick forward to scout the ridge.",
+   "kind": "random",
+   "narration": "Turn 2106 | Day 21, 10:25 amStealth checkd20: 26 -- successYou make a quick chopping motion toward the grey rise. Frizwick slips from her saddle like a shadow cast by running water. She glides through the scrub and up the jagged shale without rattling a single loose pebble. Her frame melts into the dark basalt clefts above. Minutes bleed away in the sharp wind. Then her lean figure drops from a rock ledge above your head, landing silent on the hard dirt beside your stirrup. Her teeth flash white in a wolfish grin.\"Three stone brutes. They sit in a blind gully two hundred paces up, sharing a roasted ram and sharpening iron-tipped tree trunks. Their backs are to the scree slope.\"\"If we crest the gulley from the high windward side, they will never hear the charge.\"\"We break their patrol before they can sound a horn to the peaks.\"🔊Lead the charge up the windward slope.Slip behind them to assassinate the leader.Have Daeris open with holy fire.",
+   "hp": 110,
+   "maxHp": 110,
+   "gold": 9634,
+   "xp": 106720,
+   "combat": null,
+   "sessionTokensApprox": 2619,
+   "t": 1788821354654
+  },
+  {
+   "turn": 2107,
+   "action": "Have Daeris open with holy fire.",
+   "kind": "random",
+   "narration": "Turn 2107 | Day 21, 10:30 amFlame Strike damaged20: 38 -- successYou motion Daeris to the lip of the windward crest. She raises her bronze clasp toward the grey sky, lips shaping a harsh command of judgment. The clouds rip apart. A roaring column of divine flame and blinding wrath crashes down into the gully with the thunder of a falling star. The blast engulfs the camp in white fire. Scorched mutton and burning embers scatter across the scree as the stone giants roar in agony, their hide charred and smoking. \"Strike now while the wrath blinds them!\"\"Take their knees before they heft those timbers!\"Frizwick is already bounding down the shale slope, witchlight gleaming hungrily in her fist.🔊Charge the burning brutes with Cleaver.Cast Shadow Blade and flank their leader.Fire a heavy crossbow into the nearest giant's eye.Do something reckless.",
+   "hp": 110,
+   "maxHp": 110,
+   "gold": 9634,
+   "xp": 106720,
+   "combat": {
+    "engaged": "Stone Giant Scout 3",
+    "foes": [
+     {
+      "name": "Stone Giant Scout 1",
+      "hp": 88,
+      "down": null
+     },
+     {
+      "name": "Stone Giant Scout 2",
+      "hp": 88,
+      "down": null
+     },
+     {
+      "name": "Stone Giant Scout 3",
+      "hp": 88,
+      "down": null
+     }
+    ]
+   },
+   "sessionTokensApprox": 952,
+   "t": 1788821359641
+  },
+  {
+   "turn": 2108,
+   "action": "Charge the burning brutes with Cleaver.",
+   "kind": "random",
+   "narration": "Turn 2108 | Day 21, 10:32 amAttack roll with Cleaverd20: 24 -- successCleaver damage with Sneak Attackd20: 52 -- successFrizwick attack rolld20: 22 -- successFrizwick sneak attack damaged20: 36 -- successYou vault the crest like a starving panther, boots biting hard into sliding scree. Cleaver screams through the smoke. The Thassilonian steel shears through thick grey tendon and bites deep into the third giant's knee, bringing the howling brute crashing down into the red embers. Morwen's magic smothers the ravine in dead silence, choking their bellows before an alarm can reach the peaks. Beside you, Frizwick flashes like a silver spark, driving her witchlight blade under the first giant's ribs. Daeris advances with bronze mace raised, her eyes cold as winter iron. The crippled brute under your blade claws wildly for a shattered boulder, black blood spurting across your boots.🔊Drive Cleaver through the grounded giant's throat.Sever the brute's reaching arm.Vault off the fallen giant to strike the second scout.",
+   "hp": 110,
+   "maxHp": 110,
+   "gold": 9634,
+   "xp": 106720,
+   "combat": {
+    "engaged": "Stone Giant Scout 1",
+    "foes": [
+     {
+      "name": "Stone Giant Scout 1",
+      "hp": 52,
+      "down": null
+     },
+     {
+      "name": "Stone Giant Scout 2",
+      "hp": 88,
+      "down": null
+     },
+     {
+      "name": "Stone Giant Scout 3",
+      "hp": 36,
+      "down": null
+     }
+    ]
+   },
+   "sessionTokensApprox": 1289,
+   "t": 1788821362017
+  },
+  {
+   "turn": 2109,
+   "action": "Sever the brute's reaching arm.",
+   "kind": "random",
+   "narration": "Turn 2109 | Day 21, 10:33 amAttack roll with Cleaverd20: 27 -- successCleaver slashing damaged20: 44 -- successDaeris mace attackd20: 19 -- successDaeris damaged20: 18 -- successMorwen Star-iron daggersd20: 23 -- successMorwen piercing damaged20: 31 -- successYour runeblade comes down with the butcher weight of an executioner's axe. Thassilonian steel shears through thick muscle and grey bone at the shoulder, severing the giant's arm in a single savage stroke. The brute thrashes once in the red embers, black arterial gore gushing across the scree as life drains from its glassy eyes. Beside you, Daeris shatters the kneecap of the first scout with her bronze mace. Morwen's star-iron blades whistle through the dead air of her silence sphere, burying themselves deep into the second giant's chest. The remaining brutes stumble back against the basalt wall, bleeding and trapped in the narrow ravine.🔊Drive Cleaver into the second giant's heart.Flank the staggered first scout with Frizwick.Cast Shadow Blade to butcher both survivors.",
+   "hp": 110,
+   "maxHp": 110,
+   "gold": 9634,
+   "xp": 106720,
+   "combat": {
+    "engaged": "Stone Giant Scout 2",
+    "foes": [
+     {
+      "name": "Stone Giant Scout 1",
+      "hp": 34,
+      "down": null
+     },
+     {
+      "name": "Stone Giant Scout 2",
+      "hp": 57,
+      "down": null
+     },
+     {
+      "name": "Stone Giant Scout 3",
+      "hp": 0,
+      "down": "slain"
+     }
+    ]
+   },
+   "sessionTokensApprox": 1636,
+   "t": 1788821364426
+  },
+  {
+   "turn": 2110,
+   "action": "Vault off the fallen giant to strike the second scout.",
+   "kind": "random",
+   "narration": "Turn 2110 | Day 21, 10:34 amAthletics check to vaultd20: 25 -- successAttack roll with Cleaverd20: 26 -- successCleaver slashing damage with Sneak Attackd20: 61 -- successFrizwick attack rolld20: 24 -- successFrizwick piercing damaged20: 38 -- successYou plant your boot upon the dead brute's chest and launch yourself high into the mountain air. Cleaver falls like a thunderbolt through the quiet ravine. The runeblade splits the second giant's collarbone and drives deep into its black heart, tearing through muscle and rib in a crimson spray. The massive creature crashes against the basalt wall and slides into the dust with glassy eyes. Behind you, Frizwick vaults the shattered boulders like a stalking lynx. Her witchlight blade punches up through the jaw of the last stumbling scout, ending its struggles before the body hits the shale. Morwen lowers her hands, letting the suffocating sphere of silence dissolve into the howling wind. Daeris rests her mace on her hip, wiping thick black gore from the flanged bronze. \"Clean work. No horns sounded to the heights.\"\"Search their packs quickly. If they carried patrol tokens or marching orders from Xin-Shalast, we take them now.\"🔊Search the dead giants' packs and belongings.Mount up and ride hard into the high pass.Scalp their leader's ear as a grim trophy.",
+   "hp": 110,
+   "maxHp": 110,
+   "gold": 9634,
+   "xp": 106860,
+   "combat": null,
+   "sessionTokensApprox": 2095,
+   "t": 1788821369321
+  },
+  {
+   "turn": 2111,
+   "action": "Mount up and ride hard into the high pass.",
+   "kind": "random",
+   "narration": "Turn 2111 | Day 21, 2:34 pmRiding checkd20: 24 -- successYou swing into the saddle and haul the reins north.Iron-shod hooves hammer the shale, sending sprays of black gravel over the precipice as the horses surge upward. The rutted dirt gives way to frozen granite and the brutal teeth of the Kodar range. Freezing gales roar down from the glacial peaks, but the warding bracelets pulse like banked hearthfires against your wrists, keeping the blood hot and swift in your veins. Below you, the vast sprawl of Varisia shrinks to a grey ribbon of mist. Ahead, the high notch pass cuts between two towering pillars of black basalt, the hidden road to Xin-Shalast opening before your vanguard.\"We have bypassed their valley garrisons. Beyond this notch lies the high plateau.\"\"The wind stinks of old gold and blood up here.\"\"Karzoug's mountain waits. Let us see if his throne can bleed.\"🔊Spur the horses through the basalt pillars.Scout the plateau ahead on foot.Halt briefly to inspect the horses and gear.",
+   "hp": 110,
+   "maxHp": 110,
+   "gold": 9634,
+   "xp": 106860,
+   "combat": null,
+   "sessionTokensApprox": 3026,
+   "t": 1788821372747
+  },
+  {
+   "turn": 2112,
+   "action": "Halt briefly to inspect the horses and gear.",
+   "kind": "random",
+   "narration": "Turn 2112 | Day 21, 3:04 pmInvestigation check on gear and horsesd20: 24 -- successYou draw rein in the lee of a jagged obsidian crag. The horses stand steaming in the sub-zero blast, their nostrils rimed with white frost, but their chests heave strong and unbroken. You run experienced hands down the mare's hocks, checking shoes and clearing razor shale from the frogs. The cinches hold firm, and the heavy alpine packs remain tied down against the buffeting gales. Frizwick checks the bindings of her boot spikes, shivering once before her bracelet flared with reassuring hearth-heat. Daeris lays a gloved palm against each beast's neck, murmuring a brief word to steady their frightened hearts. Beside them, Morwen pulls a spyglass from her furs and braces against the rock to scan the high pass ahead.\"The path narrows to an ice shelf two miles north. Beyond it sits the golden rim of the high plateau.\"\"The beasts can carry us to the rim, but no further. We fight on foot once we breach the outer courts.\"\"Good. I fight better with stone under my boots anyway.\"🔊Remount and push through the ice shelf.Scout the approach on foot using stealth.Distribute climbing gear and star-iron knives now.",
+   "hp": 110,
+   "maxHp": 110,
+   "gold": 9634,
+   "xp": 106860,
+   "combat": null,
+   "sessionTokensApprox": 1017,
+   "t": 1788821377455
+  },
+  {
+   "turn": 2113,
+   "action": "Scout the approach on foot using stealth.",
+   "kind": "random",
+   "narration": "Turn 2113 | Day 21, 3:49 pmStealth check with Master skilld20: 29 -- successPerception check to scoutd20: 27 -- successYou slip from the saddle and blend into the jagged shadows of the basalt wall. Frizwick mirrors your stride, moving like a phantom across the crusted ice without dislodging a single pebble. Cold wind roars through the notch, tearing white plumes of frost from the precipice. \"The horse-traders below said four reavers killed a smithy demon in Magnimar and rode north to tear the giant-king from his seat. They gave us devil horns in the retelling.\"You crest the frozen ridge on your belly and peer over the icy rim. Below lies the legendary valley of Xin-Shalast, a sunken expanse of gold-plated spires and cyclopean ruins smothered in glacial mist. A patrol of armored rune-giants marches the lower causeway, their massive iron broadswords scraping stone with a sound like iron grinding bone.\"The outer rim is held in force. But the high eastern aqueduct is cracked and unattended.\"\"We leave the mounts tethered in the cleft. Our path lies across the high stone.\"🔊Infiltrate across the cracked high aqueduct.Ambush the rune-giant patrol on the causeway.Scale the eastern cliff face toward the golden spires.",
+   "hp": 110,
+   "maxHp": 110,
+   "gold": 9634,
+   "xp": 106860,
+   "combat": null,
+   "sessionTokensApprox": 1972,
+   "t": 1788821380493
+  },
+  {
+   "turn": 2114,
+   "action": "Scale the eastern cliff face toward the golden spires.",
+   "kind": "random",
+   "narration": "Turn 2114 | Day 21, 5:49 pmAthletics check to scale the cliffd20: 26 -- successYou drive steel pitons into the frozen basalt and haul your body upward. Sinew and bone strain against the mountain as you lead the ascent. Behind you, Frizwick moves with the effortless grace of a hunting cat, finding handholds where only ice clings to vertical stone. Daeris climbs with relentless, heavy rhythm, her breastplate clinking softly beneath thick furs, while Morwen follows close behind to secure the trailing line. Your fingers hook over the carved golden lip of the terrace, and you drag yourself over the rim. The high plateau of Xin-Shalast stretches before you in savage magnificence. Golden spires claw at the bruised mountain sky, their ancient gilding scarred by ice and dragon fire. Ahead, a wide stair of black granite climbs through rows of headless colossi toward the glowing runic archway of the Pinnacle. \"The wards above are pulsing with greed magic. He knows the threshold is breached.\"\"Let him watch. He has had ten thousand years to prepare for dying.\"\"Draw your steel, husband. The final seat of Thassilon is before us.\"🔊Draw Cleaver and ascend the granite stair.Cast Invisibility and stalk ahead of the group.Scout the colossi for hidden runic traps.Do something reckless.",
+   "hp": 110,
+   "maxHp": 110,
+   "gold": 9634,
+   "xp": 106860,
+   "combat": null,
+   "sessionTokensApprox": 2771,
+   "t": 1788821385338
+  },
+  {
+   "turn": 2115,
+   "action": "Cast Invisibility and stalk ahead of the group.",
+   "kind": "random",
+   "narration": "Turn 2115 | Day 21, 5:59 pmStealth checkd20: 29 -- successFey sorcery wraps cold around your skin. Light bends, and you vanish into the freezing air. You glide soundlessly past the headless colossi. Your boots make no sound against the black granite. The emerald runes along the archway hiss with dormant malice, but your unseen passage leaves the magical tripwires untriggered. Through the towering gate of obsidian, the throne sanctum yawns before you. Hovering above a dais of raw gold, an immense runic vortex spins with crackling emerald lightning. Inside that storm of stolen souls, the gaunt, ancient form of Karzoug stirs, his burning red eyes fixed upon the threshold. At the base of the dais stand two massive armored rune-giants, their flaming greatswords resting point-down in the stone. \"You crawl into my sanctum like vermin into a furnace.\"The wizard king's voice shakes the basalt beneath your feet. He has not pierced your invisibility, but he senses the breach of his outer threshold.🔊Signal your wives to launch an ambush.Creep behind the rune-giants to strike Karzoug's focus.Place a blasting charge at the rune-giants' boots.",
+   "hp": 110,
+   "maxHp": 110,
+   "gold": 9634,
+   "xp": 106860,
+   "combat": null,
+   "sessionTokensApprox": 763,
+   "t": 1788821391955
+  },
+  {
+   "turn": 2116,
+   "action": "Creep behind the rune-giants to strike Karzoug's focus.",
+   "kind": "random",
+   "narration": "Turn 2116 | Day 21, 6:01 pmStealth check behind giantsd20: 28 -- successAttack roll with Cleaver on Soul Focusd20: 27 -- successSneak Attack damaged20: 54 -- damageYou drift behind the iron greaves of the rune-giants like a mountain ghost. Cleaver slides from its scabbard with no rasp of steel. Above the dais, the great emerald lens spins in its cradle of lightning, feeding the dead king his stolen power. You leap from the pedestal, both hands locked upon the hilt. The runeforged blade bites deep into the heart of the gem. The lens shatters with the roar of a dying gale. Green fire explodes across the throne room, hurling the rune-giants to their knees as their burning greatswords clatter against the basalt. Karzoug shrieks, his physical form violently dragged from the vortex down onto the golden dais. \"Insolent insect! I will flay your soul into ash!\"\"Now! Abadar claims the tyrant's crown!\"Morwen weaves a web of silencing sorcery around the dais while Frizwick vaults the shattered glass, her witchlight blade seeking Karzoug's throat.🔊Drive Cleaver into Karzoug's exposed chest.Toss a blasting charge beneath the rune-giants.Flank Karzoug with Frizwick to strike his flank.",
+   "hp": 110,
+   "maxHp": 110,
+   "gold": 9634,
+   "xp": 106860,
+   "combat": {
+    "engaged": null,
+    "foes": [
+     {
+      "name": "Karzoug's Soul-Lens",
+      "hp": 0,
+      "down": "slain"
+     },
+     {
+      "name": "Karzoug the Claimer",
+      "hp": 180,
+      "down": null
+     },
+     {
+      "name": "Rune-Giant Wardens",
+      "hp": 120,
+      "down": null
+     }
+    ]
+   },
+   "sessionTokensApprox": 1541,
+   "t": 1788821395155
+  },
+  {
+   "turn": 2117,
+   "action": "Toss a blasting charge beneath the rune-giants.",
+   "kind": "random",
+   "narration": "Turn 2117 | Day 21, 6:02 pmAttack roll to throw blasting charged20: 24 -- successBlasting charge explosion damaged20: 120 -- damageYou snatch the iron canister from your belt and whip your arm forward.The fuse flares red against the dim basalt. The bomb skitters across the polished floor and settles squarely between the greaves of the staggered brutes. A deafening roar tears through the sanctum as the mountain powder detonates. Iron and fire rip outward in a blinding sphere of fury. The concussion lifts both giants off their feet and smashes their armored bulks against the towering obsidian pillars. Shattered plate and charred flesh rain down upon the golden dais as the monsters collapse into motionless heaps of smoking meat. Karzoug staggers upon his throne steps, his pale flesh singed by the blast. \"Slaves of dust! I will tear the marrow from your bones!\"Frizwick darts through the rising smoke to flank the wizard king, her blade gleaming with cold malice. Daeris raises her open-hand iron pin, channeling holy light to blind his sorcerous reach, while Morwen readies a counter-curse from the shadows.🔊Drive Cleaver straight into Karzoug's heart.Cast Shadow Blade and strike with twin runesteel.Flank with Frizwick for a coordinated throat strike.",
+   "hp": 110,
+   "maxHp": 110,
+   "gold": 9634,
+   "xp": 106860,
+   "combat": {
+    "engaged": null,
+    "foes": [
+     {
+      "name": "Karzoug's Soul-Lens",
+      "hp": 0,
+      "down": "slain"
+     },
+     {
+      "name": "Karzoug the Claimer",
+      "hp": 180,
+      "down": null
+     },
+     {
+      "name": "Rune-Giant Wardens",
+      "hp": 0,
+      "down": "slain"
+     }
+    ]
+   },
+   "sessionTokensApprox": 1923,
+   "t": 1788821398201
+  }
+ ],
+ "errors": [],
+ "raw": [
+  {
+   "turn": 2098,
+   "raw": "[TIME_CHECK:late night]\n[ITEM_LOST:travel rations]\n[ITEM_LOST:travel rations]\n[TIME_ADVANCE:20m]\n[WHISPER:Word in the lower docks says a half-fey rogue butchered a creeping nightmare in a smithy with a glowing song on his lips.]\n\nYou tear into the hard salt meat and coarse bread with ravenous hunger, washing the ash and soot from your throat with a draught of cool water. The heavy labor at the bellows has hollowed your belly, but the dry meat restores iron to your limbs and heat to your blood. \n\nAcross the glowing hearth, Wyla wipes sweat and grime from her soot-streaked brow with the back of an iron-burned forearm.\n\n[SAY:Wyla Ashvane]\"A courier who brought my flux whispered a wild tale from the lower docks. Word is spread that a mad half-fey fiend is butchering horrors in the alleys while singing ancient heathen dirges.\"\n\nShe snorts, plunging the glowing fourth bracelet into a vat of hissing brine. Steam billows thick and white into the rafters, carrying the sharp tang of tempered star-metal. \n\n[SAY:Wyla Ashvane]\"Told him he was a fool, but hearing you chant over my fire, maybe the docks aren't so far off.\"\n\nMorwen turns from her vigil at the window slit, her blade catching the hearth's dying embers.\n\n[SAY:Morwen Zethran]\"Let them whisper. Fear keeps the curious away from our backs until the gold is cold.\"\n\n[SUGGEST:Inspect the quenched bracelets|Check Daeris's frost ward|Rest before the dawn]"
+  },
+  {
+   "turn": 2099,
+   "raw": "[TIME_CHECK:late night]\n[REST:long]\n[TIME:dawn]\n[HP:+20]\n[WARES:Cold iron dagger|15 gp|Wyla Ashvane's rack]\n[WARES:Alchemical fire flask|20 gp|Wyla Ashvane's shelf]\n\nYou collapse onto the heavy woolen bedrolls stacked against the dry wall of the workshop. The heat of the dying hearth radiates against your back while Morwen and Frizwick stretch out close beside you, their weapons unsheathed within reach of open palms. Daeris sinks down against your chest with a long breath, letting the iron weight of her vigilance slip away into the dark. \n\nFor hours, the rhythmic breath of the four of you fills the smithy. Sleep comes swift and deep, a black tide washing away the ache of the bellows and the salt stench of subterranean blood.\n\nDawn breaks over the ocean, spilling thin grey light through the shutter cracks. The forge fire smolders low in its bed of white ash, but on the cooling stone anvil, four bands of dark tempered metal gleam with quiet, finished power. Wyla sits slumped on a wooden stool, watching the steam curl from the quench tub with bleary satisfaction.\n\n[SAY:Wyla Ashvane]\"They are set. The mountain cold will find no blood to freeze while you wear these.\"\n\n[SUGGEST:Take and inspect the four bracelets|Equip the bracelets on the party|Prepare to march north toward the Kodar Mountains]"
+  },
+  {
+   "turn": 2100,
+   "raw": "[TIME_CHECK:dawn]\n[TIME_ADVANCE:15m]\n[ITEM_GAINED:Mountain warding bracelet]\n[COMPANION_ITEM_GAINED:Morwen Zethran|Mountain warding bracelet]\n[COMPANION_ITEM_GAINED:Frizwick|Mountain warding bracelet]\n[COMPANION_ITEM_GAINED:Daeris|Mountain warding bracelet]\n[QUEST_STEP:The Pinnacle of Avarice|Collect the cold-warded bracelets from Wyla Ashvane and march north to the Kodar Mountains|true]\n[SCHEDULE_RESOLVED:Wyla Ashvane will finish tempering and quenching the four mountain warding bracelets in three days, assisted by Daeris's forge-warding and the party's labor.]\n[FUTURE_EVENT_RESOLVED:Wyla Ashvane completes the fourth and final mountain warding bracelet before dawn.]\n\nYou take the heavy bands of dark metal from the cooling anvil. The iron feels alive, humming with a slow, deep warmth that settles against your skin like a banked hearth. \n\nYou snap the first bracelet over your own left forearm, feeling the ember-runes bite with a brief, clean heat. You step to Morwen and lock the second clasp around her wrist. She nods once, flexing her fingers as the warmth rushes through her veins. \n\nFrizwick holds out her arm with a grin, and the band seats firm against her leather bracer. Lastly, you clasp the final bracelet upon Daeris. She touches the dark gold with a soft intake of breath, her eyes steady on yours. \n\nThe heat in the metal sings against your blood. The murderous frost of the high peaks will find no purchase here.\n\n[SAY:Morwen Zethran]\"The wards are set. Karzoug waits in the clouds, and the road to Xin-Shalast lies open.\"\n\n[SUGGEST:Thank Wyla and leave the shop|Mount up and ride out the North Gate|Inspect your weapons and gear before the long march]"
+  },
+  {
+   "turn": 2101,
+   "raw": "[TIME_CHECK:dawn]\n[TIME_ADVANCE:20m]\n[ITEM_DEF:Mountain warding bracelet|category=armor|effect=Protects the wearer's blood from extreme unnatural cold and altitude sickness in the Kodar Mountains|uses=passive while worn|value=300 gp]\n[SUBLOCATION_LEAVE]\n\n[SAY:Ammut]\"You forged true work, smith. When the wizard-king falls, your fire helped strike the blow.\"\n\nWyla grunts through her exhaustion, nodding toward the shattered timbers and the blackened floorboards. \n\n[SAY:Wyla Ashvane]\"Just kill the bastard so my stone stops screaming. Now get out before the city watch smells the soot.\"\n\nYou lead your three wives out into the crisp sea air of Magnimar. Dawn glints grey upon the salt water, but the iron bands on your wrists hum with banked fury. Behind you, the city begins to wake, unaware of the doom gathering in the northern clouds. You swing into your saddles, iron clattering against leather, and turn your mounts toward the north road.\n\n[SUGGEST:Ride hard for the North Gate|Stop briefly to buy extra horse feed|Consult Morwen's map of the high pass]"
+  },
+  {
+   "turn": 2102,
+   "raw": "[TIME_CHECK:dawn]\n[TIME_ADVANCE:10m]\n\nYou rein in your mare beside Morwen. The beast snorts, its breath fogging the chill coastal air. \n\nMorwen unrolls the stiff vellum across her pommel with gloved fingers. Her gaze traces the black charcoal lines carving north through the jagged spine of the Kodar range. \n\n[SAY:Morwen Zethran]\"Past the Storval Stairs, the earth turns to jagged glass and perpetual winter. The lower route through the river valleys is choked with giant patrols, but this high notch bypasses their camps entirely.\"\n\nHer fingernail taps a narrow gap flanked by twin fangs of granite. Beyond it, the vellum bears a single jagged spiral inked in dark crimson, marking the lost heights where the wizard-king sleeps.\n\n[SAY:Daeris]\"The bracelets will guard our blood from the freezing air, but not the stone giants' clubs.\"\n\n[SAY:Frizwick]\"Then we run fast and cut deep.\"\n\n[SUGGEST:Spur your horses north toward the road|Check the party's winter rations and gear|Lead the way through the city gates]"
+  },
+  {
+   "turn": 2103,
+   "raw": "[TIME_CHECK:dawn]\n[TIME_ADVANCE:15m]\n[ITEM_KEPT:Travel rations]\n\nYou dismount to test the heavy cinch on each beast. \n\nUnder the saddlebags lie bundles of thick wool, grease-treated skins, and alpine iron. You pat the sacks of parched grain, hard smoked meat, and mountain salt. There is enough fuel and food to keep four fighters alive across the frozen wastes.\n\n[SAY:Daeris]\"The grain is dry, and the mountain ropes will bite stone without snapping.\"\n\n[SAY:Frizwick]\"And the blades are sharp enough to shave a giant's beard.\"\n\nYou haul yourself back into the stirrups and settle your grip on the reins. Your mares stamp the cobblestones, eager to run.\n\n[SUGGEST:Spur your horses north through the gates|Ride toward the North Road at an easy trot|Give your companions the signal to charge]"
+  },
+  {
+   "turn": 2104,
+   "raw": "[TIME_CHECK:dawn]\n[TIME_ADVANCE:1h]\n[LOCATION:Varisia - North Road]\n[ITEM_KEPT:Blasting charge]\n[QUEST_STEP:The Pinnacle of Avarice|Ascend the Pinnacle of Avarice and slay Karzoug in his runic throne room]\n\nYou drive your heels into the mare's flanks. The beast leaps forward with a savage whinny, iron horseshoes throwing sparks from the Magnimar stones. \n\nBehind you, your three wives surge into motion. Morwen crouches low over her saddle, cold eyes fixed ahead, while Daeris rides with iron discipline and Frizwick lets out a sharp, wild whoop of battle-glee. \n\nThe heavy oak timbers of the North Gate blur past in a roar of dust and shouting guards. You strike the open highway at a blistering gallop, the cold coastal wind lashing your faces. Ahead, the horizon fractures into the jagged teeth of the Kodar range, where the wizard-king waits in his throne of greed.\n\n[SUGGEST:Push the horses hard toward the mountains|Ease to a steady trot to save the mounts|Keep watch for giant scouts along the road]"
+  },
+  {
+   "turn": 2105,
+   "raw": "[TIME_CHECK:morning]\n[TIME_ADVANCE:2h]\n[SCENE_CAST:none]\n[WARES:none]\n[DICE:Perception check|28|success]\n[SKILL_SUCCESS:Perception]\n\nYour gaze cuts the broken hills like a hawk hunting over stone. \n\nThe scrub grass gives way to boulder-strewn ridges where the Kodar foothills begin their thrust into the sky. High on an eastern ridge, fresh rockfall catches your eye, grey scars pale against the dark shale. Huge tracks gouge the mud near a dry creek bed, each stride wide enough to span a wagon. \n\n[SAY:Ammut]\"Giant spoor on the ridge. A patrol moved south two hours ago, scouting the low road.\"\n\nFrizwick slips a thumb-pick into her palm and checks her short sword, eyes gleaming with feral heat. Morwen leans low over her horse's neck, reading the shattered scree above.\n\n[SAY:Morwen Zethran]\"They watch the main trade artery. If we take the high ravine trail now, we ride beneath their line of sight before they wheel back.\"\n\n[SAY:Daeris]\"Then we ride hard. Let their scouts find empty dust.\"\n\n[SUGGEST:Veer into the high ravine trail|Ride ahead to ambush the giant patrol|Send Frizwick forward to scout the ridge]"
+  },
+  {
+   "turn": 2106,
+   "raw": "[TIME_CHECK:midmorning]\n[TIME_ADVANCE:25m]\n[SCENE_REF:friz|Frizwick]\n[COMPANION_SKILL_SUCCESS:Frizwick|Stealth]\n[DICE:Stealth check|26|success]\n[SCENE_REF:giant_scout|?]\n\nYou make a quick chopping motion toward the grey rise. \n\nFrizwick slips from her saddle like a shadow cast by running water. She glides through the scrub and up the jagged shale without rattling a single loose pebble. Her frame melts into the dark basalt clefts above. \n\nMinutes bleed away in the sharp wind. Then her lean figure drops from a rock ledge above your head, landing silent on the hard dirt beside your stirrup. Her teeth flash white in a wolfish grin.\n\n[SAY:Frizwick]\"Three stone brutes. They sit in a blind gully two hundred paces up, sharing a roasted ram and sharpening iron-tipped tree trunks. Their backs are to the scree slope.\"\n\n[SAY:Morwen Zethran]\"If we crest the gulley from the high windward side, they will never hear the charge.\"\n\n[SAY:Daeris]\"We break their patrol before they can sound a horn to the peaks.\"\n\n[SUGGEST:Lead the charge up the windward slope|Slip behind them to assassinate the leader|Have Daeris open with holy fire]"
+  },
+  {
+   "turn": 2107,
+   "raw": "[TIME_CHECK:midmorning]\n[TIME_ADVANCE:5m]\n[SCENE_CAST:Frizwick, Daeris, Morwen Zethran]\n[COMPANION_SPELL_USED:Daeris|Flame Strike]\n[COMBAT_START:Stone Giant Scout 1|126|17|9|3d8+6|10]\n[COMBAT_START:Stone Giant Scout 2|126|17|9|3d8+6|10]\n[COMBAT_START:Stone Giant Scout 3|126|17|9|3d8+6|10]\n[COMBAT_STATS:STR:23|DEX:15|CON:20|INT:10|WIS:12|CHA:10|CR:7]\n[COMBAT_ROUND:1]\n[DICE:Flame Strike damage|38|success]\n[ENEMY_HP:Stone Giant Scout 1|-38]\n[ENEMY_HP:Stone Giant Scout 2|-38]\n[ENEMY_HP:Stone Giant Scout 3|-38]\n\nYou motion Daeris to the lip of the windward crest. \n\nShe raises her bronze clasp toward the grey sky, lips shaping a harsh command of judgment. The clouds rip apart. A roaring column of divine flame and blinding wrath crashes down into the gully with the thunder of a falling star. \n\nThe blast engulfs the camp in white fire. Scorched mutton and burning embers scatter across the scree as the stone giants roar in agony, their hide charred and smoking. \n\n[SAY:Daeris]\"Strike now while the wrath blinds them!\"\n\n[SAY:Morwen Zethran]\"Take their knees before they heft those timbers!\"\n\nFrizwick is already bounding down the shale slope, witchlight gleaming hungrily in her fist.\n\n[SUGGEST:Charge the burning brutes with Cleaver|Cast Shadow Blade and flank their leader|Fire a heavy crossbow into the nearest giant's eye]"
+  },
+  {
+   "turn": 2108,
+   "raw": "[TIME_CHECK:midmorning]\n[TIME_ADVANCE:2m]\n[DICE:Attack roll with Cleaver|24|success]\n[DICE:Cleaver damage with Sneak Attack|52|success]\n[ENEMY_HP:Stone Giant Scout 3|-52]\n[COMPANION_SPELL_USED:Morwen Zethran|Silence]\n[DICE:Frizwick attack roll|22|success]\n[DICE:Frizwick sneak attack damage|36|success]\n[ENEMY_HP:Stone Giant Scout 1|-36]\n[FUTURE_EVENT_RESOLVED:Ambush and slaughter the three stone giant scouts in the blind gully from the windward slope.]\n[COMBAT_ROUND:2]\n\nYou vault the crest like a starving panther, boots biting hard into sliding scree. \n\nCleaver screams through the smoke. The Thassilonian steel shears through thick grey tendon and bites deep into the third giant's knee, bringing the howling brute crashing down into the red embers. Morwen's magic smothers the ravine in dead silence, choking their bellows before an alarm can reach the peaks. \n\nBeside you, Frizwick flashes like a silver spark, driving her witchlight blade under the first giant's ribs. Daeris advances with bronze mace raised, her eyes cold as winter iron. \n\nThe crippled brute under your blade claws wildly for a shattered boulder, black blood spurting across your boots.\n\n[SUGGEST:Drive Cleaver through the grounded giant's throat|Sever the brute's reaching arm|Vault off the fallen giant to strike the second scout]"
+  },
+  {
+   "turn": 2109,
+   "raw": "[TIME_CHECK:midmorning]\n[TIME_ADVANCE:1m]\n[SCENE_CAST:Frizwick, Daeris, Morwen Zethran]\n[DICE:Attack roll with Cleaver|27|success]\n[DICE:Cleaver slashing damage|44|success]\n[CANON_TXN_BEGIN:stone-giant-scout-3-death|npc-death|-|giant_scout|-]\n[ENEMY_SLAIN:Stone Giant Scout 3]\n[CANON_TXN_END:stone-giant-scout-3-death]\n[DICE:Daeris mace attack|19|success]\n[DICE:Daeris damage|18|success]\n[ENEMY_HP:Stone Giant Scout 1|-18]\n[DICE:Morwen Star-iron daggers|23|success]\n[DICE:Morwen piercing damage|31|success]\n[ENEMY_HP:Stone Giant Scout 2|-31]\n[COMBAT_ROUND:3]\n\nYour runeblade comes down with the butcher weight of an executioner's axe. \n\nThassilonian steel shears through thick muscle and grey bone at the shoulder, severing the giant's arm in a single savage stroke. The brute thrashes once in the red embers, black arterial gore gushing across the scree as life drains from its glassy eyes. \n\nBeside you, Daeris shatters the kneecap of the first scout with her bronze mace. Morwen's star-iron blades whistle through the dead air of her silence sphere, burying themselves deep into the second giant's chest. The remaining brutes stumble back against the basalt wall, bleeding and trapped in the narrow ravine.\n\n[SUGGEST:Drive Cleaver into the second giant's heart|Flank the staggered first scout with Frizwick|Cast Shadow Blade to butcher both survivors]"
+  },
+  {
+   "turn": 2110,
+   "raw": "[TIME_CHECK:midmorning]\n[TIME_ADVANCE:1m]\n[SCENE_CAST:Frizwick, Daeris, Morwen Zethran]\n[DICE:Athletics check to vault|25|success]\n[SKILL_SUCCESS:Jumping]\n[DICE:Attack roll with Cleaver|26|success]\n[DICE:Cleaver slashing damage with Sneak Attack|61|success]\n[CANON_TXN_BEGIN:stone-giant-scout-2-death|npc-death|-|giant_scout|-]\n[ENEMY_SLAIN:Stone Giant Scout 2]\n[CANON_TXN_END:stone-giant-scout-2-death]\n[DICE:Frizwick attack roll|24|success]\n[DICE:Frizwick piercing damage|38|success]\n[CANON_TXN_BEGIN:stone-giant-scout-1-death|npc-death|-|giant_scout|-]\n[ENEMY_SLAIN:Stone Giant Scout 1]\n[CANON_TXN_END:stone-giant-scout-1-death]\n[COMBAT_END:victory]\n[XP:140]\n\nYou plant your boot upon the dead brute's chest and launch yourself high into the mountain air. \n\nCleaver falls like a thunderbolt through the quiet ravine. The runeblade splits the second giant's collarbone and drives deep into its black heart, tearing through muscle and rib in a crimson spray. The massive creature crashes against the basalt wall and slides into the dust with glassy eyes. \n\nBehind you, Frizwick vaults the shattered boulders like a stalking lynx. Her witchlight blade punches up through the jaw of the last stumbling scout, ending its struggles before the body hits the shale. \n\nMorwen lowers her hands, letting the suffocating sphere of silence dissolve into the howling wind. Daeris rests her mace on her hip, wiping thick black gore from the flanged bronze. \n\n[SAY:Frizwick]\"Clean work. No horns sounded to the heights.\"\n\n[SAY:Morwen Zethran]\"Search their packs quickly. If they carried patrol tokens or marching orders from Xin-Shalast, we take them now.\"\n\n[SUGGEST:Search the dead giants' packs and belongings|Mount up and ride hard into the high pass|Scalp their leader's ear as a grim trophy]"
+  },
+  {
+   "turn": 2111,
+   "raw": "[TIME_CHECK:midmorning]\n[TIME_ADVANCE:4h]\n[LOCATION_STATE:three stone giant corpses rot in a scorched blind gully]\n[NPC:Frizwick|fierce, eager for blood|]\n[NPC:Daeris|grim, ready for war|]\n[NPC:Morwen Zethran|coldly vigilant|]\n[LOCATION:Kodar Mountains - High Notch Pass]\n[LOCATION_DESC:A savage knife-edge pass cutting through the black granite peaks of the Kodar range. Howling gale winds whip freezing spindrift across frozen scree, but the forged bracelets thrum with steady warmth against the skin. To the south lies the descent toward the North Road, while the north opens into the high frozen plateaus leading toward Xin-Shalast.]\n[LOCATION_SIZE:large|180]\n[WARES:none]\n[DICE:Riding check|24|success]\n[SKILL_SUCCESS:Riding]\n\nYou swing into the saddle and haul the reins north.\n\nIron-shod hooves hammer the shale, sending sprays of black gravel over the precipice as the horses surge upward. The rutted dirt gives way to frozen granite and the brutal teeth of the Kodar range. Freezing gales roar down from the glacial peaks, but the warding bracelets pulse like banked hearthfires against your wrists, keeping the blood hot and swift in your veins. \n\nBelow you, the vast sprawl of Varisia shrinks to a grey ribbon of mist. Ahead, the high notch pass cuts between two towering pillars of black basalt, the hidden road to Xin-Shalast opening before your vanguard.\n\n[SAY:Morwen Zethran]\"We have bypassed their valley garrisons. Beyond this notch lies the high plateau.\"\n\n[SAY:Frizwick]\"The wind stinks of old gold and blood up here.\"\n\n[SAY:Daeris]\"Karzoug's mountain waits. Let us see if his throne can bleed.\"\n\n[SUGGEST:Spur the horses through the basalt pillars|Scout the plateau ahead on foot|Halt briefly to inspect the horses and gear]"
+  },
+  {
+   "turn": 2112,
+   "raw": "[TIME_CHECK:afternoon]\n[TIME_ADVANCE:30m]\n[SCENE_CAST:Frizwick, Daeris, Morwen Zethran]\n[NO_CHANGE]\n[DICE:Investigation check on gear and horses|24|success]\n[SKILL_SUCCESS:Investigation]\n\nYou draw rein in the lee of a jagged obsidian crag. \n\nThe horses stand steaming in the sub-zero blast, their nostrils rimed with white frost, but their chests heave strong and unbroken. You run experienced hands down the mare's hocks, checking shoes and clearing razor shale from the frogs. The cinches hold firm, and the heavy alpine packs remain tied down against the buffeting gales. \n\nFrizwick checks the bindings of her boot spikes, shivering once before her bracelet flared with reassuring hearth-heat. Daeris lays a gloved palm against each beast's neck, murmuring a brief word to steady their frightened hearts. Beside them, Morwen pulls a spyglass from her furs and braces against the rock to scan the high pass ahead.\n\n[SAY:Morwen Zethran]\"The path narrows to an ice shelf two miles north. Beyond it sits the golden rim of the high plateau.\"\n\n[SAY:Daeris]\"The beasts can carry us to the rim, but no further. We fight on foot once we breach the outer courts.\"\n\n[SAY:Frizwick]\"Good. I fight better with stone under my boots anyway.\"\n\n[SUGGEST:Remount and push through the ice shelf|Scout the approach on foot using stealth|Distribute climbing gear and star-iron knives now]"
+  },
+  {
+   "turn": 2113,
+   "raw": "[TIME_CHECK:afternoon]\n[TIME_ADVANCE:45m]\n[SCENE_CAST:Frizwick, Daeris, Morwen Zethran]\n[WHISPER:Frizwick heard riders from the coast swear four hell-bound reavers butchered a forge-devil in Magnimar and rode north to butcher the giant-king.]\n[DICE:Stealth check with Master skill|29|success]\n[SKILL_SUCCESS:Stealth]\n[DICE:Perception check to scout|27|success]\n[SKILL_SUCCESS:Perception]\n\nYou slip from the saddle and blend into the jagged shadows of the basalt wall. \n\nFrizwick mirrors your stride, moving like a phantom across the crusted ice without dislodging a single pebble. Cold wind roars through the notch, tearing white plumes of frost from the precipice. \n\n[SAY:Frizwick]\"The horse-traders below said four reavers killed a smithy demon in Magnimar and rode north to tear the giant-king from his seat. They gave us devil horns in the retelling.\"\n\nYou crest the frozen ridge on your belly and peer over the icy rim. Below lies the legendary valley of Xin-Shalast, a sunken expanse of gold-plated spires and cyclopean ruins smothered in glacial mist. A patrol of armored rune-giants marches the lower causeway, their massive iron broadswords scraping stone with a sound like iron grinding bone.\n\n[SAY:Morwen Zethran]\"The outer rim is held in force. But the high eastern aqueduct is cracked and unattended.\"\n\n[SAY:Daeris]\"We leave the mounts tethered in the cleft. Our path lies across the high stone.\"\n\n[SUGGEST:Infiltrate across the cracked high aqueduct|Ambush the rune-giant patrol on the causeway|Scale the eastern cliff face toward the golden spires]"
+  },
+  {
+   "turn": 2114,
+   "raw": "[TIME_CHECK:afternoon]\n[TIME_ADVANCE:2h]\n[SCENE_CAST:Frizwick, Daeris, Morwen Zethran]\n[NO_CHANGE:Daeris is with the party]\n[LOCATION:Xin-Shalast - Eastern Golden Spires]\n[LOCATION_DESC:A sheer precipice of black basalt crowned with cyclopean terraces of beaten gold. Glacial winds tear across narrow stone buttresses, high above the sunken city's lower avenues. To the west lies the cracked high aqueduct, while carved stone stairs to the north lead directly toward the high terrace before Karzoug's throne sanctum.]\n[LOCATION_SIZE:large|120]\n[WARES:none]\n[DICE:Athletics check to scale the cliff|26|success]\n[SKILL_SUCCESS:Climbing]\n\nYou drive steel pitons into the frozen basalt and haul your body upward. \n\nSinew and bone strain against the mountain as you lead the ascent. Behind you, Frizwick moves with the effortless grace of a hunting cat, finding handholds where only ice clings to vertical stone. Daeris climbs with relentless, heavy rhythm, her breastplate clinking softly beneath thick furs, while Morwen follows close behind to secure the trailing line. \n\nYour fingers hook over the carved golden lip of the terrace, and you drag yourself over the rim. \n\nThe high plateau of Xin-Shalast stretches before you in savage magnificence. Golden spires claw at the bruised mountain sky, their ancient gilding scarred by ice and dragon fire. Ahead, a wide stair of black granite climbs through rows of headless colossi toward the glowing runic archway of the Pinnacle. \n\n[SAY:Morwen Zethran]\"The wards above are pulsing with greed magic. He knows the threshold is breached.\"\n\n[SAY:Frizwick]\"Let him watch. He has had ten thousand years to prepare for dying.\"\n\n[SAY:Daeris]\"Draw your steel, husband. The final seat of Thassilon is before us.\"\n\n[SUGGEST:Draw Cleaver and ascend the granite stair|Cast Invisibility and stalk ahead of the group|Scout the colossi for hidden runic traps]"
+  },
+  {
+   "turn": 2115,
+   "raw": "[TIME_CHECK:afternoon]\n[TIME_ADVANCE:10m]\n[SCENE_CAST:Frizwick, Daeris, Morwen Zethran]\n[NO_CHANGE:Xin- is part of the place name Xin-Shalast]\n[SPELL_USED:Invisibility]\n[DICE:Stealth check|29|success]\n[SKILL_SUCCESS:Stealth]\n[SUBLOCATION:Pinnacle of Avarice - Runed Archway]\n[LOCATION_DESC:A colossal gatehouse of polished obsidian, engraved with burning emerald runes of ancient Thassilon. Severed giant heads skewered on bronze pikes line the passage. Beyond the threshold, the cavernous throne sanctum looms beneath an emerald occluded eye.]\n[LOCATION_SIZE:medium|15]\n[LOCATION_HOURS:none]\n[WARES:none]\n\nFey sorcery wraps cold around your skin. Light bends, and you vanish into the freezing air. \n\nYou glide soundlessly past the headless colossi. Your boots make no sound against the black granite. The emerald runes along the archway hiss with dormant malice, but your unseen passage leaves the magical tripwires untriggered. \n\nThrough the towering gate of obsidian, the throne sanctum yawns before you. \n\nHovering above a dais of raw gold, an immense runic vortex spins with crackling emerald lightning. Inside that storm of stolen souls, the gaunt, ancient form of Karzoug stirs, his burning red eyes fixed upon the threshold. At the base of the dais stand two massive armored rune-giants, their flaming greatswords resting point-down in the stone. \n\n[SAY:Karzoug]\"You crawl into my sanctum like vermin into a furnace.\"\n\nThe wizard king's voice shakes the basalt beneath your feet. He has not pierced your invisibility, but he senses the breach of his outer threshold.\n\n[SUGGEST:Signal your wives to launch an ambush|Creep behind the rune-giants to strike Karzoug's focus|Place a blasting charge at the rune-giants' boots]"
+  },
+  {
+   "turn": 2116,
+   "raw": "[TIME_CHECK:afternoon]\n[TIME_ADVANCE:2m]\n[SCENE_CAST:Frizwick, Daeris, Morwen Zethran, Karzoug]\n[LOCATION_HOURS:none]\n[DICE:Stealth check behind giants|28|success]\n[SKILL_SUCCESS:Stealth]\n[DICE:Attack roll with Cleaver on Soul Focus|27|success]\n[DICE:Sneak Attack damage|54|damage]\n[COMBAT_START:Karzoug's Soul-Lens|50|18|+0|0d0|0]\n[COMBAT_STATS:STR:10|DEX:10|CON:10|INT:10|WIS:10|CHA:10|CR:10]\n[ENEMY_SLAIN:Karzoug's Soul-Lens]\n[COMBAT_START:Karzoug the Claimer|180|22|+14|3d8+6|100]\n[COMBAT_STATS:STR:14|DEX:16|CON:18|INT:26|WIS:18|CHA:20|CR:16]\n[COMBAT_START:Rune-Giant Wardens|120|18|+12|3d6+8|80]\n[COMBAT_STATS:STR:26|DEX:11|CON:22|INT:12|WIS:14|CHA:12|CR:14]\n\nYou drift behind the iron greaves of the rune-giants like a mountain ghost. \n\nCleaver slides from its scabbard with no rasp of steel. Above the dais, the great emerald lens spins in its cradle of lightning, feeding the dead king his stolen power. You leap from the pedestal, both hands locked upon the hilt. \n\nThe runeforged blade bites deep into the heart of the gem. \n\nThe lens shatters with the roar of a dying gale. Green fire explodes across the throne room, hurling the rune-giants to their knees as their burning greatswords clatter against the basalt. Karzoug shrieks, his physical form violently dragged from the vortex down onto the golden dais. \n\n[SAY:Karzoug]\"Insolent insect! I will flay your soul into ash!\"\n\n[SAY:Daeris]\"Now! Abadar claims the tyrant's crown!\"\n\nMorwen weaves a web of silencing sorcery around the dais while Frizwick vaults the shattered glass, her witchlight blade seeking Karzoug's throat.\n\n[SUGGEST:Drive Cleaver into Karzoug's exposed chest|Toss a blasting charge beneath the rune-giants|Flank Karzoug with Frizwick to strike his flank]"
+  },
+  {
+   "turn": 2117,
+   "raw": "[TIME_CHECK:afternoon]\n[TIME_ADVANCE:1m]\n[SCENE_CAST:Frizwick, Daeris, Morwen Zethran, Karzoug]\n[ITEM_LOST:blasting charge]\n[DICE:Attack roll to throw blasting charge|24|success]\n[DICE:Blasting charge explosion damage|120|damage]\n[ENEMY_HP:Rune-Giant Wardens|-120]\n[ENEMY_SLAIN:Rune-Giant Wardens]\n[COMBAT_ROUND:2]\n\nYou snatch the iron canister from your belt and whip your arm forward.\n\nThe fuse flares red against the dim basalt. The bomb skitters across the polished floor and settles squarely between the greaves of the staggered brutes. \n\nA deafening roar tears through the sanctum as the mountain powder detonates. \n\nIron and fire rip outward in a blinding sphere of fury. The concussion lifts both giants off their feet and smashes their armored bulks against the towering obsidian pillars. Shattered plate and charred flesh rain down upon the golden dais as the monsters collapse into motionless heaps of smoking meat. \n\nKarzoug staggers upon his throne steps, his pale flesh singed by the blast. \n\n[SAY:Karzoug]\"Slaves of dust! I will tear the marrow from your bones!\"\n\nFrizwick darts through the rising smoke to flank the wizard king, her blade gleaming with cold malice. Daeris raises her open-hand iron pin, channeling holy light to blind his sorcerous reach, while Morwen readies a counter-curse from the shadows.\n\n[SUGGEST:Drive Cleaver straight into Karzoug's heart|Cast Shadow Blade and strike with twin runesteel|Flank with Frizwick for a coordinated throat strike]"
+  }
+ ]
+}
