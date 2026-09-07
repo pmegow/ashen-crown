@@ -1427,6 +1427,22 @@ function runEngineTests(R){
     delete worldState.deityDriftNudged;var n=(typeof buildDeityDriftNudge==="function")?buildDeityDriftNudge():"";
     if(typeof buildDeityDriftNudge==="function"&&n!==""&&n.indexOf("Apollo")<0)return "the drift nudge must name the map's deity: "+n;
   });
+  t("#344 the in-band ask reaches the STYLE tail (the old sentence forbade ending with suggestions — the very thing #328 asks for) and a miss arms a one-shot engine note: STYLE carries the ask when the setting is on and the old sentence when off; the note fires once, is skipped when the setting is off, and the registry rows exist; generateActions arms the latch on a miss only",function(){
+    makeWorld();var was=suggestInband;
+    suggestInband=true;var tail=buildSysPrompt().volatile;tail=tail.slice(tail.indexOf("STYLE: "));
+    if(tail.indexOf("End EVERY narrative response with the [SUGGEST:a|b|c] tag")<0||tail.indexOf("Do NOT end your response with suggested actions")>=0)return "STYLE must carry the in-band ask when the setting is on";
+    suggestInband=false;tail=buildSysPrompt().volatile;tail=tail.slice(tail.indexOf("STYLE: "));
+    if(tail.indexOf("Do NOT end your response with suggested actions")<0||tail.indexOf("[SUGGEST:a|b|c]")>=0)return "the rollback keeps the old sentence byte-for-byte";
+    suggestInband=true;worldState.suggestMissPing={turn:worldState.turn};
+    var n=buildSuggestMissNote();if(!/SUGGESTED ACTIONS MISSING/.test(n)||!/\[SUGGEST:action one\|action two\|action three\]/.test(n))return "note: "+n;
+    if(buildSuggestMissNote()!=="")return "the note must fire once";
+    suggestInband=false;worldState.suggestMissPing={turn:worldState.turn};if(buildSuggestMissNote()!==""||worldState.suggestMissPing)return "setting off → no note, latch cleared";
+    suggestInband=was;
+    if(NOTE_BUILDERS.indexOf(buildSuggestMissNote)<0||!NOTE_SHAPES.buildSuggestMissNote||NOTE_LATCH_FIELDS.indexOf("suggestMissPing")<0||NOTE_SHAPES.buildSuggestMissNote.ack.indexOf("SUGGEST")<0)return "registry rows";
+    var gm=__fsForTests.readFileSync(__rootForTests+"/game.js","utf8"),fn=gm.slice(gm.indexOf("function generateActions("),gm.indexOf("worldState.lastActions=acts.slice(0,3);"));
+    if(fn.indexOf("if(typeof suggestInband!==\"undefined\"&&suggestInband)worldState.suggestMissPing={turn:worldState.turn}")<0)return "generateActions must arm the miss latch on the fallback path";
+    var armIdx=fn.indexOf("worldState.suggestMissPing="),useIdx=fn.indexOf("in-band buttons used");if(armIdx<useIdx)return "the latch must be armed only on the miss branch (after the in-band branch)";
+  });
   t("#348 curve change keeps every character at their level: a Lv17 with 131,190 XP (Ammut at t2419) loads as Lv17 with XP floored to the new gate, companions likewise; nobody de-levels and nobody levels up on load",function(){
     makeWorld();var c=worldState.character;c.level=17;c.xp=131190;
     worldState.npcs.push({name:"Daeris",partyMember:true,status:"steady",charSheet:{name:"Daeris",cls:"Cleric",level:16,xp:114240,hp:60,maxHp:60,stats:{},abilities:[],spells:[],inventory:[]}});

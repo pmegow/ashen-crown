@@ -585,7 +585,8 @@ async function generateActions(msgEl){
     delete worldState.suggestInband;
     var resp=null;
     if(_ib&&_ib.length>=3){resp=JSON.stringify({present:"",actions:_ib.slice(0,3)});if(typeof console!=="undefined")console.info("[actions] #328 in-band buttons used — no suggestion call");}
-    else resp=await callGM("RECENT SCENES (oldest first — the LAST one is the current moment):\n"+suggestionHistoryPairs()+"\n\n"+SUGGESTION_ASK,buildSuggestionSys(prevActs),200,null,{noHistory:true,kind:"actions"});/* #283②: SUGGESTION_ASK matches the mode block's object demand — the user channel no longer erases the #141 checking space */
+    else{if(typeof suggestInband!=="undefined"&&suggestInband)worldState.suggestMissPing={turn:worldState.turn};/* #344: arm the miss note — the next turn asks beside the model's own output */
+    resp=await callGM("RECENT SCENES (oldest first — the LAST one is the current moment):\n"+suggestionHistoryPairs()+"\n\n"+SUGGESTION_ASK,buildSuggestionSys(prevActs),200,null,{noHistory:true,kind:"actions"});/* #283②: SUGGESTION_ASK matches the mode block's object demand — the user channel no longer erases the #141 checking space */}
     if(worldState.turn!==turnAt)throw new Error("stale"); // a newer turn landed; discard quietly
     var acts=parseSuggestionArray(resp);
     if(!acts||!acts.length){_cleanup();return;}/* remove the "…" placeholders on an empty result too (audit E25) */
