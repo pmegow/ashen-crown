@@ -1392,6 +1392,15 @@ function runEngineTests(R){
     if(blk.indexOf("(the player)")>=0)return "a blank hero backstory adds no line";
     worldState.npcs=[];if(buildPartyHistoriesBlock()!=="")return "no past anywhere → no block";
   });
+  t("#359 a companion's languages (with broken fluency) and deity ride the party block; absent fields add no line",function(){
+    makeWorld();worldState.npcs.push({name:"Daeris",status:"alive",rel:"companion",partyMember:true,met:1,charSheet:{name:"Daeris",cls:"Cleric",level:3,hp:20,maxHp:20,stats:{STR:9,DEX:12,CON:13,INT:14,WIS:17,CHA:12},deity:"Abadar — god of cities, contracts, and the measured weight of obligation",languages:[{name:"Common",broken:false},{name:"Thassilonian",broken:false},{name:"Infernal",broken:true}],skills:initSkills(),abilities:[],spells:[],inventory:[],conditions:[],relationships:[]}});
+    var v=buildSysPrompt().volatile,di=v.indexOf("Daeris — ");if(di<0)return "no companion block";var blk=v.slice(di,v.indexOf("\n\n",di)>0?v.indexOf("\n\n",di):v.length);
+    if(blk.indexOf("Languages: Common, Thassilonian, Infernal (broken)")<0)return "languages line: "+blk.slice(0,600);
+    if(blk.indexOf("Deity: Abadar — god of cities")<0)return "deity line: "+blk.slice(0,600);
+    var cs=findCompanionChar("Daeris");cs.languages=[];delete cs.deity;
+    v=buildSysPrompt().volatile;di=v.indexOf("Daeris — ");blk=v.slice(di,v.indexOf("\n\n",di)>0?v.indexOf("\n\n",di):v.length);
+    if(blk.indexOf("Languages:")>=0||blk.indexOf("Deity:")>=0)return "absent fields must add no line";
+  });
   t("#348 curve change keeps every character at their level: a Lv17 with 131,190 XP (Ammut at t2419) loads as Lv17 with XP floored to the new gate, companions likewise; nobody de-levels and nobody levels up on load",function(){
     makeWorld();var c=worldState.character;c.level=17;c.xp=131190;
     worldState.npcs.push({name:"Daeris",partyMember:true,status:"steady",charSheet:{name:"Daeris",cls:"Cleric",level:16,xp:114240,hp:60,maxHp:60,stats:{},abilities:[],spells:[],inventory:[]}});

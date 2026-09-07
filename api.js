@@ -1982,6 +1982,9 @@ function buildSysPrompt(){
       // a write-path with no read-path, so they silently rotted (Daeris, Unconscious for ~200
       // turns while narrated awake). Inject with age so stale state is visible and self-corrects.
       var _pmSk=buildSkillCanonBlock(pcs,true);if(_pmSk)line+="\n  "+_pmSk;/* #357: a companion's EARNED skills reach the GM (they were sheet-only) */
+      /* #359: languages (with broken fluency) and deity were sheet-only too — Daeris's authored Abadar and her broken Infernal never reached the GM */
+      if(pcs.languages&&pcs.languages.length)line+="\n  Languages: "+pcs.languages.map(function(l){return (l&&l.name?l.name:String(l))+(l&&l.broken?" (broken)":"");}).join(", ");
+      if(pcs.deity)line+="\n  Deity: "+pcs.deity;
       if(pcs.conditions&&pcs.conditions.length)line+="\n  Conditions: "+pcs.conditions.map(condInjectFmt).join(", ");
       // #61: companion relationships were WRITTEN by [COMPANION_RELATIONSHIP:] but never injected —
       // the same write-path-with-no-read-path class as the #46 conditions above. The GM never saw
