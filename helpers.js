@@ -712,19 +712,30 @@ function manaCur(c){
   if(!c||typeof c.mana!=="number"||!isFinite(c.mana))return max;
   return Math.max(0,Math.min(max,c.mana));
 }
-/* #352 (v1.833): THE HP readout — one pure shape for every HP number the HUD paints (the topbar
-   hero readout and each companion card), so the two can never drift. The number carries the
-   health signal itself (the bar is gone): its hue IS the percentage — hsl(pct×1.2°) runs red (0°)
-   through amber to green (120°), muted to the palette (S 60%, L 58%). Under 10% (but alive) the
-   readout is `crit` and the host adds the .hp-crit breath; at zero it goes still and dim.
-   Car Mode keeps its own glance palette by design (UA21③). Owner-tuned 2026-09-06. */
-function hpReadout(hp,maxHp){
-  var mx=(typeof maxHp==="number"&&maxHp>0)?maxHp:0,cur=(typeof hp==="number"&&isFinite(hp))?hp:0;
-  var pct=mx?Math.max(0,Math.min(100,Math.round(cur/mx*100))):0;
-  var alive=cur>0&&mx>0;
-  return {pct:pct,alive:alive,crit:alive&&pct<10,
-    color:alive?"hsl("+Math.round(pct*1.2)+",60%,58%)":"hsl(0,25%,45%)"};
+/* #352 (v1.833/v1.834): THE vital readouts — one pure shape for every HP or MP number the HUD paints
+   (the topbar hero readout and each companion card), so the hosts can never drift. The number
+   carries the signal itself (no bars): its hue IS the percentage, walked along a per-vital ramp
+   and muted to the palette (S 60%, L 58%). VITAL_RAMPS is the registry — adding a vital is one entry:
+     hp  120° green → 0° red (hue = pct×1.2); zero = dead → still and dim, never crit.
+     mp  217° blue → 330° hot pink (STOPS short of red so an empty pool never impersonates dying HP);
+         zero = spent, not dead → keeps the ramp's end colour and STILL pulses (owner ruling 2026-09-06:
+         a sorcerer without mana is useless, and knowing it before combat is critical).
+   `crit` (under 10%) makes the host add the .hp-crit breath. Car Mode keeps its own glance palette (UA21③). */
+var VITAL_RAMPS={
+  hp:{from:120,to:0,zeroStill:true},
+  mp:{from:217,to:330,zeroStill:false}
+};
+function vitalReadout(kind,cur,max){
+  var ramp=VITAL_RAMPS[kind]||VITAL_RAMPS.hp;
+  var mx=(typeof max==="number"&&max>0)?max:0,c=(typeof cur==="number"&&isFinite(cur))?cur:0;
+  var pct=mx?Math.max(0,Math.min(100,Math.round(c/mx*100))):0;
+  var alive=c>0&&mx>0,still=!mx||(!alive&&ramp.zeroStill);
+  var hue=Math.round(ramp.from+(ramp.to-ramp.from)*(1-pct/100));
+  return {pct:pct,alive:alive,crit:!still&&pct<10,
+    color:still?"hsl("+ramp.to+",25%,45%)":"hsl("+hue+",60%,58%)"};
 }
+function hpReadout(hp,maxHp){return vitalReadout("hp",hp,maxHp);}
+function mpReadout(mp,maxMp){return vitalReadout("mp",mp,maxMp);}
 /* #101 (v1.479): the ONE picker-description line, derived from the capability bible at render
    time — replaces the mechanics-bearing parentheticals that used to ride inside spell display
    names (a second copy of dice/range that could, and did, drift from the canon). Empty string

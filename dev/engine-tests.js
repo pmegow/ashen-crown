@@ -1228,6 +1228,22 @@ function runEngineTests(R){
     if(css.indexOf(".hp-crit{animation:hp-breath 1.6s ease-in-out infinite;}")===-1||css.indexOf("50%{opacity:.4}")===-1)return "the breath must stay at the owner-tuned 1.6s / 40%";
     if(css.indexOf("prefers-reduced-motion:reduce){ .hp-crit{ font-weight:bold; } }")===-1)return "reduced-motion must still mark the state (bold)";
   });
+  t("#352b the MP readout: hue walks 217° blue → 330° hot pink and never reaches red; crit under 10% INCLUDING zero (spent mana pulses — owner ruling); zero keeps the ramp end colour, not the dim; no pool → nothing; the ramp registry drives both vitals",function(){
+    var r=mpReadout(33,33);if(r.pct!==100||r.color!=="hsl(217,60%,58%)"||r.crit)return "full: "+JSON.stringify(r);
+    r=mpReadout(17,33);if(r.pct!==52||r.color!=="hsl(271,60%,58%)"||r.crit)return "half-ish: "+JSON.stringify(r);
+    r=mpReadout(4,33);if(r.pct!==12||r.crit)return "12% must NOT pulse: "+JSON.stringify(r);
+    r=mpReadout(3,33);if(r.pct!==9||!r.crit||r.color!=="hsl(320,60%,58%)")return "9% must pulse, hue 320°: "+JSON.stringify(r);
+    r=mpReadout(0,33);if(!r.crit||r.alive||r.pct!==0||r.color!=="hsl(330,60%,58%)")return "zero mana pulses at the ramp end (not dim): "+JSON.stringify(r);
+    r=mpReadout(0,0);if(r.crit||r.color!=="hsl(330,25%,45%)")return "no pool → still and dim, never crit: "+JSON.stringify(r);
+    var i;for(i=0;i<=100;i++){var hue=parseInt(mpReadout(i,100).color.slice(4),10);if(hue<217||hue>330)return "hue escaped the blue→pink band at "+i+"%: "+hue;}
+    if(hpReadout(50,100).color!==vitalReadout("hp",50,100).color)return "hpReadout must be the hp ramp entry";
+    if(!VITAL_RAMPS.hp.zeroStill||VITAL_RAMPS.mp.zeroStill)return "zero semantics: hp still, mp pulses";
+    var src=__fsForTests.readFileSync(__rootForTests+"/ui-panels.js","utf8");
+    if(src.split("mpReadout(").length<3)return "both mana hosts (hero HUD + companion fragment) must paint from mpReadout";
+    if(src.indexOf("color:var(--mana);flex-shrink:0;'>MP ")!==-1)return "the fixed-blue MP fragment is back";
+    if(src.indexOf('+"/"+pv.maxHp+" HP</span>"')===-1)return "companion cards label the HP number like the hero HUD does (owner call 2026-09-06)";
+    if(src.indexOf('+manaCur(sheet)+"/"+mx+" MP</span>"')===-1||src.indexOf("'>MP \"+manaCur(sheet)")!==-1)return "companion mana reads 'n/m MP' with the label trailing, like the hero HUD";
+  });
   t("#348 curve change keeps every character at their level: a Lv17 with 131,190 XP (Ammut at t2419) loads as Lv17 with XP floored to the new gate, companions likewise; nobody de-levels and nobody levels up on load",function(){
     makeWorld();var c=worldState.character;c.level=17;c.xp=131190;
     worldState.npcs.push({name:"Daeris",partyMember:true,status:"steady",charSheet:{name:"Daeris",cls:"Cleric",level:16,xp:114240,hp:60,maxHp:60,stats:{},abilities:[],spells:[],inventory:[]}});

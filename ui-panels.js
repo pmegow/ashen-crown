@@ -16,7 +16,8 @@
    member, so every surface that shows a member's HP shows their mana beside it. */
 function _ppManaHtml(sheet){
   var mx=(typeof manaMax==="function"&&sheet)?manaMax(sheet):0;
-  return mx>0?" <span style='color:var(--mana);flex-shrink:0;'>MP "+manaCur(sheet)+"/"+mx+"</span>":"";
+  if(!(mx>0))return "";var mpR=mpReadout(manaCur(sheet),mx);/* #352: hue = pool left (blue → hot pink), breath under 10% */
+  return " <span class='"+(mpR.crit?"hp-crit":"")+"' style='color:"+mpR.color+";flex-shrink:0;'>"+manaCur(sheet)+"/"+mx+" MP</span>";/* label trails, as on the hero HUD (owner call 2026-09-06) */
 }
 function partyMemberVitals(npc){
   var sheet=npc.charSheet||null;
@@ -82,7 +83,7 @@ function updateHUD(){
   var _hudMana=document.getElementById("hud-mana");
   if(_hudMana){var _hmMx=(typeof manaMax==="function")?manaMax(c):0;
     _hudMana.style.display=_hmMx>0?"":"none";
-    if(_hmMx>0)_hudMana.textContent=manaCur(c)+"/"+_hmMx+" MP";}
+    if(_hmMx>0){var _mpR=mpReadout(manaCur(c),_hmMx);_hudMana.textContent=manaCur(c)+"/"+_hmMx+" MP";_hudMana.style.color=_mpR.color;_hudMana.classList.toggle("hp-crit",_mpR.crit);}}/* #352: the number carries the pool signal */
   document.getElementById("hud-gold").textContent=(c.gold!=null?c.gold:0)+" gp";/* companion sheets may lack gold */
   document.getElementById("hud-align").textContent=c.actualAlignment||c.statedAlignment||"Neutral";
   document.getElementById("hud-loc").textContent=pcEffectiveLoc(c).location;/* P5: camera follows the spotlight PC (a split PC shows THEIR location) */
@@ -137,7 +138,7 @@ function updateHUD(){
           var hpR=hpReadout(pv.hp,pv.maxHp);/* #352: number-only vitals, hue = percentage, breath under 10% — the bar is gone (owner call 2026-09-06) */
           var pmXpHtml="";if(pmSheet.xp!==undefined&&pmSheet.level!==undefined){var pmNextXp=classXpLevels()[pmSheet.level];/* C6 ② */pmXpHtml="<span style='color:var(--t2);font-size:10px;flex-shrink:0;margin-left:2px;'>"+pmSheet.xp+"/"+(pmNextXp!==undefined?pmNextXp:"max")+" xp</span>";}
           card.innerHTML=nameSpan
-            +"<span class='"+(hpR.crit?"hp-crit":"")+"' style='color:"+hpR.color+";flex-shrink:0;'>"+(pv.hp||0)+"/"+pv.maxHp+"</span>"
+            +"<span class='"+(hpR.crit?"hp-crit":"")+"' style='color:"+hpR.color+";flex-shrink:0;'>"+(pv.hp||0)+"/"+pv.maxHp+" HP</span>"
             +_ppManaHtml(pmSheet)/* #110: card MP chip, blue beside the red HP */
             +pmXpHtml;
         }else{
