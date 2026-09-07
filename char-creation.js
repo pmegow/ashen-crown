@@ -90,6 +90,10 @@ function buildFinishingTouches(){
   var ap=document.getElementById("char-appear"),bs=document.getElementById("char-backstory");
   if(ap&&cs.appear&&!ap.value)ap.value=cs.appear;
   if(bs&&cs.backstory&&!bs.value)bs.value=cs.backstory;
+  /* #353: trait / flaw / motivation ride the wizard again — the GM reads all three (identity line,
+     skeleton rules, Party Histories) and companions get theirs generated, so the hero gets parity.
+     Optional: blank stays null, exactly what confirmChar used to hard-code. */
+  ["trait","flaw","motivation"].forEach(function(k){var el=document.getElementById("char-"+k);if(el&&cs[k]&&!el.value)el.value=cs[k];});
   var prev=document.getElementById("ft-portrait-preview");
   if(prev)refreshFtPortrait();
 }
@@ -122,11 +126,14 @@ async function ftRenderPortrait(){
   // id — the builder resolves it to the display name in its one lookup.
   var ap=document.getElementById("char-appear");
   var req=buildPortraitPromptRequest(Object.assign({},cs,{appear:ap&&ap.value.trim()?ap.value.trim():""}),{});
-  status.innerHTML="<span style='color:var(--t2);font-style:italic;'>Writing portrait prompt…</span>";
+  /* #353: the elapsed-seconds ticker, same shape as the scene-render status (owner call 2026-09-06) */
+  var _pt0=Date.now(),_ptBase="Writing portrait prompt…";
+  var _ptPaint=function(){status.innerHTML="<span style='color:var(--t2);font-style:italic;'>"+_ptBase+" "+Math.round((Date.now()-_pt0)/1000)+"s</span>";};
+  _ptPaint();var _ptTick=setInterval(function(){if(!status.isConnected){clearInterval(_ptTick);return;}_ptPaint();},1000);
   busy=true;
   try{
     var prompt=await callGM(req.promptReq,req.sys,600);
-    status.innerHTML="<span style='color:var(--t2);font-style:italic;'>Generating portrait…</span>";
+    _ptBase="Generating portrait…";_ptPaint();
     // UA21 ②: shared fal.ai fetch lives in ui-portrait.js — which loads AFTER this file in
     // index.html, but ftRenderPortrait only runs on user action (wizard step 5) long after
     // all scripts have loaded, so the call-time reference is safe.
@@ -136,13 +143,14 @@ async function ftRenderPortrait(){
     reader.onload=function(e){
       compressPortrait(e.target.result,function(compressed){
         cs.portrait=compressed;refreshFtPortrait();
-        status.innerHTML="<span style='color:var(--grn);'>Portrait generated.</span>";
+        status.innerHTML="<span style='color:var(--grn);'>Portrait generated in "+Math.round((Date.now()-_pt0)/1000)+"s.</span>";
       });
     };
     reader.readAsDataURL(blob);
   }catch(err){
     status.innerHTML="<span style='color:var(--red);'>"+escHtml(err.message)+"</span>";/* provider/network error text is untrusted — escape (review 2026-08-01) */
   }
+  clearInterval(_ptTick);
   busy=false;
 }
 async function ftDeriveAppearance(){
@@ -175,7 +183,7 @@ function buildReview(){
     var init2=csInitials(dispName);/* #15③: canonical (helpers.js) */
     var avHtml2=ch.portrait?'<div class="rv-av" style="overflow:hidden;"><img src="'+ch.portrait+'" style="width:100%;height:100%;object-fit:cover;display:block;"/></div>':'<div class="rv-av">'+init2+'</div>';
     var fs2=ch.stats||{};
-    el.innerHTML='<div class="rv-head">'+avHtml2+'<div><div class="rv-nm">'+(dispName?escHtml(dispName):'<span style="color:var(--t2)">Enter a name above</span>')+'</div>'/* imported-file name (#22/UA18) */
+    el.innerHTML='<div class="rv-head">'+avHtml2+'<div><div class="rv-nm">'+(dispName?escHtml(dispName):'<span style="color:var(--t2)">Enter a name below</span>')+'</div>'/* imported-file name (#22/UA18) */
       +'<div class="rv-sub">'+(ch.subraceNm||ch.subrace||ch.ancestry||"")+" "+(ch.cls||"")+" &middot; Lv"+(ch.level||1)+" &middot; "+genderLabel(ch.gender)+'</div></div></div>'
       +'<div class="rsgd">'+STATS.map(function(s){return'<div class="rsb"><div class="rn">'+s+'</div><div class="rv2">'+(fs2[s]||"—")+'</div><div class="rm">'+(fs2[s]?smod(fs2[s]):"")+'</div></div>';}).join("")+'</div>'
       +'<div class="rv-2c"><div class="rv-row"><span class="rk">Max HP</span><span class="rv">'+(ch.maxHp||ch.hp||0)+'</span></div><div class="rv-row"><span class="rk">Gold</span><span class="rv">'+(ch.gold||0)+' gp</span></div><div class="rv-row"><span class="rk">Level</span><span class="rv">'+(ch.level||1)+'</span></div><div class="rv-row"><span class="rk">XP</span><span class="rv">'+(ch.xp||0)+'</span></div></div>'
@@ -187,16 +195,17 @@ function buildReview(){
   }
   var i,cls=classDef(cs.cls),anc=null;/* #72 C6 ① */for(i=0;i<ANCS.length;i++){if(ANCS[i].id===cs.ancestry){anc=ANCS[i];break;}}
   var fs=getFin(),hp=getMHP();if(!rvGoldRolled){rvGold=15+droll(10);rvGoldRolled=true;}
-  var dispNm=cs.name||(document.getElementById("char-name")?document.getElementById("char-name").value.trim():"");
+  var _nmEl=document.getElementById("char-name"),dispNm=(_nmEl&&_nmEl.value.trim())||cs.name||"";/* #353: the live field wins — it sits BELOW the card and fills it as you type */
   var init=csInitials(dispNm);/* #15③: canonical (helpers.js) */
   var subnm=getSubNm();
   var alignEl=document.getElementById("char-alignment"),statedAlign=alignEl?alignEl.value:"Chaotic Neutral";
   var genderLbl=genderLabel(cs.gender);/* #11③: shared mapping */
   var avHtml=cs.portrait?'<div class="rv-av" style="overflow:hidden;"><img src="'+cs.portrait+'" style="width:100%;height:100%;object-fit:cover;display:block;"/></div>':'<div class="rv-av">'+init+'</div>';
-  el.innerHTML='<div class="rv-head">'+avHtml+'<div><div class="rv-nm">'+(dispNm?escHtml(dispNm):'<span style="color:var(--t2)">Enter a name above</span>')+'</div><div class="rv-sub">'+(subnm||(anc?anc.nm:"?"))+" "+(cs.cls||"?")+" &middot; "+cs.age+" &middot; "+genderLbl+'</div></div></div>'/* user-typed name (#22/UA18) */
+  el.innerHTML='<div class="rv-head">'+avHtml+'<div><div class="rv-nm">'+(dispNm?escHtml(dispNm):'<span style="color:var(--t2)">Enter a name below</span>')+'</div><div class="rv-sub">'+(subnm||(anc?anc.nm:"?"))+" "+(cs.cls||"?")+" &middot; "+cs.age+" &middot; "+genderLbl+'</div></div></div>'/* user-typed name (#22/UA18) */
     +'<div class="rsgd">'+STATS.map(function(s){return'<div class="rsb"><div class="rn">'+s+'</div><div class="rv2">'+fs[s]+'</div><div class="rm">'+smod(fs[s])+'</div></div>';}).join("")+'</div>'
     +'<div class="rv-2c"><div class="rv-row"><span class="rk">Max HP</span><span class="rv">'+hp+'</span></div><div class="rv-row"><span class="rk">Gold</span><span class="rv">'+rvGold+' gp</span></div><div class="rv-row"><span class="rk">Prime</span><span class="rv">'+(cls?cls.prime:"?")+'</span></div><div class="rv-row"><span class="rk">Hit die</span><span class="rv">'+(cls?"d"+cls.hd:"?")+'</span></div></div>'
     +(cs.appear?'<div class="desc-pre">"'+escHtml(cs.appear)+'"</div>':"")
+    +(["trait","flaw","motivation"].filter(function(k){return cs[k];}).map(function(k){return '<div class="rv-row"><span class="rk">'+k.charAt(0).toUpperCase()+k.slice(1)+'</span><span class="rv" style="font-weight:normal;">'+escHtml(cs[k])+'</span></div>';}).join(""))/* #353 */
     +'<div class="rv-row"><span class="rk">Alignment</span><span class="rv" style="font-weight:normal;">'+statedAlign+'</span></div>'
     +(DEITY_CENTRIC.indexOf(cs.cls)>=0&&document.getElementById("char-deity")&&document.getElementById("char-deity").value.trim()?'<div class="rv-row"><span class="rk">Deity</span><span class="rv" style="font-weight:normal;">'+document.getElementById("char-deity").value.trim()+'</span></div>':"")
     +'<div><div class="rk" style="margin-bottom:6px;">Starting gear</div><div class="tags">'+(cls?cls.gear:"").split(", ").map(function(g){return'<span class="tag">'+g+'</span>';}).join("")+'</div></div>';
@@ -295,7 +304,7 @@ function confirmChar(){
   var ancLangMap={elf:"Elvish",dwarf:"Dwarvish",gnome:"Gnomish",tiefling:"Infernal",hollow:"Umbral"};
   if(ancLangMap[cs.ancestry])startLangs.push(ancLangMap[cs.ancestry]);
   if(cs.ancestry==="halfblood"&&cs.subrace){var subLangMap={half_elven:"Elvish",half_orcish:"Orcish",half_draconic:"Draconic",half_infernal:"Infernal",half_fey:"Sylvan",half_gnomish:"Gnomish"};if(subLangMap[cs.subrace]&&startLangs.indexOf(subLangMap[cs.subrace])<0)startLangs.push(subLangMap[cs.subrace]);}
-  var char={name:cs.name,gender:cs.gender||"M",age:cs.age,appear:cs.appear,mark:"",backstory:cs.backstory||"",ancestry:anc?anc.nm:"Unknown",subrace:cs.subrace,subraceNm:subnm,heritageVariant:cs.heritageVariant||null,cls:cs.cls,stats:fs,hp:hp,maxHp:hp,gold:rvGold,inventory:(cls?cls.gear.split(", "):[]).concat(["First aid kit"]),level:1,xp:0,abilities:[],spells:[],archetype:null,archetypeNm:null,statedAlignment:statedAlign,actualAlignment:statedAlign,alignLaw:alignSeedAxes(statedAlign).law,alignGood:alignSeedAxes(statedAlign).good,/* #139: axes seed FROM the label — 0,0 under a non-neutral label made the first shift snap the display toward True Neutral */deity:charDeity,trait:null,flaw:null,motivation:null,languages:startLangs.map(function(l){return{name:l,broken:false};}),skills:null,conditions:[],relationships:[],saveModifiers:[],portrait:cs.portrait||null,portraitOffset:cs.portraitOffset||null,storyBeats:[],coreMemories:[],partyMember:true};
+  var char={name:cs.name,gender:cs.gender||"M",age:cs.age,appear:cs.appear,mark:"",backstory:cs.backstory||"",ancestry:anc?anc.nm:"Unknown",subrace:cs.subrace,subraceNm:subnm,heritageVariant:cs.heritageVariant||null,cls:cs.cls,stats:fs,hp:hp,maxHp:hp,gold:rvGold,inventory:(cls?cls.gear.split(", "):[]).concat(["First aid kit"]),level:1,xp:0,abilities:[],spells:[],archetype:null,archetypeNm:null,statedAlignment:statedAlign,actualAlignment:statedAlign,alignLaw:alignSeedAxes(statedAlign).law,alignGood:alignSeedAxes(statedAlign).good,/* #139: axes seed FROM the label — 0,0 under a non-neutral label made the first shift snap the display toward True Neutral */deity:charDeity,trait:cs.trait||null,flaw:cs.flaw||null,motivation:cs.motivation||null,languages:startLangs.map(function(l){return{name:l,broken:false};}),skills:null,conditions:[],relationships:[],saveModifiers:[],portrait:cs.portrait||null,portraitOffset:cs.portraitOffset||null,storyBeats:[],coreMemories:[],partyMember:true};
   char.xp=startXp; // apply the (clamped) starting XP at level 1 too — was silently dropped (audit E56)
   if(startLvl>1){char.level=startLvl;var hpB=0,si;for(si=2;si<=startLvl;si++){var hg=cls?(Math.ceil(cls.hd/2)+1+Math.floor((char.stats.CON-10)/2)):3;hpB+=Math.max(1,hg);}char.hp+=hpB;char.maxHp+=hpB;}
   // Racial capabilities — single-sourced in the capability bible (TODO #10). Resolve racial_caps from
@@ -495,6 +504,7 @@ function _csContext(){
   var cls=classDef(cs.cls);/* #72 C6 ①: null input → null, same as the old guard */
   if(cls)ctx+="Class: "+cls.id+"\n";
   if(cs.name)ctx+="Name: "+cs.name+"\n";
+  ["trait","flaw","motivation"].forEach(function(k){var el=document.getElementById("char-"+k),v=(el&&el.value.trim())||cs[k];if(v)ctx+=k.charAt(0).toUpperCase()+k.slice(1)+": "+v+"\n";});/* #353 */
   if(cs.gender)ctx+="Gender: "+genderLabel(cs.gender)+"\n";
   if(cs.age)ctx+="Age: "+cs.age+"\n";
   return ctx;
@@ -518,7 +528,7 @@ async function aiRandomiseAll(btn){
   if(btn){btn.classList.add("spinning");btn.disabled=true;btn.textContent="✦ …";}
   var ctx=_csContext();
   var prompt="Generate a complete dark fantasy RPG character identity. Return ONLY valid JSON, no markdown:\n"
-    +'{"name":"string","appear":"1-2 sentence physical description","backstory":"1-2 sentences of history"}'
+    +'{"name":"string","appear":"1-2 sentence physical description","backstory":"1-2 sentences of history","trait":"one line","flaw":"one line","motivation":"one line"}'
     +"\n\nContext:\n"+ctx;
   try{
     var raw=await callGM(prompt,"You are a dark fantasy character creation assistant. Output ONLY a single valid JSON object, no markdown, no commentary.",600);
@@ -527,6 +537,7 @@ async function aiRandomiseAll(btn){
     if(c.appear&&document.getElementById("char-appear"))document.getElementById("char-appear").value=c.appear;
     if(c.backstory&&document.getElementById("char-backstory"))document.getElementById("char-backstory").value=c.backstory;
     cs.name=c.name||cs.name;cs.appear=c.appear||cs.appear;cs.backstory=c.backstory||cs.backstory;
+    ["trait","flaw","motivation"].forEach(function(k){if(c[k]){cs[k]=String(c[k]);var el=document.getElementById("char-"+k);if(el)el.value=cs[k];}});/* #353 */
     buildReview();
     showToast("Character generated — review and adjust below.");
   }catch(e){showToast("Generate failed: "+e.message);}
@@ -537,7 +548,10 @@ function injectSparkleButtons(){
   var fields=[
     {id:"char-name",      label:"character name"},
     {id:"char-appear",    label:"physical appearance"},
-    {id:"char-backstory", label:"backstory"}
+    {id:"char-backstory", label:"backstory"},
+    {id:"char-trait",      label:"personality trait (one line)"},
+    {id:"char-flaw",       label:"character flaw (one line)"},
+    {id:"char-motivation", label:"driving motivation (one line)"}
   ];
   fields.forEach(function(f){
     var el=document.getElementById(f.id);if(!el)return;

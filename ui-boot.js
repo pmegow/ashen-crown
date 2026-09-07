@@ -132,7 +132,7 @@ function wireButtons(){
   document.getElementById("char-alignment").addEventListener("change",function(){if(!cs.deityEdited)buildStep6Deity();});
   document.getElementById("char-deity").addEventListener("input",function(){cs.deityEdited=this.value!==getDefaultDeity();});
   document.getElementById("ft-back").addEventListener("click",function(){goStep(4);});
-  document.getElementById("ft-next").addEventListener("click",function(){cs.appear=document.getElementById("char-appear").value.trim();cs.backstory=document.getElementById("char-backstory").value.trim();goStep(6);});
+  document.getElementById("ft-next").addEventListener("click",function(){cs.appear=document.getElementById("char-appear").value.trim();cs.backstory=document.getElementById("char-backstory").value.trim();["trait","flaw","motivation"].forEach(function(k){var el=document.getElementById("char-"+k);cs[k]=el?el.value.trim():"";});/* #353 */goStep(6);});
   document.getElementById("ft-upload").addEventListener("click",function(){document.getElementById("ft-portrait-file").click();});
   document.getElementById("ft-portrait-file").addEventListener("change",function(){var file=this.files[0];if(!file)return;var reader=new FileReader();reader.onload=function(e){compressPortrait(e.target.result,function(compressed){cs.portrait=compressed;refreshFtPortrait();});};reader.readAsDataURL(file);this.value="";});
   document.getElementById("ft-render").addEventListener("click",function(){ftRenderPortrait();});

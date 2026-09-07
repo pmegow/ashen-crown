@@ -1249,6 +1249,22 @@ function runEngineTests(R){
     frag=ppHp(100,100);if(frag.indexOf("class=''")===-1)return "a full HP fragment must not breathe: "+frag;
     if(src.indexOf('+manaCur(sheet)+"/"+mx+" MP</span>"')===-1||src.indexOf("'>MP \"+manaCur(sheet)")!==-1)return "companion mana reads 'n/m MP' with the label trailing, like the hero HUD";
   });
+  t("#353 wizard parity: Finishing Touches collects trait / flaw / motivation (optional, sparkle-assisted, randomise-filled) and confirmChar carries them; the review card reads the name field BELOW it live, its avatar matches the portrait preview's aspect, and the portrait render shows an elapsed timer",function(){
+    var idx=__fsForTests.readFileSync(__rootForTests+"/index.html","utf8"),cc=__fsForTests.readFileSync(__rootForTests+"/char-creation.js","utf8"),ub=__fsForTests.readFileSync(__rootForTests+"/ui-boot.js","utf8");
+    var s5=idx.slice(idx.indexOf('id="step5"'),idx.indexOf('id="step6"'));
+    var k;for(k=0;k<3;k++){var f=["trait","flaw","motivation"][k];
+      if(s5.indexOf('id="char-'+f+'"')===-1)return "step 5 lacks the "+f+" field";
+      if(cc.indexOf('{id:"char-'+f+'"')===-1)return "no sparkle button for "+f;}
+    if(s5.indexOf("(optional)")===-1)return "the persona fields must read as optional — blank stays null";
+    if(cc.indexOf("trait:cs.trait||null,flaw:cs.flaw||null,motivation:cs.motivation||null")===-1)return "confirmChar must carry the wizard's persona fields (was hard-coded null)";
+    if(ub.indexOf('cs[k]=el?el.value.trim():""')===-1)return "the Next button must capture the three fields into cs";
+    if(cc.indexOf('"trait":"one line","flaw":"one line","motivation":"one line"')===-1)return "Randomise must fill the persona fields too";
+    if(cc.indexOf("Enter a name above")!==-1||cc.split("Enter a name below").length!==3)return "the review placeholder must say BELOW on both paths";
+    if(cc.indexOf('dispNm=(_nmEl&&_nmEl.value.trim())||cs.name')===-1)return "the review name must read the live field first";
+    var av=idx.match(/\.rv-av\{width:(\d+)px;height:(\d+)px;border-radius:50%/),ft=s5.match(/id="ft-portrait-preview" style="width:(\d+)px;height:(\d+)px;border-radius:50%/);
+    if(!av||!ft||av[1]!==ft[1]||av[2]!==ft[2])return "review avatar aspect must match the finishing-touches preview: "+(av&&av.slice(1))+" vs "+(ft&&ft.slice(1));
+    if(cc.indexOf('Portrait generated in "+Math.round((Date.now()-_pt0)/1000)+"s.')===-1||cc.indexOf("clearInterval(_ptTick)")===-1)return "the portrait render must show elapsed seconds and clear its ticker";
+  });
   t("#348 curve change keeps every character at their level: a Lv17 with 131,190 XP (Ammut at t2419) loads as Lv17 with XP floored to the new gate, companions likewise; nobody de-levels and nobody levels up on load",function(){
     makeWorld();var c=worldState.character;c.level=17;c.xp=131190;
     worldState.npcs.push({name:"Daeris",partyMember:true,status:"steady",charSheet:{name:"Daeris",cls:"Cleric",level:16,xp:114240,hp:60,maxHp:60,stats:{},abilities:[],spells:[],inventory:[]}});
