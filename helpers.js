@@ -113,6 +113,21 @@ function diceStatsLine(){
     +(s.faces?"; d20 faces recorded "+s.faces+", mean "+s.meanFace+", 14+ on "+s.share14plus+"% (a fair die: 35%)":"; no d20 faces recorded yet")
     +(s.judged?"; checks against a DC: "+s.judged+", success "+s.successRate+"%"+(s.dcMean!=null?", mean DC "+s.dcMean:""):"")+".";
 }
+// ── #355 the REGISTER guard (owner ruling 2026-09-06: ledgers are banned as a STORY DEVICE, never as data) ──
+// The GM used "the ledger rots" as its big line six hours after the ruling. The data.js rule bans
+// building plots on paperwork; this is the model's own metaphor vocabulary, which no plot rule
+// touches — the #227 antiquity-ratchet class (house style beating the voice directive). Three parts:
+// a STYLE clause at the end of the prompt, this census on the CLEANED narration (player text and
+// Table Talk never scanned), and an engine note the next turn naming the word — the "new channel"
+// lesson: an instruction that loses to the model's own recent output must arrive beside it.
+// The list is deliberately tight — unambiguous clerical nouns only. "account", "contract", "bill",
+// "record", "register" and "the books" are all legitimate English in a fantasy mouth and stay out.
+var REGISTER_WORDS=["ledger","ledgers","invoice","invoices","invoiced","paperwork","bookkeeping","bookkeeper","clerical","spreadsheet","spreadsheets","accountant","accountants","tally sheet","balance sheet"];
+var REGISTER_RE=new RegExp("\\b(?:"+REGISTER_WORDS.map(function(w){return w.replace(/ /g,"\\s+");}).join("|")+")\\b","gi");
+var REGISTER_LOG_MAX=50;
+function registerScan(text){var out=[],seen={},m,re=new RegExp(REGISTER_RE.source,"gi");while((m=re.exec(String(text||"")))){var w=m[0].toLowerCase().replace(/\s+/g," ");if(!seen[w]){seen[w]=1;out.push(w);}}return out;}
+function registerStats(log){log=log||(worldState&&worldState.registerSlips)||[];var by={},i;for(i=0;i<log.length;i++){var w=log[i].word;by[w]=(by[w]||0)+1;}return {slips:log.length,byWord:by,lastTurn:log.length?log[log.length-1].turn:null};}
+function registerStatsLine(){var s=registerStats();if(!s.slips)return "";var parts=Object.keys(s.byWord).sort().map(function(w){return w+" \u00d7"+s.byWord[w];});return "Register slips (clerical words the narration used and was corrected on): "+s.slips+" ("+parts.join(", ")+"), last at turn "+s.lastTurn+".";}
 // #328: the [SUGGEST:a|b|c] payload → up to three clean actions. Leading "A)" / "1." markers and
 // asterisks are dropped (the v1.90 parseActions lesson); blanks vanish. Pure.
 function parseSuggestTag(body){var out=[],parts=String(body||"").split("|"),i;for(i=0;i<parts.length&&out.length<3;i++){var t=parts[i].replace(/\*/g,"").trim().replace(/^[(\[]?(?:[A-Ca-c]|[1-3])[)\].:]\s*/,"").trim();if(t.length>1)out.push(t);}return out;}

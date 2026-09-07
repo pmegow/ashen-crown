@@ -1804,6 +1804,7 @@ function observeDriftAxes(raw,clean){
     else if(lw){lw.lastTurn=turn;lw.count=(lw.count||1)+1;}/* P4b: counting related-but-unnamed turns is the FEATURE (the ratified fixture: an entry survives eight untagged turns) — weak cues are killed at the SOURCE by the sentence discipline above */
     if(lw&&lw.count>=LOCATION_FILING_TURNS){worldState.locationFilingPing={place:lw.place,firstTurn:lw.firstTurn,turn:turn};delete worldState.locationFilingWatch;}
   }
+  if(typeof registerFile==="function")registerFile(clean,turn);/* #355: clerical-register census on the CLEANED narration */
   var price=detectTravelPrice(clean);
   if(price&&price.days>0)worldState.travelPriceWatch={destination:price.destination,expected:price.days*MIN_PER_DAY,startMin:clockNow(),startTurn:turn};
   var tw=worldState.travelPriceWatch,lm=raw.match(/\[LOCATION:([^\]]+)\]/i);

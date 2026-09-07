@@ -1306,6 +1306,36 @@ function runEngineTests(R){
     for(i=0;i<WIZARD_AGES.length;i++)if(ages.indexOf('value="'+WIZARD_AGES[i]+'"')===-1)return "age vocabulary drifted from the select: "+WIZARD_AGES[i];
     for(i=0;i<WIZARD_ALIGNMENTS.length;i++)if(al.indexOf('value="'+WIZARD_ALIGNMENTS[i]+'"')===-1)return "alignment vocabulary drifted from the select: "+WIZARD_ALIGNMENTS[i];
   });
+  t("#355 the register guard: 'the ledger rots' files a slip and arms the note; 'give an account' / 'the contract' / 'the register of her voice' do not; the note fires once naming the word, waits out combat, then clears; the ring caps; STYLE ends with the clerical clause before 'Death is possible'; Table Talk carries the record; the census runs on the CLEANED narration inside observeDriftAxes only",function(){
+    var hits=registerScan("\"The house requires one to stay behind and weep, or the ledger rots.\" He filed the invoice of her grief.");
+    if(hits.join("|")!=="ledger|invoice")return "scan: "+JSON.stringify(hits);
+    if(registerScan("Give an account of yourself. The contract of muscle tightened. The register of her voice dropped. He balanced the books of his conscience.").length)return "false positive on legitimate English";
+    if(registerScan("The Ledgers of Thassilon").join("|")!=="ledgers")return "case-insensitive plural";
+    makeWorld();delete worldState.registerSlips;delete worldState.registerPing;delete worldState.combat;
+    var r=registerFile("or the ledger rots.",41);if(r.join("|")!=="ledger")return "file returned "+JSON.stringify(r);
+    if(!worldState.registerSlips||worldState.registerSlips.length!==1||worldState.registerSlips[0].turn!==41||worldState.registerSlips[0].word!=="ledger")return "ring: "+JSON.stringify(worldState.registerSlips);
+    if(!worldState.registerPing||worldState.registerPing.words.join("|")!=="ledger")return "latch not armed";
+    if(registerFile("Nothing of that sort here.",42).length||worldState.registerSlips.length!==1)return "a clean turn must not file";
+    worldState.combat={foes:[{name:"Ghoul",hp:5,maxHp:5}],round:1};
+    if(buildRegisterNote()!=="")return "the note must stay silent in combat";
+    if(!worldState.registerPing)return "combat must not burn the latch";
+    delete worldState.combat;
+    var n=buildRegisterNote();if(!/ENGINE NOTE/.test(n)||!/'ledger'/.test(n)||!/never clerical/i.test(n)||!/blood, oaths, hunger/.test(n))return "note: "+n;
+    if(buildRegisterNote()!=="")return "the note must fire once";
+    var k;for(k=0;k<REGISTER_LOG_MAX+7;k++)registerFile("ledger",100+k);
+    if(worldState.registerSlips.length!==REGISTER_LOG_MAX||worldState.registerSlips[0].turn!==107)return "ring must cap at "+REGISTER_LOG_MAX+" newest: "+worldState.registerSlips.length+"/"+worldState.registerSlips[0].turn;
+    var line=registerStatsLine();if(!/Register slips/.test(line)||!/ledger \u00d7/.test(line)||!/turn 156/.test(line))return "record line: "+line;
+    delete worldState.registerSlips;if(registerStatsLine()!=="")return "no slips → no line";
+    var v=buildSysPrompt().volatile,tail=v.slice(v.indexOf("STYLE: "));
+    var ci=tail.indexOf("NEVER reach for clerical images"),di=tail.indexOf("Death is possible.");
+    if(ci===-1||di===-1||ci>di)return "the clerical clause must sit inside STYLE just before 'Death is possible'";
+    if(!/no ledgers, invoices, paperwork, bookkeeping or accountants/.test(tail)||!/Debts are blood, oaths, hunger and memory/.test(tail))return "clause wording";
+    if(NOTE_BUILDERS.indexOf(buildRegisterNote)===-1||!NOTE_SHAPES.buildRegisterNote||NOTE_SHAPES.buildRegisterNote.combat!=="silent"||NOTE_LATCH_FIELDS.indexOf("registerPing")===-1)return "registry rows";
+    var gm=__fsForTests.readFileSync(__rootForTests+"/game.js","utf8"),ob=gm.slice(gm.indexOf("function observeDriftAxes("),gm.indexOf("var price=detectTravelPrice(clean);"));
+    if(ob.indexOf("registerFile(clean,turn)")===-1)return "the census must run inside observeDriftAxes on the cleaned narration";
+    if(gm.split("registerFile(").length!==2)return "the census must have exactly one call site (never the player's text, never Table Talk)";
+    var tt=__fsForTests.readFileSync(__rootForTests+"/table-talk.js","utf8");if(tt.indexOf("registerStatsLine()")===-1)return "Table Talk must carry the record";
+  });
   t("#348 curve change keeps every character at their level: a Lv17 with 131,190 XP (Ammut at t2419) loads as Lv17 with XP floored to the new gate, companions likewise; nobody de-levels and nobody levels up on load",function(){
     makeWorld();var c=worldState.character;c.level=17;c.xp=131190;
     worldState.npcs.push({name:"Daeris",partyMember:true,status:"steady",charSheet:{name:"Daeris",cls:"Cleric",level:16,xp:114240,hp:60,maxHp:60,stats:{},abilities:[],spells:[],inventory:[]}});
