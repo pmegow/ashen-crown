@@ -1060,7 +1060,7 @@ function runEngineTests(R){
   });
   t("#329 the chip and the wiring: diceTxt renders a pending [CHECK:] as 'd20 · click to roll' only while it is the armed check, and [DICE:] as before; rollPendingCheck rolls, clears, and sends the note as a silent continuation carrying the [DICE:] record; no buttons while a roll is pending; a typed action lets the check lapse; Car Mode says 'roll'; the setting is a File ▸ Settings checkbox",function(){
     var was=playerRollsDice;try{playerRollsDice=true;makeWorld();worldState.turn=30;applyMuts("[CHECK:Stealth check|+5|DC 14]");
-      var h=diceTxt("You crouch. [CHECK:Stealth check|+5|DC 14]");if(!/dice-pending/.test(h)||!/click to roll/i.test(h)||!/rollPendingCheck\(\)/.test(h)||!/STEALTH CHECK|Stealth check/.test(h))return "pending chip: "+h;
+      var h=diceTxt("You crouch. [CHECK:Stealth check|+5|DC 14]");if(!/dice-pending/.test(h)||!/<strong class="roll-due">click to roll/i.test(h)||!/rollPendingCheck\(\)/.test(h)||!/STEALTH CHECK|Stealth check/.test(h))return "pending chip: "+h;
       delete worldState.pendingCheck;h=diceTxt("[CHECK:Stealth check|+5|DC 14]");if(/dice-pending/.test(h)||/rollPendingCheck/.test(h))return "a lapsed check must not be clickable: "+h;
       h=diceTxt("[DICE:Stealth check|17|success]");if(!/<strong>17<\/strong>/.test(h)||!/success/.test(h))return "[DICE:] rendering changed: "+h;
     }finally{playerRollsDice=was;}
@@ -1226,6 +1226,7 @@ function runEngineTests(R){
     if(src.split("hpReadout(").length<3)return "both HUD hosts (hero readout + companion card) must paint from hpReadout";
     var css=__fsForTests.readFileSync(__rootForTests+"/index.html","utf8");
     if(css.indexOf(".hp-crit{animation:hp-breath 1.6s ease-in-out infinite;}")===-1||css.indexOf("50%{opacity:.4}")===-1)return "the breath must stay at the owner-tuned 1.6s / 40%";
+    if(css.indexOf(".roll-due{animation:hp-breath 1.6s ease-in-out infinite;}")===-1)return "the pending-roll chip must breathe on the same keyframes and timing as critical HP";
     if(css.indexOf("prefers-reduced-motion:reduce){ .hp-crit{ font-weight:bold; } }")===-1)return "reduced-motion must still mark the state (bold)";
   });
   t("#352b the MP readout: hue walks 217° blue → 330° hot pink and never reaches red; crit under 10% INCLUDING zero (spent mana pulses — owner ruling); zero keeps the ramp end colour, not the dim; no pool → nothing; the ramp registry drives both vitals",function(){
