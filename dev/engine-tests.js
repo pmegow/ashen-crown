@@ -1401,6 +1401,14 @@ function runEngineTests(R){
     v=buildSysPrompt().volatile;di=v.indexOf("Daeris — ");blk=v.slice(di,v.indexOf("\n\n",di)>0?v.indexOf("\n\n",di):v.length);
     if(blk.indexOf("Languages:")>=0||blk.indexOf("Deity:")>=0)return "absent fields must add no line";
   });
+  t("#360 the currency rule matches what the GOLD parser can store: whole gold only, small change is scene colour, never a fraction; the parser still drops fractions rather than misreading them",function(){
+    var rule=DEFAULT_RULES.filter(function(r){return /Currency is tracked/.test(r);})[0];if(!rule)return "no currency rule";
+    if(!/WHOLE gold pieces/.test(rule)||!/NEVER emit a fraction/.test(rule)||!/do NOT emit \[GOLD:\] for anything under one gold piece/.test(rule))return "rule wording: "+rule;
+    if(/convert to gp first/.test(rule))return "the old convert-then-emit instruction promised a precision the parser cannot honour";
+    makeWorld();worldState.character.gold=25;applyMuts("[GOLD:-0.5]");if(worldState.character.gold!==25)return "a fractional tag must not move whole gold: "+worldState.character.gold;
+    applyMuts("[GOLD:-1.5]");if(worldState.character.gold!==24)return "the integer prefix still applies: "+worldState.character.gold;
+    applyMuts("[GOLD:+3 gp]");if(worldState.character.gold!==27)return "positive control";
+  });
   t("#348 curve change keeps every character at their level: a Lv17 with 131,190 XP (Ammut at t2419) loads as Lv17 with XP floored to the new gate, companions likewise; nobody de-levels and nobody levels up on load",function(){
     makeWorld();var c=worldState.character;c.level=17;c.xp=131190;
     worldState.npcs.push({name:"Daeris",partyMember:true,status:"steady",charSheet:{name:"Daeris",cls:"Cleric",level:16,xp:114240,hp:60,maxHp:60,stats:{},abilities:[],spells:[],inventory:[]}});
