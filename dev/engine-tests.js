@@ -1264,7 +1264,7 @@ function runEngineTests(R){
     if(cc.indexOf('dispNm=(_nmEl&&_nmEl.value.trim())||cs.name')===-1)return "the review name must read the live field first";
     var av=idx.match(/\.rv-av\{width:(\d+)px;height:(\d+)px;border-radius:50%/),ft=s5.match(/id="ft-portrait-preview" style="width:(\d+)px;height:(\d+)px;border-radius:50%/);
     if(!av||!ft||av[1]!==ft[1]||av[2]!==ft[2])return "review avatar aspect must match the finishing-touches preview: "+(av&&av.slice(1))+" vs "+(ft&&ft.slice(1));
-    if(cc.indexOf('Portrait generated in "+Math.round((Date.now()-_pt0)/1000)+"s.')===-1||cc.indexOf("clearInterval(_ptTick)")===-1)return "the portrait render must show elapsed seconds and clear its ticker";
+    if(cc.indexOf('Portrait generated in "+_pt.seconds()+"s.')===-1||cc.indexOf("_pt.stop()")===-1)return "the portrait render must show elapsed seconds and stop its ticker";
   });
   t("#354 the opening hour: START_LOCATIONS carries each preset's hour and the Review picker is generated from it; startClockMin maps a clock hour onto minutes-since-dawn (midnight → 1080); clockHourLabel is the phase word; a blueprint's startingTime overrides; custom/blank keeps the dawn default",function(){
     if(startClockMin(6)!==0||startClockMin(0)!==1080||startClockMin(5)!==1380||startClockMin(20)!==840||startClockMin(30)!==0||startClockMin("x")!==0)return "startClockMin: "+[startClockMin(6),startClockMin(0),startClockMin(5),startClockMin(20)];
@@ -1335,6 +1335,24 @@ function runEngineTests(R){
     if(ob.indexOf("registerFile(clean,turn)")===-1)return "the census must run inside observeDriftAxes on the cleaned narration";
     if(gm.split("registerFile(").length!==2)return "the census must have exactly one call site (never the player's text, never Table Talk)";
     var tt=__fsForTests.readFileSync(__rootForTests+"/table-talk.js","utf8");if(tt.indexOf("registerStatsLine()")===-1)return "Table Talk must carry the record";
+  });
+  t("#356 THE elapsed ticker: paints '<base> Ns' at once, set() swaps the base while the clock runs on, stop() is idempotent, text mode writes textContent, no element never throws; every render/read status site and the loading modal ride it and no inline interval survives",function(){
+    var el={innerHTML:"",isConnected:true},tk=elapsedTicker(el,"Generating portrait…");
+    if(!/^<span style='color:var\(--t2\);font-style:italic;'>Generating portrait… 0s<\/span>$/.test(el.innerHTML))return "first paint: "+el.innerHTML;
+    tk.set("Rendering — queue 2");if(el.innerHTML.indexOf("Rendering — queue 2 0s")===-1)return "set: "+el.innerHTML;
+    if(tk.base()!=="Rendering — queue 2"||typeof tk.seconds()!=="number")return "accessors";
+    tk.stop();tk.stop();
+    var t2={textContent:"",isConnected:true},k2=elapsedTicker(t2,"",{text:true});if(t2.textContent!=="0s")return "text mode / empty base: "+JSON.stringify(t2.textContent);k2.stop();
+    var t3={textContent:"x",isConnected:true},k3=elapsedTicker(t3,"Generating image on Flux…",{text:true});if(t3.textContent!=="Generating image on Flux… 0s")return "text mode: "+t3.textContent;k3.stop();
+    var k4=elapsedTicker(null,"nothing");k4.set("still nothing");k4.stop();
+    var t5={innerHTML:"",isConnected:true},k5=elapsedTicker(t5,"x",{style:"font-size:12px;"});if(t5.innerHTML.indexOf("<span style='font-size:12px;'>")!==0)return "style opt";k5.stop();
+    var up=__fsForTests.readFileSync(__rootForTests+"/ui-portrait.js","utf8"),cc=__fsForTests.readFileSync(__rootForTests+"/char-creation.js","utf8"),gm=__fsForTests.readFileSync(__rootForTests+"/game.js","utf8"),sh=__fsForTests.readFileSync(__rootForTests+"/ui-shell.js","utf8");
+    if(up.split("elapsedTicker(").length!==4)return "the portrait modal's generate, regenerate and describe paths must all tick";
+    if(cc.split("elapsedTicker(").length!==3)return "the wizard's render and derive paths must both tick";
+    if(gm.split("elapsedTicker(").length!==2||gm.indexOf("_rTick=setInterval(")!==-1)return "the scene render must ride the shared ticker, not its own interval";
+    if(sh.indexOf("lm-secs")===-1||sh.split("elapsedTicker(").length!==2||sh.indexOf("_lmT.stop();var m=document.getElementById(\"loading-modal\")")===-1)return "the loading modal must tick and stop on removal";
+    if(/status\.innerHTML="<span[^"]*>(?:Generating portrait|Writing portrait prompt|Reading the portrait)/.test(up+cc))return "a frozen in-flight status survives somewhere";
+    if(up.indexOf("_gt.stop();showResult(")===-1||up.indexOf("}catch(err){_gt.stop();")===-1||up.indexOf("}catch(err){_dt.stop();")===-1)return "every terminal write in the portrait modal must stop the ticker first";
   });
   t("#348 curve change keeps every character at their level: a Lv17 with 131,190 XP (Ammut at t2419) loads as Lv17 with XP floored to the new gate, companions likewise; nobody de-levels and nobody levels up on load",function(){
     makeWorld();var c=worldState.character;c.level=17;c.xp=131190;

@@ -301,12 +301,12 @@ async function showPortraitModal(refreshFn,opts){
     var status=document.getElementById("pm-status");
     var src=getPort();if(!src)return;
     if(busy){status.innerHTML="<span style='font-size:12px;color:var(--t2);'>Game is busy — try again in a moment.</span>";return;}
-    status.innerHTML="<span style='font-size:12px;color:var(--t2);font-style:italic;'>Reading the portrait&hellip;</span>";
+    var _dt=elapsedTicker(status,"Reading the portrait…",{style:"font-size:12px;color:var(--t2);font-style:italic;"});/* #356: THE elapsed ticker */
     busy=true;
     try{
-      var desc=await describePortraitImage(src,c.name);
+      var desc=await describePortraitImage(src,c.name);_dt.stop();
       showDescribeResult(desc);
-    }catch(err){status.innerHTML="<span style='font-size:12px;color:var(--red);'>"+escHtml(err.message||"Failed")+"</span>";}/* escape — untrusted error text (review 2026-08-01) */
+    }catch(err){_dt.stop();status.innerHTML="<span style='font-size:12px;color:var(--red);'>"+escHtml(err.message||"Failed")+"</span>";}/* escape — untrusted error text (review 2026-08-01) */
     busy=false;
   }
   function showDescribeResult(desc){
@@ -342,13 +342,13 @@ async function showPortraitModal(refreshFn,opts){
     if(isImg2Img&&!pmRefSrc){status.innerHTML="<span style='font-size:12px;color:var(--red);'>Select a reference image first.</span>";return;}
     if(busy){status.innerHTML="<span style='font-size:12px;color:var(--t2);'>Game is busy — try again in a moment.</span>";return;}
     var req=buildPortraitPromptRequest(c,{details:details,img2img:isImg2Img});/* #160: THE shared prompt builder (takes the modal's subject — player or companion) */
-    status.innerHTML="<span style='font-size:12px;color:var(--t2);font-style:italic;'>Writing portrait prompt…</span>";
+    var _gt=elapsedTicker(status,"Writing portrait prompt…",{style:"font-size:12px;color:var(--t2);font-style:italic;"});/* #356: THE elapsed ticker */
     busy=true;
     try{
       var prompt=await callGM(req.promptReq,req.sys,600);
-      status.innerHTML="<span style='font-size:12px;color:var(--t2);font-style:italic;'>Generating portrait…</span>";
-      showResult(await generatePortraitImage(prompt,isImg2Img?pmRefSrc:null),isImg2Img,prompt);/* UA21 ②: shared fetch */
-    }catch(err){
+      _gt.set("Generating portrait…");
+      var _img=await generatePortraitImage(prompt,isImg2Img?pmRefSrc:null);_gt.stop();showResult(_img,isImg2Img,prompt);/* UA21 ②: shared fetch */
+    }catch(err){_gt.stop();
       status.innerHTML="<span style='font-size:12px;color:var(--red);'>"+escHtml(err.message)+"</span>";
     }
     busy=false;
@@ -361,11 +361,11 @@ async function showPortraitModal(refreshFn,opts){
     if(!falAvailable()||!prompt)return;
     if(isImg2Img&&!pmRefSrc){status.innerHTML="<span style='font-size:12px;color:var(--red);'>Select a reference image first.</span>";return;}
     if(busy){status.innerHTML="<span style='font-size:12px;color:var(--t2);'>Game is busy — try again in a moment.</span>";return;}
-    status.innerHTML="<span style='font-size:12px;color:var(--t2);font-style:italic;'>Generating portrait…</span>";
+    var _gt=elapsedTicker(status,"Generating portrait…",{style:"font-size:12px;color:var(--t2);font-style:italic;"});/* #356: THE elapsed ticker */
     busy=true;
     try{
-      showResult(await generatePortraitImage(prompt,isImg2Img?pmRefSrc:null),isImg2Img,prompt);/* UA21 ②: shared fetch */
-    }catch(err){
+      var _img=await generatePortraitImage(prompt,isImg2Img?pmRefSrc:null);_gt.stop();showResult(_img,isImg2Img,prompt);/* UA21 ②: shared fetch */
+    }catch(err){_gt.stop();
       status.innerHTML="<span style='font-size:12px;color:var(--red);'>"+escHtml(err.message)+"</span>";
     }
     busy=false;

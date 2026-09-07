@@ -126,14 +126,11 @@ async function ftRenderPortrait(){
   // id — the builder resolves it to the display name in its one lookup.
   var ap=document.getElementById("char-appear");
   var req=buildPortraitPromptRequest(Object.assign({},cs,{appear:ap&&ap.value.trim()?ap.value.trim():""}),{});
-  /* #353: the elapsed-seconds ticker, same shape as the scene-render status (owner call 2026-09-06) */
-  var _pt0=Date.now(),_ptBase="Writing portrait prompt…";
-  var _ptPaint=function(){status.innerHTML="<span style='color:var(--t2);font-style:italic;'>"+_ptBase+" "+Math.round((Date.now()-_pt0)/1000)+"s</span>";};
-  _ptPaint();var _ptTick=setInterval(function(){if(!status.isConnected){clearInterval(_ptTick);return;}_ptPaint();},1000);
+  var _pt=elapsedTicker(status,"Writing portrait prompt…");/* #353/#356: THE elapsed ticker */
   busy=true;
   try{
     var prompt=await callGM(req.promptReq,req.sys,600);
-    _ptBase="Generating portrait…";_ptPaint();
+    _pt.set("Generating portrait…");
     // UA21 ②: shared fal.ai fetch lives in ui-portrait.js — which loads AFTER this file in
     // index.html, but ftRenderPortrait only runs on user action (wizard step 5) long after
     // all scripts have loaded, so the call-time reference is safe.
@@ -143,24 +140,24 @@ async function ftRenderPortrait(){
     reader.onload=function(e){
       compressPortrait(e.target.result,function(compressed){
         cs.portrait=compressed;refreshFtPortrait();
-        status.innerHTML="<span style='color:var(--grn);'>Portrait generated in "+Math.round((Date.now()-_pt0)/1000)+"s.</span>";
+        status.innerHTML="<span style='color:var(--grn);'>Portrait generated in "+_pt.seconds()+"s.</span>";
       });
     };
     reader.readAsDataURL(blob);
   }catch(err){
     status.innerHTML="<span style='color:var(--red);'>"+escHtml(err.message)+"</span>";/* provider/network error text is untrusted — escape (review 2026-08-01) */
   }
-  clearInterval(_ptTick);
+  _pt.stop();
   busy=false;
 }
 async function ftDeriveAppearance(){
   var status=document.getElementById("ft-portrait-status");
   if(!cs.portrait){status.innerHTML="<span style='color:var(--red);'>No portrait to read.</span>";return;}
   if(busy){status.innerHTML="<span style='color:var(--t2);'>Game is busy — try again in a moment.</span>";return;}
-  status.innerHTML="<span style='color:var(--t2);font-style:italic;'>Reading the portrait…</span>";
+  var _dt=elapsedTicker(status,"Reading the portrait…");/* #356 */
   busy=true;
   try{
-    var desc=await describePortraitImage(cs.portrait,cs.name);
+    var desc=await describePortraitImage(cs.portrait,cs.name);_dt.stop();
     if(desc){
       var ap=document.getElementById("char-appear");
       if(ap)ap.value=desc;
@@ -169,7 +166,7 @@ async function ftDeriveAppearance(){
     }else{
       status.innerHTML="<span style='color:var(--red);'>Empty description returned.</span>";
     }
-  }catch(err){
+  }catch(err){_dt.stop();
     status.innerHTML="<span style='color:var(--red);'>"+escHtml(err.message||"Failed")+"</span>";
   }
   busy=false;

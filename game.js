@@ -3030,23 +3030,19 @@ async function doRender(){
         // the player the app is alive. Cleared EXPLICITLY before any terminal text is written
         // (the interval would otherwise overwrite the error a second later); the success path's
         // imgStatus.remove() is covered by the isConnected self-stop.
-        var _rTick0=Date.now(),_rTickBase=imgStatus.textContent;
-        var _rTick=setInterval(function(){
-          if(!imgStatus.isConnected){clearInterval(_rTick);return;}
-          imgStatus.textContent=_rTickBase+" "+Math.round((Date.now()-_rTick0)/1000)+"s";
-        },1000);
+        var _rTick=elapsedTicker(imgStatus,imgStatus.textContent,{text:true});/* #356: THE elapsed ticker (the 2026-08-31 heartbeat, now shared) */
         var falData;
         if(mdlCfg.slow){
           // #293: slow engines ride the queue lane — the status callback rewrites the ticker's
           // base text with REAL state (queue position / rendering); elapsed seconds keep ticking.
-          var _rBase0=_rTickBase;
-          falData=await falQueueRender(falEndpoint,falBody,function(st){_rTickBase=_rBase0+" — "+st;});
+          var _rBase0=_rTick.base();
+          falData=await falQueueRender(falEndpoint,falBody,function(st){_rTick.set(_rBase0+" — "+st);});
         }else{
           var falRes=await falFetch(falEndpoint,falBody);/* §3.7: own key direct, or the server's key via /api/render */
-          if(!falRes.ok){clearInterval(_rTick);throw new Error(falErrorMsg(falRes.status,await falRes.text().catch(function(){return "";})));}/* #163b: surface fal's own complaint */
+          if(!falRes.ok){_rTick.stop();throw new Error(falErrorMsg(falRes.status,await falRes.text().catch(function(){return "";})));}/* #163b: surface fal's own complaint */
           falData=await falRes.json();
         }
-        clearInterval(_rTick);
+        _rTick.stop();
         if(falData.images&&falData.images[0]&&falData.images[0].url){
           imageUrl=falData.images[0].url;
           imgStatus.remove();
@@ -3054,7 +3050,7 @@ async function doRender(){
           img.style.cssText="width:100%;border-radius:4px;display:block;";
           img.alt="Scene illustration";div.appendChild(img);sceneImg=img;
         }else{imgStatus.textContent="No image returned.";}
-      }catch(fe){if(typeof _rTick!=="undefined")clearInterval(_rTick);imgStatus.textContent="Image error: "+fe.message;}
+      }catch(fe){if(typeof _rTick!=="undefined")_rTick.stop();imgStatus.textContent="Image error: "+fe.message;}
     }else{
       // No fal key — show the prompt text and a hint
       promptShown=true;promptDiv.style.display="block";

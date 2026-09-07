@@ -94,10 +94,11 @@ function showLoadingModal(msg){
   modal.style.cssText="position:fixed;inset:0;background:rgba(0,0,0,.82);z-index:500;display:flex;align-items:center;justify-content:center;";
   modal.innerHTML="<div style='background:var(--modal-bg);border:1px solid var(--acc);border-radius:12px;padding:36px 48px;text-align:center;min-width:220px;'>"
     +"<div style='width:44px;height:44px;border:3px solid var(--bg3);border-top-color:var(--acc);border-radius:50%;animation:lm-spin .75s linear infinite;margin:0 auto 18px;'></div>"
-    +"<div style='font-size:13px;color:var(--t1);font-family:var(--font);'>"+msg+"</div>"
+    +"<div style='font-size:13px;color:var(--t1);font-family:var(--font);'><span>"+msg+"</span> <span id='lm-secs' style='color:var(--t2);'></span></div>"/* #356: the counter rides every loading modal */
     +"</div>";
   document.body.appendChild(modal);
-  return function(){var m=document.getElementById("loading-modal");if(m)m.remove();};
+  var _lmT=elapsedTicker(document.getElementById("lm-secs"),"",{text:true});/* #356 */
+  return function(){_lmT.stop();var m=document.getElementById("loading-modal");if(m)m.remove();};
 }
 // ── #14: THE modal scaffold (AUDIT_FABLE_07_16_2026 #14) ──────────────────────
 // Every standard modal (dim overlay + amber box) routes through this — the ~28 hand-rolled

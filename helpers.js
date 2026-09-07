@@ -128,6 +128,22 @@ var REGISTER_LOG_MAX=50;
 function registerScan(text){var out=[],seen={},m,re=new RegExp(REGISTER_RE.source,"gi");while((m=re.exec(String(text||"")))){var w=m[0].toLowerCase().replace(/\s+/g," ");if(!seen[w]){seen[w]=1;out.push(w);}}return out;}
 function registerStats(log){log=log||(worldState&&worldState.registerSlips)||[];var by={},i;for(i=0;i<log.length;i++){var w=log[i].word;by[w]=(by[w]||0)+1;}return {slips:log.length,byWord:by,lastTurn:log.length?log[log.length-1].turn:null};}
 function registerStatsLine(){var s=registerStats();if(!s.slips)return "";var parts=Object.keys(s.byWord).sort().map(function(w){return w+" \u00d7"+s.byWord[w];});return "Register slips (clerical words the narration used and was corrected on): "+s.slips+" ("+parts.join(", ")+"), last at turn "+s.lastTurn+".";}
+// ── #356 THE elapsed ticker (owner rule 2026-09-06: "we should always have the counter while we're
+// rendering — keeps the UI alive and lets the user know we're working on something") ──
+// One heartbeat for every in-flight status line: scene renders, portrait renders, portrait reads,
+// the loading modal. A frozen status reads as broken long before it reads as slow (the 2026-08-31
+// Seedream hang). set() swaps the base text while the seconds keep counting (the queue lane's real
+// state); stop() must run BEFORE any terminal text is written or the next tick overwrites it — the
+// isConnected self-stop covers hosts that simply vanish. Node-safe (the interval is unref'd).
+function elapsedTicker(el,base,opts){
+  var t0=Date.now(),cur=String(base||""),text=!!(opts&&opts.text),style=(opts&&opts.style)||"color:var(--t2);font-style:italic;",id=null;
+  function secs(){return Math.round((Date.now()-t0)/1000);}
+  function paint(){if(!el)return;var s=(cur?cur+" ":"")+secs()+"s";if(text)el.textContent=s;else el.innerHTML="<span style='"+style+"'>"+s+"</span>";}
+  function stop(){if(id!==null){clearInterval(id);id=null;}}
+  paint();
+  if(typeof setInterval==="function"){id=setInterval(function(){if(el&&el.isConnected===false){stop();return;}paint();},1000);if(id&&typeof id.unref==="function")id.unref();}
+  return {set:function(b){cur=String(b||"");paint();},stop:stop,seconds:secs,base:function(){return cur;}};
+}
 // #328: the [SUGGEST:a|b|c] payload → up to three clean actions. Leading "A)" / "1." markers and
 // asterisks are dropped (the v1.90 parseActions lesson); blanks vanish. Pure.
 function parseSuggestTag(body){var out=[],parts=String(body||"").split("|"),i;for(i=0;i<parts.length&&out.length<3;i++){var t=parts[i].replace(/\*/g,"").trim().replace(/^[(\[]?(?:[A-Ca-c]|[1-3])[)\].:]\s*/,"").trim();if(t.length>1)out.push(t);}return out;}
