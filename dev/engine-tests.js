@@ -1241,7 +1241,12 @@ function runEngineTests(R){
     var src=__fsForTests.readFileSync(__rootForTests+"/ui-panels.js","utf8");
     if(src.split("mpReadout(").length<3)return "both mana hosts (hero HUD + companion fragment) must paint from mpReadout";
     if(src.indexOf("color:var(--mana);flex-shrink:0;'>MP ")!==-1)return "the fixed-blue MP fragment is back";
-    if(src.indexOf('+"/"+pv.maxHp+" HP</span>"')===-1)return "companion cards label the HP number like the hero HUD does (owner call 2026-09-06)";
+    if(src.split("_ppHpHtml(").length<5)return "every party surface (companion card + the three side-panel rows) paints HP through the one _ppHpHtml fragment";
+    if(src.indexOf("color:var(--hp);'>HP ")!==-1)return "a side-panel row still wears the fixed red HP with the leading label (owner report t2452)";
+    /* ui-panels.js is a DOM-wiring file the engine loader skips — lift the pure fragment out of the source and run it */
+    var fnSrc=src.slice(src.indexOf("function _ppHpHtml("),src.indexOf("function _ppManaHtml(")),ppHp=new Function("hpReadout",fnSrc+"return _ppHpHtml;")(hpReadout);
+    var frag=ppHp(8,121);if(frag.indexOf("hp-crit")===-1||frag.indexOf("8/121 HP</span>")===-1||frag.indexOf(hpReadout(8,121).color)===-1)return "HP fragment: "+frag;
+    frag=ppHp(100,100);if(frag.indexOf("class=''")===-1)return "a full HP fragment must not breathe: "+frag;
     if(src.indexOf('+manaCur(sheet)+"/"+mx+" MP</span>"')===-1||src.indexOf("'>MP \"+manaCur(sheet)")!==-1)return "companion mana reads 'n/m MP' with the label trailing, like the hero HUD";
   });
   t("#348 curve change keeps every character at their level: a Lv17 with 131,190 XP (Ammut at t2419) loads as Lv17 with XP floored to the new gate, companions likewise; nobody de-levels and nobody levels up on load",function(){

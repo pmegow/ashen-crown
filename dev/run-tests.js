@@ -1899,6 +1899,23 @@ try {
   }
 } catch (e) { console.error("ENGINE MANIFEST CHECK FAILED: " + e.message); process.exit(1); }
 
+// ── SCRIPT SYNTAX CONTRACT (2026-09-06, the v1.835 stray-quote incident) ──
+// The engine loader executes only the manifest files; the DOM-wiring files (ui-*.js, char-creation,
+// stt, wasm-probe) were never even PARSED by the suite, so a syntax error in one of them — a
+// string-concatenation slip in ui-panels.js — passed 2,027 green assertions and broke the whole
+// page (every later script's globals went undefined). Every <script src> in the shell must parse.
+try {
+  var _vmS = require("vm"), _fsS = require("fs"), _pathS = require("path"), _rootS = _pathS.join(__dirname, "..");
+  var _idxS = _fsS.readFileSync(_pathS.join(_rootS, "index.html"), "utf8"), _reS = /<script src="([^"]+\.js)"/g, _mS, _badS = [];
+  while ((_mS = _reS.exec(_idxS))) {
+    var _fS = _mS[1]; if (_fS.indexOf("/") >= 0) continue;
+    try { new _vmS.Script(_fsS.readFileSync(_pathS.join(_rootS, _fS), "utf8"), { filename: _fS }); }
+    catch (eS) { _badS.push(_fS + " — " + eS.message); }
+  }
+  if (_badS.length) { console.error("SCRIPT SYNTAX CONTRACT: a script index.html loads does not parse:\n  " + _badS.join("\n  ")); process.exit(1); }
+  console.log("[syntax] script syntax contract OK — every <script src> in index.html parses");
+} catch (e) { console.error("SCRIPT SYNTAX CONTRACT FAILED: " + e.message); process.exit(1); }
+
 // ── PERFORMANCE BENCH LOADER CONTRACT (Sol review P2-02, 2026-08-28) ─────────
 // A benchmark that hand-copies engine order can fail before measuring anything while the real
 // suite stays green. Both committed benches must take the complete order from load-engine.js,
