@@ -232,16 +232,17 @@ function getDefaultDeity(){
   var alignEl=document.getElementById("char-alignment");
   var align=alignEl?alignEl.value:"True Neutral";
   var anc=cs.ancestry||"",sub=cs.subrace||"",evil=align.indexOf("Evil")>=0;
-  if(anc==="elf"&&cls!=="Paladin")return"Corellon, God of Spring and Beauty";
-  if(anc==="dwarf")return"Moradin, Soul Forger of the Dwarves";
-  if(anc==="gnome"&&cls!=="Paladin")return"Ioun, Goddess of Knowledge and Prophecy";
+  /* #362: ancestry defaults from cultural pantheons only (owner ruling 2026-09-07) */
+  if(anc==="elf"&&cls!=="Paladin")return"Artemis, Lady of the Moonlit Hunt";
+  if(anc==="dwarf")return"Hephaestus, Lord of the Forge";
+  if(anc==="gnome"&&cls!=="Paladin")return"Thoth, God of Knowledge and the Written Word";
   if(anc==="halfblood"){
-    if(sub==="half_elven"&&!evil)return"Sehanine, Goddess of Moonlight and Illusion";
-    if(sub==="half_orcish"&&evil)return"Gruumsh, the One-Eyed Destroyer";
-    if(sub==="half_infernal"&&evil)return"Asmodeus, God of Tyranny";
-    if(sub==="half_fey")return"Sehanine, Goddess of Moonlight and Illusion";
-    if(sub==="half_hollow")return"The Raven Queen, Mistress of Fate";
-    if(sub==="half_draconic")return evil?"Tiamat, the Dragon Queen":"Bahamut, the Platinum Dragon";
+    if(sub==="half_elven"&&!evil)return"Selene, Goddess of the Moon";
+    if(sub==="half_orcish"&&evil)return"Ares, God of Slaughter and War";
+    if(sub==="half_infernal"&&evil)return"Set, God of Tyranny and the Desert Storm";
+    if(sub==="half_fey")return"Danu, Mother of the Fair Folk";
+    if(sub==="half_hollow")return"The Morrígan, Mistress of Fate and Crows";
+    if(sub==="half_draconic")return evil?"Tiamat, the Primordial Sea-Dragon":"Quetzalcoatl, the Feathered Serpent";
   }
   return(DEITY_MAP[cls]&&DEITY_MAP[cls][align])||"Unknown";
 }

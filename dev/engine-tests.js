@@ -1415,6 +1415,18 @@ function runEngineTests(R){
     var tt=__fsForTests.readFileSync(__rootForTests+"/table-talk.js","utf8");if(tt.indexOf("spellUnavailable(c.spells[i])")<0||/c\.spells\[i\]\.used\?" \(used\)"/.test(tt))return "Table Talk must read the gate";
     var rule=DEFAULT_RULES.join("\n");if(/SPELLS AVAILABLE list|expended slots/.test(rule)||!/RACIAL 1\/day spell marked used CANNOT be cast again before a long rest/.test(rule)||!/Every other spell costs mana/.test(rule))return "slot-era wording survives in the default rules";
   });
+  t("#362 the default deities come from cultural pantheons only: every DEITY_CENTRIC class × alignment has a 'Name, epithet' entry, no name from a published RPG roster appears in the map or the ancestry resolver, and the drift nudge still matches the map's exact strings",function(){
+    var cls,al,i,names=[];
+    for(i=0;i<DEITY_CENTRIC.length;i++){cls=DEITY_CENTRIC[i];if(!DEITY_MAP[cls])return "no map for "+cls;
+      for(al in DEITY_MAP[cls]){var v=DEITY_MAP[cls][al];if(WIZARD_ALIGNMENTS.indexOf(al)<0)return "unknown alignment key "+al;if(!/^[^,]+, .+/.test(v))return "entry shape: "+v;names.push(v);}
+      if(Object.keys(DEITY_MAP[cls]).length!==WIZARD_ALIGNMENTS.length)return cls+" must cover all nine alignments";}
+    var src=__fsForTests.readFileSync(__rootForTests+"/char-creation.js","utf8"),res=src.slice(src.indexOf("function getDefaultDeity("),src.indexOf("function buildStep6Deity("));
+    var hay=names.join(" | ")+" | "+res,k;for(k=0;k<PUBLISHED_RPG_DEITIES.length;k++){if(hay.indexOf(PUBLISHED_RPG_DEITIES[k])>=0)return "published-RPG name survives: "+PUBLISHED_RPG_DEITIES[k];}
+    if(res.indexOf("Quetzalcoatl")<0||res.indexOf("Hephaestus")<0||res.indexOf("Danu")<0)return "ancestry resolver must carry the cultural analogs";
+    makeWorld();worldState.character.cls="Cleric";worldState.character.deity=DEITY_MAP.Cleric["Lawful Good"];worldState.character.actualAlignment="Chaotic Evil";worldState.character.statedAlignment="Lawful Good";
+    delete worldState.deityDriftNudged;var n=(typeof buildDeityDriftNudge==="function")?buildDeityDriftNudge():"";
+    if(typeof buildDeityDriftNudge==="function"&&n!==""&&n.indexOf("Apollo")<0)return "the drift nudge must name the map's deity: "+n;
+  });
   t("#348 curve change keeps every character at their level: a Lv17 with 131,190 XP (Ammut at t2419) loads as Lv17 with XP floored to the new gate, companions likewise; nobody de-levels and nobody levels up on load",function(){
     makeWorld();var c=worldState.character;c.level=17;c.xp=131190;
     worldState.npcs.push({name:"Daeris",partyMember:true,status:"steady",charSheet:{name:"Daeris",cls:"Cleric",level:16,xp:114240,hp:60,maxHp:60,stats:{},abilities:[],spells:[],inventory:[]}});

@@ -133,41 +133,49 @@ var DEFAULT_RULES=[
   "COMPANION AGENDAS — a companion MAY carry a WANT of their own (the party block lists it: 'Wants:'); most carry none for long stretches, and that is right. A want is never manufactured: it grows only from what they have lived — their recorded history, a defining moment, the story itself — and it never invents a faction, artifact or person. It colours what they choose and say; when the party's course cuts against it they say so, and once per arc they may refuse an order or act on it alone. Refusal is the ceiling — they never leave the party over a want. A violent want may surface in a fight ONLY when the foe or the stakes touch it, never as a running complaint about the wrong enemy. A want listed as 'Later (silent)' is never spoken of until the active want resolves; if the story happens to resolve it early, file [COMPANION_AGENDA_DONE:Name|a few words of it] and give it one line of acknowledgement. When the active want is fulfilled, file [COMPANION_AGENDA_DONE:Name]; when you play a beat of it, mark [COMPANION_AGENDA_BEAT:Name]."
 ];
 var DEITY_CENTRIC=["Cleric","Paladin","Druid"];
+/* #362 (owner ruling 2026-09-07): the default deities come from CULTURAL pantheons only — Greek, Norse,
+   Egyptian, Celtic, Mesopotamian, Yoruba, Slavic, Aztec — never from a published RPG's roster. Each entry
+   is the domain-and-alignment analog of the one it replaced. A campaign's own authored deities (blueprints,
+   the editor) are untouched; the drift nudge matches these exact strings, so a sheet still carrying an old
+   name simply gets no nudge. */
 var DEITY_MAP={
   "Cleric":{
-    "Lawful Good":"Pelor, God of Sun and Healing",
-    "Neutral Good":"Ioun, Goddess of Knowledge and Prophecy",
-    "Chaotic Good":"Avandra, Goddess of Change and Luck",
-    "Lawful Neutral":"Erathis, Goddess of Civilization",
-    "True Neutral":"The Raven Queen, Mistress of Fate",
-    "Chaotic Neutral":"Sehanine, Goddess of Moonlight and Illusion",
-    "Lawful Evil":"Asmodeus, God of Tyranny",
-    "Neutral Evil":"Vecna, the Undying God",
-    "Chaotic Evil":"Tharizdun, the Chained God"
+    "Lawful Good":"Apollo, God of the Sun, Healing and Prophecy",
+    "Neutral Good":"Thoth, God of Knowledge and the Written Word",
+    "Chaotic Good":"Fortuna, Goddess of Luck and Change",
+    "Lawful Neutral":"Athena, Goddess of Wisdom, Law and the City",
+    "True Neutral":"The Morrígan, Mistress of Fate and Crows",
+    "Chaotic Neutral":"Hecate, Goddess of the Moon, Crossroads and Witchcraft",
+    "Lawful Evil":"Set, God of Tyranny and the Desert Storm",
+    "Neutral Evil":"Ereshkigal, Queen of the Great Below",
+    "Chaotic Evil":"Apophis, the Serpent of Unmaking"
   },
   "Paladin":{
-    "Lawful Good":"Bahamut, the Platinum Dragon",
-    "Neutral Good":"Pelor, God of Sun and Healing",
-    "Chaotic Good":"Kord, God of Strength and Thunder",
-    "Lawful Neutral":"Erathis, Goddess of Civilization",
-    "True Neutral":"The Raven Queen, Mistress of Fate",
-    "Chaotic Neutral":"Kord, God of Strength and Thunder",
-    "Lawful Evil":"Asmodeus, God of Tyranny",
-    "Neutral Evil":"Tiamat, the Dragon Queen",
-    "Chaotic Evil":"Tiamat, the Dragon Queen"
+    "Lawful Good":"Tyr, God of Justice and Oaths",
+    "Neutral Good":"Apollo, God of the Sun, Healing and Prophecy",
+    "Chaotic Good":"Thor, God of Thunder and Strength",
+    "Lawful Neutral":"Athena, Goddess of Wisdom, Law and the City",
+    "True Neutral":"The Morrígan, Mistress of Fate and Crows",
+    "Chaotic Neutral":"Shango, Lord of Thunder and Fire",
+    "Lawful Evil":"Set, God of Tyranny and the Desert Storm",
+    "Neutral Evil":"Tiamat, the Primordial Sea-Dragon",
+    "Chaotic Evil":"Apophis, the Serpent of Unmaking"
   },
   "Druid":{
-    "Lawful Good":"Melora, Goddess of Nature and the Sea",
-    "Neutral Good":"Corellon, God of Spring and Beauty",
-    "Chaotic Good":"Corellon, God of Spring and Beauty",
-    "Lawful Neutral":"Melora, Goddess of Nature and the Sea",
-    "True Neutral":"The Primal Spirits",
-    "Chaotic Neutral":"The Primal Spirits",
-    "Lawful Evil":"Torog, God of the Underdark",
-    "Neutral Evil":"Torog, God of the Underdark",
-    "Chaotic Evil":"Tharizdun, the Chained God"
+    "Lawful Good":"Yemoja, Mother of Waters",
+    "Neutral Good":"Freyr, Lord of Harvest and Growing Things",
+    "Chaotic Good":"Cernunnos, the Horned Lord of the Wild",
+    "Lawful Neutral":"Gaia, the Earth Itself",
+    "True Neutral":"The Old Spirits of Root, Stone and Storm",
+    "Chaotic Neutral":"Pan, God of the Wild and of Panic",
+    "Lawful Evil":"Balor, the Blighting Eye of the Fomorians",
+    "Neutral Evil":"Baba Yaga, the Bone-Legged Witch of the Woods",
+    "Chaotic Evil":"Apophis, the Serpent of Unmaking"
   }
 };
+/* #362: names from published RPG rosters that must never return to the defaults (tested against the map
+   and the ancestry resolver). Tiamat is Mesopotamian by origin and stays, without the borrowed epithet. */
+var PUBLISHED_RPG_DEITIES=["Pelor","Ioun","Avandra","Erathis","Raven Queen","Sehanine","Asmodeus","Vecna","Tharizdun","Bahamut","Kord","Melora","Corellon","Torog","Moradin","Gruumsh","Primal Spirits","Dragon Queen","Platinum Dragon","Abadar","Erastil","Sarenrae","Desna","Pharasma","Iomedae","Gorum","Torag","Nethys","Cayden Cailean","Calistria","Shelyn","Lamashtu","Rovagug","Urgathoa","Zon-Kuthon","Norgorber","Gozreh","Irori","Lathander","Mystra","Bane","Cyric","Kelemvor","Tempus","Selûne","Shar","Lolth","Gond","Helm","Ilmater","Oghma","Silvanus","Tymora","Umberlee","Waukeen"];
 var SPELL_PICK_LIMITS={"cantrips":2,"1":2,"2":2,"3":1};
 // #72 C2 (2026-08-03): picks granted when a spell tier UNLOCKS in play — the creation-picker
 // rhythm carried forward (SPELL_PICK_LIMITS-style). Per-class counts are template-iteration
