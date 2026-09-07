@@ -69,6 +69,7 @@ The GM embeds hidden tags in every response. `applyMuts(text)` parses them and m
 | `[PARTY_MEMBER:name\|true/false]` | Toggle party membership (cap enforced; over-cap NPC kept as a non-party ally) |
 | `[DICE:label\|result\|outcome]` | Rendered as a dice block (no mutation) |
 | `[SKILL_SUCCESS:skillId]` | Increment the skill counter; toast on level-up |
+| `[COMPANION_SKILL_SUCCESS:Name\|skillId]` | The companion twin (#357) — the named party member's OWN counter, same applier (`skillSuccessApply`), mut/toast prefixed with the name; their earned skills ride the party block as one compact line |
 | `[CONDITION:name\|duration]` / `[CONDITION_REMOVED:name]` | Push/filter `character.conditions` |
 | `[RELATIONSHIP_BOND:entity\|text]` / `[RELATIONSHIP_DYNAMIC:entity\|text]` | #168 W7 — write durable bond / current dynamic independently; replacing an existing bond stages a preimage + needs the exact tag re-emitted on a later response; >240 chars refuses |
 | `[RELATIONSHIP_BOND_REMOVED:]` / `[RELATIONSHIP_DYNAMIC_REMOVED:]` / `[RELATIONSHIP_PAIR_REMOVED:]` | Axis/pair removal under the same confirmation/preimage contract |

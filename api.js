@@ -1977,6 +1977,7 @@ function buildSysPrompt(){
       // #46: companion conditions were WRITTEN by [COMPANION_CONDITION:] but never injected —
       // a write-path with no read-path, so they silently rotted (Daeris, Unconscious for ~200
       // turns while narrated awake). Inject with age so stale state is visible and self-corrects.
+      var _pmSk=buildSkillCanonBlock(pcs,true);if(_pmSk)line+="\n  "+_pmSk;/* #357: a companion's EARNED skills reach the GM (they were sheet-only) */
       if(pcs.conditions&&pcs.conditions.length)line+="\n  Conditions: "+pcs.conditions.map(condInjectFmt).join(", ");
       // #61: companion relationships were WRITTEN by [COMPANION_RELATIONSHIP:] but never injected —
       // the same write-path-with-no-read-path class as the #46 conditions above. The GM never saw
@@ -2326,16 +2327,18 @@ function buildSkillMechanicsDoc(){
 // pattern as the spell bible — the GM adjudicates a skill from fixed canon, not from
 // whatever its name evokes this turn). ""-clean when no skill has been earned, which keeps
 // a fresh character's prompt byte-identical to the pre-#52 empty case.
-function buildSkillCanonBlock(c){
+function buildSkillCanonBlock(c,compact){/* #357: compact = the one-line companion form inside the party block */
   if(!c||!c.skills||typeof skillBibleEntry!=="function")return"";
   var lines=[],ids=Object.keys(c.skills),i,statsById={};
   if(typeof SKILLS!=="undefined"){for(i=0;i<SKILLS.length;i++)statsById[SKILLS[i].id]=(SKILLS[i].stats||[]).join("/");}
   for(i=0;i<ids.length;i++){
     var id=ids[i],succ=c.skills[id];if(!(succ>0))continue;
     var lvl=skillLevel(succ),e=skillBibleEntry(id);
+    if(compact){lines.push(id+" "+SKILL_LEVELS[lvl]+" (+"+skillLevelBonus(lvl)+(statsById[id]?"; "+statsById[id]:"")+")");continue;}
     lines.push("- "+id+" — "+SKILL_LEVELS[lvl]+" (+"+skillLevelBonus(lvl)+(statsById[id]?"; "+statsById[id]:"")+")"+(e?". "+e.def:""));
   }
   if(!lines.length)return"";
+  if(compact)return "Skills (earned — the SKILL MECHANICS ladder applies to them too): "+lines.join(", ");
   return "SKILLS (earned — apply the SKILL MECHANICS ladder: bonus on checks, auto-success bands):\n"+lines.join("\n")+"\n";
 }
 // capBibleLine (TODO #10) — one canonical capability line for the injection: LABELED and COMPLETE

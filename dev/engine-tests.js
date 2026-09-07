@@ -1354,6 +1354,31 @@ function runEngineTests(R){
     if(/status\.innerHTML="<span[^"]*>(?:Generating portrait|Writing portrait prompt|Reading the portrait)/.test(up+cc))return "a frozen in-flight status survives somewhere";
     if(up.indexOf("_gt.stop();showResult(")===-1||up.indexOf("}catch(err){_gt.stop();")===-1||up.indexOf("}catch(err){_dt.stop();")===-1)return "every terminal write in the portrait modal must stop the ticker first";
   });
+  t("#357 companions earn their own skill ladder: [COMPANION_SKILL_SUCCESS:Name|skill] bumps the named companion's counter (never the hero's), resolves a lowercased id, drops an unknown name or skill loudly, announces a ladder step with the name; the hero path is unchanged; a companion's earned skills ride the party block as one compact line and a zero sheet adds nothing; the tag is taught and stripped",function(){
+    makeWorld();worldState.character.skills=initSkills();
+    worldState.npcs.push({name:"Daeris",status:"alive",rel:"companion",partyMember:true,met:1,pronouns:"she/her",charSheet:{name:"Daeris",cls:"Cleric",level:3,hp:20,maxHp:20,gold:5,stats:{STR:9,DEX:12,CON:13,INT:14,WIS:17,CHA:12},skills:initSkills(),abilities:[],spells:[],inventory:[],conditions:[],relationships:[]}});
+    var ds=findCompanionChar("Daeris");if(!ds)return "fixture: companion not resolvable";
+    var r=applyMuts("She slips past. [COMPANION_SKILL_SUCCESS:Daeris|Stealth]");
+    if(ds.skills.Stealth!==1)return "companion counter: "+ds.skills.Stealth;
+    if(worldState.character.skills.Stealth!==0)return "the hero's counter must not move";
+    if(!(r.muts||[]).some(function(m){return /^Daeris — Stealth/.test(m);}))return "mut must carry the name: "+JSON.stringify(r.muts);
+    applyMuts("[COMPANION_SKILL_SUCCESS:daeris|stealth]");if(ds.skills.Stealth!==2)return "lowercase name+id must resolve: "+ds.skills.Stealth;
+    var before=JSON.stringify(ds.skills);applyMuts("[COMPANION_SKILL_SUCCESS:Nobody|Stealth][COMPANION_SKILL_SUCCESS:Daeris|Made Up Skill]");
+    if(JSON.stringify(ds.skills)!==before||worldState.character.skills.Stealth!==0)return "unknown name / skill must change nothing";
+    var k;for(k=0;k<SKILL_THRESHOLDS[1]-3;k++)applyMuts("[COMPANION_SKILL_SUCCESS:Daeris|Stealth]");
+    var step=applyMuts("[COMPANION_SKILL_SUCCESS:Daeris|Stealth]");
+    var lv=skillLevel(ds.skills.Stealth);if(lv<1||!(step.muts||[]).some(function(m){return m==="Daeris — Stealth: "+SKILL_LEVELS[lv];}))return "ladder step must be announced with the name: "+JSON.stringify(step.muts);
+    applyMuts("[SKILL_SUCCESS:Stealth]");if(worldState.character.skills.Stealth!==1||ds.skills.Stealth!==SKILL_THRESHOLDS[1])return "the hero path must still work and stay separate";
+    var v=buildSysPrompt().volatile,di=v.indexOf("Daeris — ");if(di<0)return "no companion block";
+    var blk=v.slice(di,v.indexOf("\n\n",di)>0?v.indexOf("\n\n",di):v.length);
+    if(blk.indexOf("Skills (earned")===-1||blk.indexOf("Stealth "+SKILL_LEVELS[lv]+" (+"+skillLevelBonus(lv))===-1)return "the party block must carry the companion's earned skills: "+blk.slice(0,400);
+    ds.skills=initSkills();v=buildSysPrompt().volatile;di=v.indexOf("Daeris — ");blk=v.slice(di,v.indexOf("\n\n",di)>0?v.indexOf("\n\n",di):v.length);
+    if(blk.indexOf("Skills (earned")!==-1)return "a zero sheet must add no skills line";
+    var full=TAG_DOC_LINES.join(""),doc=buildStateTagsDoc();
+    if(full.indexOf("[COMPANION_SKILL_SUCCESS:Name|skill_id]")<0||doc.indexOf("[COMPANION_SKILL_SUCCESS:Name|skill_id]")<0)return "the companion form must be taught beside the player form";
+    if(cleanTxt("Quiet. [COMPANION_SKILL_SUCCESS:Daeris|Stealth] Done.").indexOf("COMPANION_SKILL")!==-1)return "the tag must be stripped from prose";
+    if(TAG_STRIP_NAMES.indexOf("COMPANION_SKILL_SUCCESS")<0)return "strip registry";
+  });
   t("#348 curve change keeps every character at their level: a Lv17 with 131,190 XP (Ammut at t2419) loads as Lv17 with XP floored to the new gate, companions likewise; nobody de-levels and nobody levels up on load",function(){
     makeWorld();var c=worldState.character;c.level=17;c.xp=131190;
     worldState.npcs.push({name:"Daeris",partyMember:true,status:"steady",charSheet:{name:"Daeris",cls:"Cleric",level:16,xp:114240,hp:60,maxHp:60,stats:{},abilities:[],spells:[],inventory:[]}});
@@ -7120,7 +7145,7 @@ function runEngineTests(R){
     // would read the relabel ceremony aloud in the prose and pollute the transcript.
     // v1.697 (#211): +NO_CHANGE in BOTH registries (+10 chars payload form; bare form joins
     // _CT_BARE) — the audit-ack channel must strip everywhere or the ack IS the leak it cures.
-    if(__djb2(_CT_TAGS.source)!==-842529501||_CT_TAGS.source.length!==1700)return "_CT_TAGS diverged from the frozen literal";/* #329 (v1.805): CHECK joins the strip vocabulary. *//* #328 (v1.804): SUGGEST joins the strip vocabulary. *//* #317/#207 (v1.785): WHISPER + LOCATION_HOURS join the strip vocabulary; the LOCATION_HOURS doc line lands (WHISPER is engine-only). *//* #301 (v1.775): DEATH_ANSWER joins the strip vocabulary (+13 chars). *//* #300 (v1.774): DOWNED_RESOLVED joins the strip vocabulary (+16 chars). *//* #303 (v1.772): WARES + WANTED join the strip vocabulary (+13 chars = "WARES|WANTED|"). *//* #216 (v1.700): TIME_CHECK joins the strip vocabulary (+11 chars). *//* #168 W7: explicit bond/dynamic/pair-removal tags for player and companion; compatibility tags remain stripped. */
+    if(__djb2(_CT_TAGS.source)!==1140424665||_CT_TAGS.source.length!==1724)return "_CT_TAGS diverged from the frozen literal";/* #357 (v1.841): COMPANION_SKILL_SUCCESS joins the strip vocabulary (+24 chars = "COMPANION_SKILL_SUCCESS|"). *//* #329 (v1.805): CHECK joins the strip vocabulary. *//* #328 (v1.804): SUGGEST joins the strip vocabulary. *//* #317/#207 (v1.785): WHISPER + LOCATION_HOURS join the strip vocabulary; the LOCATION_HOURS doc line lands (WHISPER is engine-only). *//* #301 (v1.775): DEATH_ANSWER joins the strip vocabulary (+13 chars). *//* #300 (v1.774): DOWNED_RESOLVED joins the strip vocabulary (+16 chars). *//* #303 (v1.772): WARES + WANTED join the strip vocabulary (+13 chars = "WARES|WANTED|"). *//* #216 (v1.700): TIME_CHECK joins the strip vocabulary (+11 chars). *//* #168 W7: explicit bond/dynamic/pair-removal tags for player and companion; compatibility tags remain stripped. */
     return _CT_BARE.source==="\\[(ENEMY_SURRENDERS|ENEMY_SLAIN|SUBLOCATION_LEAVE|NO_CHANGE)\\]"?true:"_CT_BARE diverged";/* v1.463: bare ENEMY_SLAIN strips (unsupported form — warn + no-op, but never leaks) */
   });
   t("the cast-cost prohibition rides the SPELL_USED doc line; the [MANA:] external-effects line exists (#138 narrowing of the v1.555 clause)",function(){
@@ -7199,7 +7224,7 @@ function runEngineTests(R){
     // for the guestbook's second axis. The line teaches usual-base-ONLY semantics (never current
     // presence, never a substitute for meeting them) and the |false clear. Golden diffed by eye.
     var d=buildStateTagsDoc();
-    return (__djb2(d)===-799296427&&d.length===27754)?true:"doc block diverged (hash "+__djb2(d)+", len "+d.length+") — prompt-text changes must be deliberate commits";/* v1.777 (#311 ①): NPC_SUPERSEDE, NPC_MERGE, ALIAS/MERGE and ITEM_RENAMED move to the engine-only tier (-1155 chars — taught by their asking notes). v1.774 (#300): the DOWNED / DOWNED_RESOLVED / Rest-heals doc line (+597 chars). v1.772 (#303): the WARES/WANTED wants-and-economy doc line (+750 chars). v1.771 (#302): the [XP:N] flavour-only clause (+277 chars) — the engine pays milestones, the GM's XP is capped. v1.715 (#233): the ACT_COMPLETE doc line gains the door contract (+127 chars) — the title must MATCH the active act and every arc must close first ([ARC_COMPLETE:] may land in the same response). The instruction half of the act-door hardening; the handler refuses either violation loudly. Prior: v1.700 (#216) [TIME_CHECK:] (+582); v1.680 (#176) [ITEM_RENAMED:] pair (+353); #194 (v1.651) SAY presence clause + SCENE_CAST + NPC_DEATH_REPORTED; #187④a RETCON turn-addressing; #168 W7 axes. */
+    return (__djb2(d)===-179245211&&d.length===27949)?true:"doc block diverged (hash "+__djb2(d)+", len "+d.length+") — prompt-text changes must be deliberate commits";/* #357 (v1.841): the one [COMPANION_SKILL_SUCCESS:] doc line (+195 chars) beside the player form — companions earn their own ladder. Golden diffed by eye. *//* v1.777 (#311 ①): NPC_SUPERSEDE, NPC_MERGE, ALIAS/MERGE and ITEM_RENAMED move to the engine-only tier (-1155 chars — taught by their asking notes). v1.774 (#300): the DOWNED / DOWNED_RESOLVED / Rest-heals doc line (+597 chars). v1.772 (#303): the WARES/WANTED wants-and-economy doc line (+750 chars). v1.771 (#302): the [XP:N] flavour-only clause (+277 chars) — the engine pays milestones, the GM's XP is capped. v1.715 (#233): the ACT_COMPLETE doc line gains the door contract (+127 chars) — the title must MATCH the active act and every arc must close first ([ARC_COMPLETE:] may land in the same response). The instruction half of the act-door hardening; the handler refuses either violation loudly. Prior: v1.700 (#216) [TIME_CHECK:] (+582); v1.680 (#176) [ITEM_RENAMED:] pair (+353); #194 (v1.651) SAY presence clause + SCENE_CAST + NPC_DEATH_REPORTED; #187④a RETCON turn-addressing; #168 W7 axes. */
   });
   t("SKILL_SUCCESS doc ids track SKILLS exactly, both directions (the Explosives rot class)",function(){
     // v1.546: the exact-ids list rotted by hand — Explosives shipped in SKILLS (data.js) but never
