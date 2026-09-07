@@ -15,7 +15,9 @@ function startGame(char,toneName,toneVoice,authorId){
   // snapshotted and "New Game" deleted it with no save. The import/campNew paths already mint one.
   if(!getActiveCampId())setActiveCampId(newCampaignId());
   worldState={ver:10,campId:getActiveCampId(),campName:char._campName||char.name,legacyCharsUsed:[],pendingLegacy:null,character:char,world:{location:char._startLoc||"The Crossroads of Ashenveil",region:"The Blighted Reach",time:"dusk",weather:"cold wind carrying ash",threat:"low",sublocation:null},tone:{name:toneName||"Sword and Sorcery",voice:toneVoice||""},npcs:[],questLog:[],eventHistory:[],combat:null,turn:0,transcript:[],actStartTurn:0,clock:{min:12*MIN_PER_HOUR,schedule:[]}};/* #73: new campaigns open at the declared dusk; rendered time derives from this scalar */
-  delete worldState.character._startLoc;delete worldState.character._campName;
+  /* #354: the preset carries the opening hour — the clock is engine-owned, so the preset sets it (never the GM) */
+  if(typeof char._startHour==="number"){worldState.clock={min:startClockMin(char._startHour),schedule:[]};worldState.world.time=clockHourLabel(char._startHour);}
+  delete worldState.character._startLoc;delete worldState.character._campName;delete worldState.character._startHour;
   if(arguments.length>=4){worldState.proseAuthor=authorId||"";proseAuthor=authorId||"";store.set(PROSE_K,authorId||"");}
   sessionLog=[];memory=blankMemory();lastAction=null;// don't let the previous campaign's last action leak into this one's Retry (audit E83)
   // Add any companions selected during character creation
@@ -2393,6 +2395,7 @@ function normalizeBlueprint(bp){
   if(typeof bp.premise!=="string")bp.premise=bp.premise==null?"":String(bp.premise);
   if(typeof bp.startingLocation!=="string")bp.startingLocation="";
   if(typeof bp.startingRegion!=="string")bp.startingRegion="";
+  if(typeof bp.startingTime!=="string")bp.startingTime="";/* #354: optional opening time "HH:MM" (blank = the wizard preset / dawn) */
   if(!Array.isArray(bp.acts))bp.acts=[];
   // Every act needs an arcs array (audit E19) — applyBlueprint iterates act.arcs unconditionally,
   // and the cloud-library path skips validateBlueprint, so a missing arcs crashed startGame.
@@ -2429,7 +2432,7 @@ function normalizeBlueprint(bp){
      blueprint passes through. Short fields are untouched byte-for-byte (legacy prompts stay identical). */
   if(typeof clampStr==="function"&&typeof IMPORT_CAPS!=="undefined"){
     var _cp=IMPORT_CAPS,_ci,_cj;
-    bp.premise=clampStr(bp.premise,_cp.premise);["startingLocation","startingRegion","author","name"].forEach(function(k){bp[k]=clampStr(bp[k],_cp.field);});
+    bp.premise=clampStr(bp.premise,_cp.premise);["startingLocation","startingRegion","startingTime","author","name"].forEach(function(k){bp[k]=clampStr(bp[k],_cp.field);});
     for(_ci=0;_ci<bp.acts.length;_ci++){var _a=bp.acts[_ai=_ci];if(!_a)continue;["title","goal","dnaHint","desc"].forEach(function(k){_a[k]=clampStr(_a[k],_cp.field);});
       for(_cj=0;_cj<(_a.arcs||[]).length;_cj++){var _r=_a.arcs[_cj];if(_r)["title","objective","dnaHint","desc"].forEach(function(k){_r[k]=clampStr(_r[k],_cp.field);});}}
     [bp.npcs,bp.locations,bp.creatures].forEach(function(list){for(var _k=0;_k<list.length;_k++){var _o=list[_k];if(_o&&typeof _o==="object")["name","notes","secret","desc","role","status","relation","sizeNote"].forEach(function(f){_o[f]=clampStr(_o[f],_cp.field);});}});
@@ -2648,6 +2651,7 @@ function applyBlueprint(bp){
   // Location + region override — blueprint is authoritative; overwrite whatever the wizard set
   if(bp.startingLocation)worldState.world.location=bp.startingLocation;
   if(bp.startingRegion)worldState.world.region=bp.startingRegion;
+  var _bpH=startTimeToHour(bp.startingTime);if(_bpH!==null){worldState.clock={min:startClockMin(_bpH),schedule:[]};worldState.world.time=clockHourLabel(_bpH);}/* #354: an authored opening time beats the wizard preset */
   // Prose voice — author's choice; player can override via Dev Mode. Only a NON-EMPTY blueprint
   // voice overrides (audit E20): normalizeBlueprint coerces an unset voice to "", and applyBlueprint
   // runs AFTER startGame set worldState.proseAuthor from the wizard pick, so a blank "" would clobber

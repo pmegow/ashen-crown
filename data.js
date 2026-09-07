@@ -268,3 +268,25 @@ var TABLE_TALK_FAQ=[
   {q:"What is Car Mode?",a:"A hands-free mode in the File menu: the story is read aloud, you speak your actions, and the numbered options are spoken so you can answer by number."},
   {q:"How do I report a problem?",a:"File ▸ ⚠ Report bug on the game screen. The form says exactly what it sends and to whom; you can leave out the screenshot."}
 ];
+
+/* #354 (v1.837): THE starting-location table — the Review step's picker is GENERATED from it and the
+   preset carries the campaign's OPENING HOUR (owner ruling 2026-09-06: "graveyard at midnight" must not
+   open at dawn; the clock stays engine-owned, so the preset sets it, never the GM). hour is a 0–23 clock
+   hour; the engine turns it into minutes-since-dawn (startClockMin) and a phase word (clockHourLabel).
+   `custom` and blueprint starts without an opening time keep the historical dawn/dusk default. */
+var START_LOCATIONS=[
+  {loc:"The Crossroads of Ashenveil",label:"The Crossroads -- windswept junction between trade routes",hour:6},
+  {loc:"A shipwreck on the Blighted Coast",label:"Shipwreck -- washed ashore with nothing but what you carry",hour:5},
+  {loc:"The Salted Wound Tavern",label:"Tavern -- a dimly lit refuge for sellswords and drifters",hour:20},
+  {loc:"The Guild Hall of your order",label:"Guild Hall -- summoned by your order for a new assignment",hour:9},
+  {loc:"A prison cell in an unknown fortress",label:"Prison -- you wake in chains with no memory of how",hour:3},
+  {loc:"A forest clearing near ancient ruins",label:"Wilderness -- camped near ruins humming with old magic",hour:21},
+  {loc:"An abandoned menagerie on the edge of a dying city",label:"Abandoned menagerie -- rusted cages, something still inside",hour:17},
+  {loc:"The mouth of an ancient dungeon",label:"Ancient dungeon -- torchlight swallowed by stairs going down",hour:10},
+  {loc:"Midnight in the center of the graveyard",label:"Graveyard at midnight -- alone among the stones, something just moved",hour:0},
+  {loc:"custom",label:"Custom -- describe your own starting place",hour:null}
+];
+/* #354: the wizard's apparent-age and alignment vocabularies — the Identity/Stats selects in index.html
+   list exactly these (pinned), and the random-hero roller draws from them. */
+var WIZARD_AGES=["young (late teens)","early twenties","thirties","middle-aged","weathered and old"];
+var WIZARD_ALIGNMENTS=["Lawful Good","Neutral Good","Chaotic Good","Lawful Neutral","True Neutral","Chaotic Neutral","Lawful Evil","Neutral Evil","Chaotic Evil"];

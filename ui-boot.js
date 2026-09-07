@@ -139,7 +139,6 @@ function wireButtons(){
   document.getElementById("ft-derive").addEventListener("click",function(){ftDeriveAppearance();});
   document.getElementById("rv-back").addEventListener("click",function(){pendingImportChar=null;goStep(5);});
   document.getElementById("rv-go").addEventListener("click",confirmChar);
-  document.getElementById("rv-randomise").addEventListener("click",function(){aiRandomiseAll(this);});
   injectSparkleButtons();
   document.getElementById("rv-start-loc").addEventListener("change",function(){document.getElementById("rv-start-loc-custom").style.display=this.value==="custom"?"block":"none";});
   document.getElementById("rv-start-level").addEventListener("change",function(){var b=document.getElementById("rv-go");if(b)b.textContent=parseInt(this.value)>=3?"Assign level perks":"Begin your journey";buildDots();});
@@ -232,6 +231,7 @@ function wireButtons(){
   document.getElementById("fm-export").addEventListener("click",exportSave);
   /* #23① sweep: the tone-step "↩ Import existing save" input was removed — redundant with File ▸ Import Character / Load Game (its importSave wiring went with it) */
   document.getElementById("open-blueprint-browser").addEventListener("click",showBlueprintBrowser);
+  document.getElementById("random-hero").addEventListener("click",function(){aiRandomHero(this);});/* #354 */
   document.getElementById("blueprint-clear").addEventListener("click",clearBlueprint);
   document.getElementById("fm-sync-mob").addEventListener("click",function(){document.getElementById("file-menu").style.display="none";showSyncModal();});
   document.getElementById("fm-state-mob").addEventListener("click",function(){document.getElementById("file-menu").style.display="none";document.getElementById("sidebar").classList.toggle("open");});

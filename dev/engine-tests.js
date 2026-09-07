@@ -1265,6 +1265,46 @@ function runEngineTests(R){
     if(!av||!ft||av[1]!==ft[1]||av[2]!==ft[2])return "review avatar aspect must match the finishing-touches preview: "+(av&&av.slice(1))+" vs "+(ft&&ft.slice(1));
     if(cc.indexOf('Portrait generated in "+Math.round((Date.now()-_pt0)/1000)+"s.')===-1||cc.indexOf("clearInterval(_ptTick)")===-1)return "the portrait render must show elapsed seconds and clear its ticker";
   });
+  t("#354 the opening hour: START_LOCATIONS carries each preset's hour and the Review picker is generated from it; startClockMin maps a clock hour onto minutes-since-dawn (midnight → 1080); clockHourLabel is the phase word; a blueprint's startingTime overrides; custom/blank keeps the dawn default",function(){
+    if(startClockMin(6)!==0||startClockMin(0)!==1080||startClockMin(5)!==1380||startClockMin(20)!==840||startClockMin(30)!==0||startClockMin("x")!==0)return "startClockMin: "+[startClockMin(6),startClockMin(0),startClockMin(5),startClockMin(20)];
+    if(clockHourLabel(0)!=="midnight"||clockHourLabel(6)!=="dawn"||clockHourLabel(17)!=="dusk"||clockHourLabel(23)!=="night")return "labels";
+    if(startTimeToHour("00:00")!==0||startTimeToHour("21:30")!==21||startTimeToHour("7")!==7||startTimeToHour("24:00")!==null||startTimeToHour("")!==null||startTimeToHour("noon")!==null)return "startTimeToHour";
+    var g=startLocationEntry("Midnight in the center of the graveyard");if(!g||g.hour!==0)return "the graveyard must open at midnight";
+    if(startLocationEntry("custom").hour!==null||startLocationEntry("nowhere")!==null)return "custom has no hour; unknown → null";
+    var seen={},i;for(i=0;i<START_LOCATIONS.length;i++){var e=START_LOCATIONS[i];if(!e.loc||!e.label||seen[e.loc])return "table row "+i+" malformed or duplicate";seen[e.loc]=1;if(e.hour!==null&&(typeof e.hour!=="number"||e.hour<0||e.hour>23))return "hour out of range at "+e.loc;}
+    var idx=__fsForTests.readFileSync(__rootForTests+"/index.html","utf8");
+    if(idx.indexOf('<select id="rv-start-loc"></select>')===-1)return "the Review picker must be EMPTY in the shell — it is generated from START_LOCATIONS";
+    var cc=__fsForTests.readFileSync(__rootForTests+"/char-creation.js","utf8");
+    if(cc.indexOf("START_LOCATIONS[_si].label")===-1||cc.indexOf("char._startHour=")===-1||cc.indexOf("ic._startHour=")===-1)return "the wizard must generate the picker and carry the hour on both paths";
+    var gm=__fsForTests.readFileSync(__rootForTests+"/game.js","utf8");
+    if(gm.indexOf("worldState.clock={min:startClockMin(char._startHour),schedule:[]}")===-1||gm.indexOf("delete worldState.character._startHour")===-1)return "startGame must open the clock at the preset hour and scrub the carrier";
+    makeWorld();worldState.clock={min:0,schedule:[]};worldState.world.time="dusk";
+    applyBlueprint(normalizeBlueprint({format:"tnd-blueprint-v1",name:"Night",startingLocation:"A crypt",startingTime:"00:00",acts:[]}));
+    if(worldState.clock.min!==1080||worldState.world.time!=="midnight")return "blueprint opening time not applied: "+JSON.stringify(worldState.clock)+" "+worldState.world.time;
+    makeWorld();worldState.clock={min:0,schedule:[]};worldState.world.time="dusk";
+    applyBlueprint(normalizeBlueprint({format:"tnd-blueprint-v1",name:"Blank",startingLocation:"A crypt",acts:[]}));
+    if(worldState.clock.min!==0||worldState.world.time!=="dusk")return "a blueprint without an opening time must leave the clock alone";
+    var bp=normalizeBlueprint({format:"tnd-blueprint-v1",name:"X",startingTime:42,acts:[]});if(bp.startingTime!=="")return "non-string startingTime must normalise to blank";
+  });
+  t("#354 the random hero: rollRandomHero is pure and injectable — every id it returns exists, the subrace belongs to the ancestry and the lineage to the subrace, the class comes from the available roster, six 4d6-drop-lowest stats (3–18) land highest-first on the class's statPriority, floating ancestry points go to the class's top stats, age/alignment come from the wizard vocabularies; the shell wires one button on step 1 and none on Review",function(){
+    var seed=7;function rnd(){seed=(seed*1103515245+12345)%2147483648;return seed/2147483648;}
+    var n,anc,i,sr;for(n=0;n<300;n++){var r=rollRandomHero(rnd);
+      anc=null;for(i=0;i<ANCS.length;i++)if(ANCS[i].id===r.ancestry)anc=ANCS[i];if(!anc)return "unknown ancestry "+r.ancestry;
+      if(anc.subraces&&anc.subraces.length){sr=null;for(i=0;i<anc.subraces.length;i++)if(anc.subraces[i].id===r.subrace)sr=anc.subraces[i];if(!sr)return "subrace "+r.subrace+" not under "+anc.id;
+        if(sr.lineages&&sr.lineages.length){var ok=false;for(i=0;i<sr.lineages.length;i++)if(sr.lineages[i].id===r.heritageVariant)ok=true;if(!ok)return "lineage "+r.heritageVariant+" not under "+sr.id;}else if(r.heritageVariant)return "lineage on a subrace without lineages";}
+      else if(r.subrace||r.heritageVariant)return "subrace on an ancestry without subraces";
+      var cd=classDef(r.cls);if(!cd)return "unknown class "+r.cls;
+      var prio=cd.statPriority||STATS,vals=[];for(i=0;i<prio.length;i++){var v=r.bs[prio[i]];if(typeof v!=="number"||v<3||v>18)return "stat "+prio[i]+"="+v;vals.push(v);}
+      for(i=1;i<vals.length;i++)if(vals[i]>vals[i-1])return "stats not laid highest-first on statPriority: "+JSON.stringify(r.bs);
+      if(anc.fc>0){if(r.fp.length!==Math.min(anc.fc,prio.length))return "floating points "+r.fp.length+" vs fc "+anc.fc;for(i=0;i<r.fp.length;i++)if(r.fp[i]!==prio[i])return "floating point off the class's top stats";}else if(r.fp.length)return "floating points on a fixed-stat ancestry";
+      if(["M","F","NB"].indexOf(r.gender)<0||WIZARD_AGES.indexOf(r.age)<0||WIZARD_ALIGNMENTS.indexOf(r.alignment)<0)return "vocabulary escape: "+r.gender+"/"+r.age+"/"+r.alignment;}
+    var idx=__fsForTests.readFileSync(__rootForTests+"/index.html","utf8"),ub=__fsForTests.readFileSync(__rootForTests+"/ui-boot.js","utf8");
+    if(idx.indexOf('id="rv-randomise"')!==-1||ub.indexOf("rv-randomise")!==-1)return "the Review-step Randomise must be gone (moved to step 1)";
+    var s1=idx.slice(idx.indexOf('id="step1"'),idx.indexOf('id="step2"'));if(s1.indexOf('id="random-hero"')===-1||ub.indexOf('getElementById("random-hero")')===-1)return "step 1 must carry the wired random-hero button";
+    var ages=(idx.match(/<select id="char-age">(.*?)<\/select>/)||[])[1]||"",al=(idx.match(/<select id="char-alignment">(.*?)<\/select>/)||[])[1]||"";
+    for(i=0;i<WIZARD_AGES.length;i++)if(ages.indexOf('value="'+WIZARD_AGES[i]+'"')===-1)return "age vocabulary drifted from the select: "+WIZARD_AGES[i];
+    for(i=0;i<WIZARD_ALIGNMENTS.length;i++)if(al.indexOf('value="'+WIZARD_ALIGNMENTS[i]+'"')===-1)return "alignment vocabulary drifted from the select: "+WIZARD_ALIGNMENTS[i];
+  });
   t("#348 curve change keeps every character at their level: a Lv17 with 131,190 XP (Ammut at t2419) loads as Lv17 with XP floored to the new gate, companions likewise; nobody de-levels and nobody levels up on load",function(){
     makeWorld();var c=worldState.character;c.level=17;c.xp=131190;
     worldState.npcs.push({name:"Daeris",partyMember:true,status:"steady",charSheet:{name:"Daeris",cls:"Cleric",level:16,xp:114240,hp:60,maxHp:60,stats:{},abilities:[],spells:[],inventory:[]}});

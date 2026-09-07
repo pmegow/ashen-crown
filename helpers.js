@@ -558,6 +558,34 @@ function partyCompanionsWithSheets(includeDead){
 // the worldState.npcs entries; charSheet holds the v10 sheet, npcPortrait() the image.
 function livingPartyCompanions(){return partyCompanionsWithSheets(false);}
 function droll(s){return Math.floor(Math.random()*s)+1;}
+/* #354 (v1.837): opening-hour helpers. The clock's zero is DAWN (#89: clock%1440==0 ≡ ~6am), so a
+   preset's clock hour becomes minutes-since-dawn. clockHourLabel is the one phase vocabulary for a
+   fresh campaign's world.time (the GM's [TIME:] tag takes over from turn one). */
+var DAWN_HOUR=6;
+function startClockMin(hour){if(typeof hour!=="number"||!isFinite(hour))return 0;var h=((Math.floor(hour)%24)+24)%24;return ((h-DAWN_HOUR+24)%24)*MIN_PER_HOUR;}
+function clockHourLabel(hour){var h=((Math.floor(hour)%24)+24)%24;
+  return h<4?"midnight":h<6?"before dawn":h<8?"dawn":h<12?"morning":h<14?"midday":h<17?"afternoon":h<19?"dusk":h<21?"evening":"night";}
+function startTimeToHour(hhmm){var m=/^\s*(\d{1,2})(?::(\d{2}))?\s*$/.exec(String(hhmm||""));if(!m)return null;var h=parseInt(m[1],10);return (h>=0&&h<24)?h:null;}
+function startLocationEntry(loc){var i;for(i=0;i<START_LOCATIONS.length;i++){if(START_LOCATIONS[i].loc===loc)return START_LOCATIONS[i];}return null;}
+/* #354: THE random hero — one pure roll of everything the wizard's first four steps decide (ancestry →
+   subrace → lineage, class from the available roster, 4d6-drop-lowest stats laid onto the class's
+   statPriority, floating ancestry points onto the class's top stats, gender, age, alignment). The wizard
+   paints the result into cs and jumps to Review; the AI text helper fills the words afterwards. `rand`
+   is injectable so the roll is testable; defaults to Math.random. */
+function rollRandomHero(rand){
+  rand=(typeof rand==="function")?rand:Math.random;
+  function pick(arr){return arr[Math.floor(rand()*arr.length)];}
+  function d6(){return Math.floor(rand()*6)+1;}
+  var anc=pick(ANCS),sub=null,lin=null;
+  if(anc.subraces&&anc.subraces.length){var sr=pick(anc.subraces);sub=sr.id;if(sr.lineages&&sr.lineages.length)lin=pick(sr.lineages).id;}
+  var defs=classDefs().filter(function(d){return typeof classAvailable!=="function"||classAvailable(d.id);});
+  var cls=pick(defs.length?defs:classDefs());
+  var rolls=[],i;for(i=0;i<6;i++){var d=[d6(),d6(),d6(),d6()].sort(function(a,b){return a-b;});rolls.push(d[1]+d[2]+d[3]);}
+  rolls.sort(function(a,b){return b-a;});
+  var prio=cls.statPriority||STATS,bs={};for(i=0;i<prio.length;i++)bs[prio[i]]=rolls[i];
+  var fp=[];if(anc.fc>0){for(i=0;i<anc.fc&&i<prio.length;i++)fp.push(prio[i]);}
+  return {ancestry:anc.id,subrace:sub,heritageVariant:lin,cls:cls.id,bs:bs,fp:fp,gender:pick(["M","F","NB"]),age:pick(WIZARD_AGES),alignment:pick(WIZARD_ALIGNMENTS)};
+}
 function r4d6(){var d=[droll(6),droll(6),droll(6),droll(6)];d.sort(function(a,b){return a-b;});return d[1]+d[2]+d[3];}
 function getFin(){
   var b={STR:cs.bs.STR,DEX:cs.bs.DEX,CON:cs.bs.CON,INT:cs.bs.INT,WIS:cs.bs.WIS,CHA:cs.bs.CHA};

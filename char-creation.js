@@ -176,6 +176,7 @@ async function ftDeriveAppearance(){
 }
 function buildReview(){
   var el=document.getElementById("rv-card");if(!el)return;
+  var _sl=document.getElementById("rv-start-loc");if(_sl&&!_sl.options.length){var _si;for(_si=0;_si<START_LOCATIONS.length;_si++){var _o=document.createElement("option");_o.value=START_LOCATIONS[_si].loc;_o.textContent=START_LOCATIONS[_si].label;_sl.appendChild(_o);}}/* #354: the picker is GENERATED from the table */
   // Imported character path — show as-is summary, no re-roll
   if(pendingImportChar){
     var ch=pendingImportChar,nameEl=document.getElementById("char-name");
@@ -274,7 +275,7 @@ function confirmChar(){
     var cn2El=document.getElementById("rv-camp-name"),campNm2=cn2El&&cn2El.value.trim()?cn2El.value.trim():ic.name;
     var slEl2=document.getElementById("rv-start-loc"),startLoc2=slEl2?slEl2.value:"The Crossroads of Ashenveil";
     if(startLoc2==="custom"){var clEl2=document.getElementById("rv-start-loc-text");startLoc2=clEl2&&clEl2.value.trim()?clEl2.value.trim():"A place of your choosing";}
-    ic._campName=campNm2;ic._startLoc=startLoc2;
+    ic._campName=campNm2;ic._startLoc=startLoc2;var _se2=startLocationEntry(startLoc2);ic._startHour=(_se2&&typeof _se2.hour==="number")?_se2.hour:null;/* #354 */
     if(!snapshotActiveCamp())return;/* B4: storage full — don't wipe the only local copy of the current campaign */
     store.del(WSK);store.del(SLK);store.del(MEM_KEY);
     var nid=newCampaignId();setActiveCampId(nid);
@@ -342,7 +343,7 @@ function confirmChar(){
     // pre-bump HP/CON-mod, so HP can be recomputed from base on every apply/revert.
     pendingPerkBase={stats:Object.assign({},char.stats),abilLen:char.abilities.length,maxHp:char.maxHp,hp:char.hp,conMod:Math.floor((char.stats.CON-10)/2)};_cbApplied=[];
     showCreationArchetype();}
-  else{char._startLoc=startLoc;if(buildPendingSpellPool(char)){pendingChar=char;pendingTone=getToneNm();pendingVoice=getToneVc();pendingAuthor=cs.author||"";pendingLoc=startLoc;showCreationSpellPick();}else{startGame(char,getToneNm(),getToneVc(),cs.author||"");}}
+  else{char._startLoc=startLoc;var _seH=startLocationEntry(startLoc);char._startHour=(_seH&&typeof _seH.hour==="number")?_seH.hour:null;/* #354: the preset carries the opening hour */if(buildPendingSpellPool(char)){pendingChar=char;pendingTone=getToneNm();pendingVoice=getToneVc();pendingAuthor=cs.author||"";pendingLoc=startLoc;showCreationSpellPick();}else{startGame(char,getToneNm(),getToneVc(),cs.author||"");}}
 }
 function showCreationArchetype(){
   var c=pendingChar;if(!c)return;var archs=(classDef(c.cls)||{}).archetypes||[];/* C6 ② */
@@ -523,6 +524,22 @@ async function aiSuggestField(fieldId,fieldLabel,btn){
     if(el)el.value=result.trim();
   }catch(e){if(typeof showToast==="function")showToast("Suggest failed: "+(e&&e.message?e.message:"unknown error"));}/* was a silent empty catch (audit E37) */
   if(btn){btn.classList.remove("spinning");btn.disabled=false;}
+}
+/* #354 (v1.837): ✦ Roll a random character — step 1's alternate start (owner ruling 2026-09-06: the
+   old Review-step Randomise only wrote identity text; the front-of-wizard button rolls EVERYTHING and
+   lands on Review, where every field is still editable and Back walks the steps). */
+async function aiRandomHero(btn){
+  if(btn){btn.disabled=true;btn.textContent="✦ Rolling…";}
+  var ts=document.getElementById("tone-sel");if(ts&&ts.value)cs.tone=ts.value;
+  if(cs.tone==="custom"){var _ct=document.getElementById("tone-ct");if(!_ct||!_ct.value.trim()){cs.tone="swords";if(ts)ts.value="swords";}}
+  var r=rollRandomHero();
+  cs.ancestry=r.ancestry;cs.subrace=r.subrace;cs.heritageVariant=r.heritageVariant;cs.fp=r.fp;cs.cls=r.cls;
+  cs.statMode="roll";cs.bs=r.bs;cs.rolled=true;cs.gender=r.gender;cs.age=r.age;cs.deityEdited=false;
+  var g=document.getElementById("char-gender"),a=document.getElementById("char-age"),al=document.getElementById("char-alignment");
+  if(g)g.value=r.gender;if(a)a.value=r.age;if(al)al.value=r.alignment;
+  buildStep6Deity();/* divine classes get their default deity, others clear it (audit E39) */
+  goStep(6);
+  try{await aiRandomiseAll(null);}finally{if(btn){btn.disabled=false;btn.textContent="✦ Roll a random character";}}
 }
 async function aiRandomiseAll(btn){
   if(btn){btn.classList.add("spinning");btn.disabled=true;btn.textContent="✦ …";}
