@@ -1,0 +1,1007 @@
+{
+ "meta": {
+  "ver": "v1.847",
+  "model": "claude-sonnet-5 via gateway",
+  "campId": "camp_1788815204942_4613",
+  "campName": "modelTestCampaign_sonnet5_344",
+  "turns": 50,
+  "inband": 50,
+  "missNotesFired": 0,
+  "zeroTagTurns": 0,
+  "usage": {
+   "in": 208747,
+   "out": 31464,
+   "cacheRead": 973684,
+   "cacheWrite": 381157,
+   "calls": 62,
+   "costUSD": 1.8797633,
+   "unpriced": 0,
+   "byKind": {
+    "turn": {
+     "in": 170215,
+     "out": 23424,
+     "cacheRead": 951200,
+     "cacheWrite": 381157,
+     "calls": 51,
+     "costUSD": 1.7178025000000001
+    },
+    "actions": {
+     "in": 1254,
+     "out": 113,
+     "cacheRead": 22484,
+     "cacheWrite": 0,
+     "calls": 1,
+     "costUSD": 0.0081348
+    },
+    "summarize": {
+     "in": 37278,
+     "out": 7927,
+     "cacheRead": 0,
+     "cacheWrite": 0,
+     "calls": 10,
+     "costUSD": 0.15382600000000002
+    }
+   },
+   "since": 1788815211434,
+   "syncBytes": 3565275,
+   "syncPosts": 51,
+   "lastSyncBytes": 112778
+  },
+  "hp": "23/23",
+  "level": 2,
+  "xp": 278,
+  "gold": 75,
+  "chapters": 10,
+  "npcs": 9,
+  "quests": [
+   "The Gilded Cage:active"
+  ]
+ },
+ "log": [
+  {
+   "turn": 1,
+   "action": "Signal the caravan to halt and ready weapons.",
+   "kind": "random",
+   "narration": "Turn 1 | Day 1, 7:02 pmYou raise a fist, sharp, and the lead wagon's brakes shriek in answer. The oxen bawl as the drovers haul them still, and up and down the short column you hear steel clear leather, buckles cinched tight in the ash-wind. That casual voice from the treeline stops too, cut off mid-word, and the silence it leaves behind is worse than the sound was. Somewhere in the brush a bowstring creaks under a thumb's pressure, and you know, in your gut where such things live, that you have already been seen.🔊Draw your longsword and charge the treeline.Shout a challenge into the brush.Order the drovers to take cover.",
+   "hp": 14,
+   "maxHp": 14,
+   "gold": 40,
+   "xp": 0,
+   "combat": null,
+   "sessionTokensApprox": 1177,
+   "t": 1788815298700
+  },
+  {
+   "turn": 2,
+   "action": "Draw my longsword and scan the tree line.",
+   "kind": "random",
+   "narration": "Turn 2 | Day 1, 7:03 pmSteel rasps free and settles cold and sure in your fist, chainmail shifting like a second skin as you plant your boots wide. Your eyes rake the treeline, ash-pale trunks and black shadow, searching for the glint of a buckle or the wrong shape of a branch. Then you find them, three, four, more, men rising up out of the scrub like the dead climbing out of shallow graves, and one of them laughs, low and delighted, as if he has been waiting years for this exact moment. He steps into the open first, broad as a door, a notched cutlass loose in his hand, and something in the set of his jaw claws up out of your memory before he even speaks.\"Well now,\" he calls, grinning through a beard gone gray with road-dust, \"if it isn't the Northland dog himself, walking right back into the pen.\"🔊Demand to know how he knows your name.Charge Nolan before the others move.Order the drovers to scatter for the trees.",
+   "hp": 14,
+   "maxHp": 14,
+   "gold": 40,
+   "xp": 0,
+   "combat": null,
+   "sessionTokensApprox": 1444,
+   "t": 1788815305787
+  },
+  {
+   "turn": 3,
+   "action": "Order the drovers to take cover.",
+   "kind": "random",
+   "narration": "Turn 3 | Day 1, 7:04 pm\"Down! Get behind the wagons, now!\" you roar, and the drovers do not need telling twice, they scatter for the wheels and the packed crates like rabbits gone to ground. Nolan's grin only widens at that, unhurried, a man watching a fight he has already decided the ending of. Behind him the treeline stirs, more shapes peeling away from bark and shadow, spreading wide to box the road, and you count five now, six, closing at a walk because they know you cannot outrun what is coming. The oxen scream and lunge against their yokes, and somewhere a drover sobs a prayer to some god that will not be listening, not out here, not in the ash and the dying light.\"No need for all that,\" Nolan says, spreading empty hands though his cutlass never leaves his grip, \"Valerius don't want you dead, Korrag. Wants you home.\"🔊Refuse and demand they leave.Ask what Valerius wants with you.Attack Nolan now.",
+   "hp": 14,
+   "maxHp": 14,
+   "gold": 40,
+   "xp": 0,
+   "combat": null,
+   "sessionTokensApprox": 1690,
+   "t": 1788815312858
+  },
+  {
+   "turn": 4,
+   "action": "Refuse and demand they leave.",
+   "kind": "random",
+   "narration": "Turn 4 | Day 1, 7:05 pm\"Valerius can rot,\" you snarl, longsword leveled at Nolan's throat. \"Turn around and walk back into whatever hole you crawled from, or I'll open every one of you up right here.\"Nolan's grin does not falter, it only sharpens, like a man savoring a joke only he understands. Behind him the ring of slavers tightens, unhurried, confident, the confidence of wolves who have run this exact hunt before. One of them, younger, hungrier, breaks formation with a short barking laugh and lunges for the nearest drover cowering by the wheel.🔊Cut down the thug going for the drover.Charge straight at Nolan.Fall back to defend the wagon.",
+   "hp": 14,
+   "maxHp": 14,
+   "gold": 40,
+   "xp": 0,
+   "combat": {
+    "engaged": null,
+    "foes": [
+     {
+      "name": "Nolan Grimtide",
+      "hp": 18,
+      "down": null
+     },
+     {
+      "name": "Slaver Thug",
+      "hp": 11,
+      "down": null
+     }
+    ]
+   },
+   "sessionTokensApprox": 1924,
+   "t": 1788815319356
+  },
+  {
+   "turn": 5,
+   "action": "Attack Nolan now.",
+   "kind": "random",
+   "narration": "Turn 5 | Day 1, 7:06 pmStrength check (attack roll)d20: 17 -- hitPower Strike declared. You close the gap in three long strides, ash kicking up behind your heels, and swing the longsword in a rising arc meant to open him collar to hip.Steel bites deep into Nolan's shoulder, and he staggers back with a grunt torn ragged from his throat, cutlass dropping half a foot before he wrenches it back up. Blood sheets dark down his forearm, soaking into the road-dust, and for the first time that smug grin cracks into something closer to rage.\"Still fast,\" he spits, circling wide now, favoring the ruined arm. \"Fine. We do this the hard way.\"The Slaver Thug reaches the drover cowering by the wheel and hauls him up by the collar, blade flashing toward his throat, more threat than intent, a hostage snatched quick and ugly.🔊Break off and save the drover.Press the attack on wounded Nolan.Throw something to distract the thug.",
+   "hp": 14,
+   "maxHp": 14,
+   "gold": 40,
+   "xp": 0,
+   "combat": {
+    "engaged": "Nolan Grimtide",
+    "foes": [
+     {
+      "name": "Nolan Grimtide",
+      "hp": 7,
+      "down": null
+     },
+     {
+      "name": "Slaver Thug",
+      "hp": 11,
+      "down": null
+     }
+    ]
+   },
+   "sessionTokensApprox": 2174,
+   "t": 1788815327510
+  },
+  {
+   "turn": 6,
+   "action": "Fall back to defend the wagon.",
+   "kind": "random",
+   "narration": "Turn 6 | Day 1, 7:07 pmDexterity saving throw (thug's attack vs you)d20: 9 -- failedYou wrench back from Nolan, boots skidding in loose ash, and plant yourself between the wagon wheel and the Slaver Thug's raised blade. Shield Wall braces through your stance, chainmail locked tight, shoulder squared to take whatever comes.The thug hesitates half a heartbeat, drover still fisted in his off hand, weighing whether a hostage is worth dying for against a wall of Northland muscle and steel. Nolan barks a laugh behind you, wet with pain but still mocking, and puts weight back on his good leg.\"Careful now,\" he rasps at the thug, \"don't let the big dog bite.\"The thug shoves the drover down hard into the dirt instead, choosing steel over hostage, and lunges at you with a wild overhand cut.His blade skids off your shield-braced arm, absorbed and turned, barely a sting through the chainmail.🔊Cut down the reckless thug.Turn back on wounded Nolan.Check on the fallen drover.",
+   "hp": 14,
+   "maxHp": 14,
+   "gold": 40,
+   "xp": 0,
+   "combat": {
+    "engaged": "Nolan Grimtide",
+    "foes": [
+     {
+      "name": "Nolan Grimtide",
+      "hp": 7,
+      "down": null
+     },
+     {
+      "name": "Slaver Thug",
+      "hp": 11,
+      "down": null
+     }
+    ]
+   },
+   "sessionTokensApprox": 2454,
+   "t": 1788815335298
+  },
+  {
+   "turn": 7,
+   "action": "Cut down the reckless thug.",
+   "kind": "random",
+   "narration": "Turn 7 | Day 1, 7:08 pmStrength check (attack roll)d20: 19 -- hitPower Strike declared. You pivot off the wagon wheel and drive your longsword through the thug's overextended guard, putting your whole shoulder into it.The blade goes in under his ribs and comes out red, and he folds around the wound with a strangled cry, cutlass falling from suddenly nerveless fingers into the ash.He's down before he finishes falling, dead weight crumpling into the dirt beside the drover he tried to drag off, and the drover scrambles back on hands and heels, wide-eyed, gasping. Nolan's laugh has gone entirely, his face gone tight and pale beneath the blood loss, and he backs a step further from the wagon, cutlass wavering in his grip.\"You've got teeth, Northlander. Valerius said you would.\"🔊Press Nolan while he's wavering.Demand he call off the rest.Check the drover is unhurt.Do something reckless.",
+   "hp": 14,
+   "maxHp": 14,
+   "gold": 40,
+   "xp": 0,
+   "combat": {
+    "engaged": null,
+    "foes": [
+     {
+      "name": "Nolan Grimtide",
+      "hp": 7,
+      "down": null
+     },
+     {
+      "name": "Slaver Thug",
+      "hp": 0,
+      "down": "slain"
+     }
+    ]
+   },
+   "sessionTokensApprox": 247,
+   "t": 1788815350578
+  },
+  {
+   "turn": 8,
+   "action": "Do something reckless.",
+   "kind": "random",
+   "narration": "Turn 8 | Day 1, 7:09 pmStrength check (improvised thrown weapon attack)d20: 20 -- critical hitYou don't press the sword, you throw it. Longsword end over end, blade catching the ash-grey light, straight for the hollow of Nolan's throat where the gorget gapes.The blade takes him just under the jaw, punching clean through and out the back of his neck, and Nolan Grimtide goes down like a puppet with the strings cut, still wearing that half-formed word on his lips, cutlass ringing off stone as it falls from dead fingers. The wolves around the wagon go utterly silent, and somewhere in the treeline a raven bursts up screaming into the ash-colored sky.The remaining slavers stare at their fallen leader, then at you, empty-handed and breathing hard, blood-flecked and towering amid the wreckage of their ambush. One of them drops his blade in the ash without a word and bolts for the treeline, and the rest are only a heartbeat behind him, scattering like crows off a corpse.🔊Retrieve your longsword from the body.Search Nolan's corpse.Rally the shaken drovers.",
+   "hp": 14,
+   "maxHp": 14,
+   "gold": 60,
+   "xp": 160,
+   "combat": null,
+   "sessionTokensApprox": 908,
+   "t": 1788815359350
+  },
+  {
+   "turn": 9,
+   "action": "Search Nolan's corpse.",
+   "kind": "random",
+   "narration": "Turn 9 | Day 1, 7:09 pmYou crouch over the body and turn out what pockets and pouches the man kept, cold ash sifting between your fingers. A drover behind you, still shaking, mutters low to another as if you can't hear.\"They'll say Grimtide's crew got cut down to a man by some giant out of the north, wait and see. By the time it reaches Ashenveil it'll be twenty of us he killed bare-handed.\"Nolan's coin purse yields little, a handful of silver and copper, no gold worth the counting. But knotted at his belt you find a strip of tanned hide branded with a sigil you don't recognize, a coiled shape like a snake swallowing its own crown, and beneath his shirt collar, half-healed into old pale scar tissue, the same mark burned into his own flesh.🔊Examine the brand more closely.Ask the drover if he knows the sigil.Search the rest of the ambush site.",
+   "hp": 14,
+   "maxHp": 14,
+   "gold": 60,
+   "xp": 160,
+   "combat": null,
+   "sessionTokensApprox": 1811,
+   "t": 1788815367177
+  },
+  {
+   "turn": 10,
+   "action": "Rally the shaken drovers.",
+   "kind": "random",
+   "narration": "Turn 10 | Day 1, 7:24 pmYou straighten, tuck the hide strip through your belt, and turn on the drovers still crouched behind wagon wheels and crates. Your voice carries flat and hard across the crossroads, the kind of tone that leaves no room for panic to keep breathing.\"On your feet. It's done. Get the oxen calmed and check the wheels, we've lost enough daylight already.\"They rise slow, shamefaced, one still trembling as he brushes ash from his knees, but they move to the task, hands finding rope and yoke and the familiar motions of work to steady themselves. The bodies of the ambush lie scattered across the packed earth, dark stains soaking into the dust, and the smell of blood hangs sharp under the wind's bitter char.🔊Ask the drovers about Valerius.Push on toward Ashenveil.Search the ambush site for more clues.",
+   "hp": 14,
+   "maxHp": 14,
+   "gold": 60,
+   "xp": 160,
+   "combat": null,
+   "sessionTokensApprox": 2602,
+   "t": 1788815375515
+  },
+  {
+   "turn": 11,
+   "action": "Ask the drovers about Valerius.",
+   "kind": "random",
+   "narration": "Turn 11 | Day 1, 7:34 pmYou catch the nearest drover by the shoulder before he can bury himself back in his work, an older man with ash ground into the creases of his face, and force him to meet your eyes.\"Valerius. That name mean anything to you?\"The drover's hands still on the yoke strap. He shakes his head too quickly, the way a man does when he wants a question to have never been asked.\"Only what every trader hears whispered south of the gate. That the fighting pits under Ashenveil have got a new master, and men don't come back from owing him money. That's all I know, I swear it. We just haul crates, friend, we don't ask whose crates.\"He pulls free of your grip and hurries back to the oxen, refusing to look at the bodies scattered behind you. You get nothing more from the others, only frightened glances and the same tight silence. Whatever Valerius is, his name alone is enough to make working men flinch and go quiet.🔊Push the caravan on toward Ashenveil.Press the drover harder for details.Study the brand again before moving.Accept the offer: The Gilded Cage.",
+   "hp": 14,
+   "maxHp": 14,
+   "gold": 75,
+   "xp": 170,
+   "combat": null,
+   "sessionTokensApprox": 718,
+   "t": 1788815393598
+  },
+  {
+   "turn": 12,
+   "action": "Accept the offer: The Gilded Cage.",
+   "kind": "random",
+   "narration": "Turn 12 | Day 1, 7:54 pmThe name settles into you like a hook set deep, a promise of blood and answers both. You will find this Valerius soon enough, but first there is a cage of gold and screaming men waiting in Ashenveil, and something rotten feeding it.\"The Gilded Cage,\" you mutter, testing the shape of the words. \"Fighting pits under a new master. I know that story. I lived it once.\"You raise your voice, calling the drovers back to the wagons with a jerk of your chin toward the South Road.\"Enough standing in blood. Ashenveil's still ahead of us. Move!\"The wheels groan back into motion, oxen lowing as the caravan lurches south past the ash-drifted trees, leaving the dead where they fell for crows and worse things to find.🔊Press on toward the High Gate.Ask the drovers what they know of the pits.Check the road for further ambush.",
+   "hp": 14,
+   "maxHp": 14,
+   "gold": 75,
+   "xp": 170,
+   "combat": null,
+   "sessionTokensApprox": 998,
+   "t": 1788815400153
+  },
+  {
+   "turn": 13,
+   "action": "Ask the drovers what they know of the pits.",
+   "kind": "random",
+   "narration": "Turn 13 | Day 1, 8:09 pmThe caravan rattles on beneath a sky the color of old iron, wheels chewing through ash-dust as you fall into step beside the lead wagon. The drover who spoke before keeps his eyes on the road, but you press anyway, low and hard.\"The pits. Tell me what you've heard, all of it. Don't dress it up.\"He glances sideways, weighing whether silence or talk is the safer road.\"Word is they fight men who shouldn't still be standing. Half dead from wounds that'd drop an ox, and they get back up snarling. Some say it's drink, some say it's a needle. Whatever it is, the ones who take it don't stay right in the head afterward. My cousin saw a bout in the lower city, said a man tore another's arm off with his teeth and just kept fighting after, blood pouring down his own chin. They call the man who sells it the Shadow Alchemist. Nobody's seen his face and lived to brag on it.\"The wagon jolts over a rut, and he falls silent again, done saying more than he wanted to.🔊Ask if he knows where the pits are hidden.Press him on the Shadow Alchemist's identity.Ride ahead and scout the High Gate.",
+   "hp": 14,
+   "maxHp": 14,
+   "gold": 75,
+   "xp": 170,
+   "combat": null,
+   "sessionTokensApprox": 1685,
+   "t": 1788815409198
+  },
+  {
+   "turn": 14,
+   "action": "Press him on the Shadow Alchemist's identity.",
+   "kind": "random",
+   "narration": "Turn 14 | Day 1, 8:19 pmYou lean in closer, close enough that the drover cannot pretend not to hear you over the creak of the wagon.\"The Shadow Alchemist. A name, a face, anything. Somebody always knows something.\"The drover's jaw works like he is chewing on the question before he lets it out.\"Nothing solid, I swear it on my mother's grave. Some say he's a priest gone wrong, robes and all, works out of the old temple district where the city stopped bothering to keep the watch posted. Others say that's just a story to scare children. All I know for certain is the elixir's real, because men who drink it end up dead or worse, and somebody's getting rich selling it. That's a mortal man's greed talking, whatever else moves behind it.\"He crosses himself, some old ashland ward against evil, and goes quiet, done offering more than fear will let him.🔊Ask if he's ever seen the temple district himself.Let the matter rest and watch the road.Ask about Valerius's connection to the pits.Skip ahead — a montage to the next real decision.",
+   "hp": 14,
+   "maxHp": 14,
+   "gold": 75,
+   "xp": 170,
+   "combat": null,
+   "sessionTokensApprox": 1984,
+   "t": 1788815417348
+  },
+  {
+   "turn": 15,
+   "action": "Let the matter rest and watch the road.",
+   "kind": "random",
+   "narration": "Turn 15 | Day 1, 10:19 pmYou fall back from the wagon's edge and let the drover keep his silence, some things a man is better off not chewing on twice. The road stretches south beneath the ash-pale sky, packed earth rutted deep by a thousand years of wheels before yours, and the wind carries that same bitter char it has carried since dawn. You keep your hand near your sword hilt and your eyes on the treeline, because crossroads have taught you what waits in shadow twice already today.The land begins to change as you march, ash giving way to blackened stubble where crops once grew, and far off you catch the first grey smear of smoke that is not wildfire but chimney and forge, the breath of a city waking to its own corruption. Ashenveil waits ahead, patient as a spider in a web built from other men's fear.🔊Push on toward the High Gate.Ask the drovers about Ashenveil's watch.Scan the road ahead for danger.Skip ahead — a montage to the next real decision.",
+   "hp": 14,
+   "maxHp": 14,
+   "gold": 75,
+   "xp": 170,
+   "combat": null,
+   "sessionTokensApprox": 2224,
+   "t": 1788815423610
+  },
+  {
+   "turn": 16,
+   "action": "Scan the road ahead for danger.",
+   "kind": "random",
+   "narration": "Turn 16 | Day 1, 10:29 pmWisdom checkd20: 16 -- successYour eyes narrow against the wind, raking the road where it bends between two shoulders of blackened hill. Nothing moves but ash devils spinning thin across the ruts, and a carrion bird wheeling low over something dead in the ditch grass.You mark a break in the brush where the earth has been disturbed recently, boot prints pressed deep and fresh, three men at least, moving parallel to the road rather than crossing it. Whoever they are, they are shadowing the caravan rather than blocking it, watching rather than striking, and that patience unsettles you more than another ambush would.🔊Warn the drovers to stay alert.Investigate the boot prints closer.Press on and watch the brush.Skip ahead — a montage to the next real decision.",
+   "hp": 14,
+   "maxHp": 14,
+   "gold": 75,
+   "xp": 170,
+   "combat": null,
+   "sessionTokensApprox": 2426,
+   "t": 1788815428907
+  },
+  {
+   "turn": 17,
+   "action": "Press on and watch the brush.",
+   "kind": "random",
+   "narration": "Turn 17 | Day 1, 10:49 pmThe shadows have not struck yet, only watched, so you keep the wagons rolling and your gaze hard on the treeline. Ash sifts down through the grey light as the caravan grinds forward, wheels crunching over the blackened stubble, and you catch one flicker of movement far back in the brush before it stills again like a deer freezing mid-step. Whoever they are, they know their business, keeping their distance and their patience, waiting on something you have not yet given them.🔊Signal the drovers to pick up the pace.Call out a challenge to the brush.Keep pressing on toward Ashenveil.Skip ahead — a montage to the next real decision.",
+   "hp": 14,
+   "maxHp": 14,
+   "gold": 75,
+   "xp": 170,
+   "combat": null,
+   "sessionTokensApprox": 524,
+   "t": 1788815442767
+  },
+  {
+   "turn": 18,
+   "action": "Skip ahead — a montage to the next real decision.",
+   "kind": "random",
+   "narration": "Turn 18 | Day 1, 2:49 amThe road eats the hours the way it eats everything else out here, slow and grinding. Twice more you catch the shadowing men keeping pace through the brush, and twice more they melt away when you turn to face them, content to watch and wait rather than close the distance. The wagons roll past burned-out steadings and fields gone to black rot, the drovers grown quiet with the nearness of the city, and you keep your sword arm loose and ready through it all. By the time the sun bleeds low and orange through the ash-haze, the walls of Ashenveil rise ahead of you at last, a jagged crown of stone and smoke, and the High Gate stands open like a mouth waiting to swallow the caravan whole.🔊Approach the High Gate.Warn the drovers to be ready.Look for the shadowing men one last time.",
+   "hp": 14,
+   "maxHp": 14,
+   "gold": 75,
+   "xp": 170,
+   "combat": null,
+   "sessionTokensApprox": 1098,
+   "t": 1788815448175
+  },
+  {
+   "turn": 19,
+   "action": "Warn the drovers to be ready.",
+   "kind": "random",
+   "narration": "Turn 19 | Day 1, 2:54 amYou raise a fist and the wagons slow, wheels groaning to a near-halt just short of the High Gate's shadow. The drovers look to you with the same hollow, ash-rimmed eyes they have worn since the crossroads.\"Eyes open past the gate. City like this eats the careless.\"The nearest drover, the one whose tongue has loosened twice already on this road, gives a grim nod and passes the word down the line with a low whistle. Ahead, the High Gate stands open under a sky gone the color of an old bruise, guardsmen slouched in its shadow with spears more for show than use, and beyond them Ashenveil's rot breathes out to meet you, coal smoke and brine and something fouler underneath both.🔊Approach the High Gate guards.Head for the Low Quarter.Ask about the old temple district.",
+   "hp": 14,
+   "maxHp": 14,
+   "gold": 75,
+   "xp": 170,
+   "combat": null,
+   "sessionTokensApprox": 1748,
+   "t": 1788815454225
+  },
+  {
+   "turn": 20,
+   "action": "Ask about the old temple district.",
+   "kind": "random",
+   "narration": "Turn 20 | Day 1, 3:09 amYou leave the wagons idling short of the gate and stride toward the slouched guardsmen, their spears more habit than threat. One straightens as you approach, a broad-shouldered man with a scar bisecting one eyebrow, watching you the way a man watches a stray dog that might have teeth.\"The old temple district. Where's that lie in this rot heap?\"The guardsman's eyes flick to his fellow before answering, a habit of men who have learned some questions are worth remembering who asked them.\"South and east, past the Low Quarter, where the old gods' bones still stand. Watch doesn't patrol there anymore, not since the roof of Saint Ammon's fell in on a whole congregation and something walked out of the rubble that wasn't a priest. You'd have to be a fool or desperate to go looking in that quarter after dark.\"He looks you over again, taking in the chainmail, the sword-calluses, the set of your jaw.\"Which are you?\"🔊Tell him you're both.Ask him more about Saint Ammon's fall.Head toward the Low Quarter now.",
+   "hp": 14,
+   "maxHp": 14,
+   "gold": 75,
+   "xp": 170,
+   "combat": null,
+   "sessionTokensApprox": 2074,
+   "t": 1788815462224
+  },
+  {
+   "turn": 21,
+   "action": "Ask him more about Saint Ammon's fall.",
+   "kind": "random",
+   "narration": "Turn 21 | Day 1, 3:19 am\"Saint Ammon's. What happened there.\"Orvun shifts his spear to lean on it, the way old men lean on canes, though he is not so old, just worn thin by a city that wears everyone thin eventually.\"Three years back now. Cult moved in under the temple before anyone knew to stop them, some old order that worshipped down in the crypts before Ammon's lot ever laid the first stone. Ground gave way one night, mid-sermon, whole nave folded into whatever they'd been digging under it. Watch went in after, lost two men to something in the dark that didn't leave bodies behind to bury. After that the captain drew a line on the map and said the district wasn't ours to keep anymore.\"He spits to the side, an old habit against old fear.\"Folk still go missing down there sometimes. Debtors, mostly, or fools looking for treasure the collapse never really buried. Nobody official goes looking for them.\"His eyes narrow slightly, some private calculation passing behind them.\"You've the look of a man with a reason to ask. That reason worth anything to me, or are we done here?\"🔊Offer him gold for more details.Tell him you're hunting the Shadow Alchemist.Brush past him toward the Low Quarter.Do something reckless.",
+   "hp": 14,
+   "maxHp": 14,
+   "gold": 75,
+   "xp": 170,
+   "combat": null,
+   "sessionTokensApprox": 2451,
+   "t": 1788815471873
+  },
+  {
+   "turn": 22,
+   "action": "Tell him I'm hunting the Shadow Alchemist.",
+   "kind": "random",
+   "narration": "Turn 22 | Day 1, 3:29 amOrvun's spear stops leaning. It comes upright, slow, the way a man's spine goes straight when a name lands somewhere it shouldn't.\"There's a hooded rat calling himself the Shadow Alchemist working out of that district. Selling something to the pit fighters that turns them into things that don't die easy. I mean to find him.\"The guardsman's guarded look sharpens into something closer to fear held very still. He glances past you, back toward the gatehouse, as though the name itself might have ears.\"Keep your voice down, Northlander. That's not a name spoken loose in daylight, not this close to the walls.\"He lowers his voice further, leaning in.\"I don't know him. Nobody knows him, that's the whole trouble of it. But I've heard the pit-masters pay well for silence, and men who ask after him too loudly tend to stop being seen. If you're set on it, that's your grave to dig. Not mine to stop you.\"He studies you a moment longer, weighing something.\"Ten gold says I never saw you ask. Ten more and I might remember something useful.\"🔊Pay him the twenty gold.Refuse and push past him.Threaten him for the information.",
+   "hp": 14,
+   "maxHp": 14,
+   "gold": 75,
+   "xp": 170,
+   "combat": null,
+   "sessionTokensApprox": 378,
+   "t": 1788815489564
+  },
+  {
+   "turn": 23,
+   "action": "Do something reckless.",
+   "kind": "random",
+   "narration": "Turn 23 | Day 1, 3:39 amIntimidation checkd20: 19 -- successYou reach out and seize the front of Orvun's cloak, dragging him off his spear and into the gate's shadow, close enough to smell the fear-sweat under his mail. His fellow guardsmen startle, spears half-raised, but you have already put your body between them and the only man who matters.\"You'll tell me what you know, and you'll tell me now, or I walk into that district anyway and let every debt-skipping fool who ever begged you for coin know it was you who sent me blind.\"Orvun's bravado cracks like thin ice. His hands come up, not to fight, but to plead, and the words spill out of him fast and low, meant only for your ears.\"Gods, all right, all right! There's a warehouse, one of the old fish-salters' halls near the temple district's edge, still standing when half the street around it isn't. Wagons go in at night with the shutters painted over. I've seen the marks on the ones that come out again, brands, like a collar burned into the wrist. That's all I know, I swear it on my mother's bones, that's all!\"He shudders, glancing past you at his gawking fellow guards, humiliation and terror fighting for space on his face.\"Now let me go before they see more than they already have.\"You release him. He staggers back, smoothing his cloak with shaking hands, and the other guardsmen look away fast, suddenly very interested in the horizon. Orvun's fear has bought you gold's worth of truth without spending a coin, but you have made an enemy of his pride, and pride is a debt paid slow and ugly in a city like this.🔊Head for the old fish-salters' warehouse.Return to the drovers and the wagons.Ask Orvun about the branded wrist-marks.",
+   "hp": 14,
+   "maxHp": 14,
+   "gold": 75,
+   "xp": 170,
+   "combat": null,
+   "sessionTokensApprox": 1214,
+   "t": 1788815502232
+  },
+  {
+   "turn": 24,
+   "action": "Ask Orvun about the branded wrist-marks.",
+   "kind": "random",
+   "narration": "Turn 24 | Day 1, 3:49 amOrvun's eyes dart sideways again, checking who might be listening, but the fear in him has already found its groove, and words come easier now that the worst of the telling is done.\"Seen three, maybe four of them pass through this gate since midsummer. Always at night, always moving fast, like something was chasing them that wasn't there. The mark's burned deep, wrist to forearm, a shape like a snake eating a crown. One of them, a big brute, tried to buy passage out of the city with a fistful of gold and shaking hands. Kept saying it itched. Kept scratching at it till it bled.\"He swallows hard, and for a moment the guardsman's swagger is gone entirely, replaced by something rawer.\"Captain wrote it off as pit-fighter madness, too much wine and too many blows to the skull. But I've stood this gate eleven years. I know madness. That wasn't it. That man looked like something was still in him, wearing his skin from the inside.\"He straightens his cloak one final time, some scrap of composure reclaimed.\"That's everything I've got, Northlander. Don't come back asking more, and don't tell anyone where you heard it.\"The brand he describes needs no further explanation between you. You have seen its twin already, burned into a strip of hide taken off a dead man's belt.🔊Head for the old fish-salters' warehouse.Return to the drovers and wagons first.Press Orvun on where the branded man went.Skip ahead — a montage to the next real decision.",
+   "hp": 14,
+   "maxHp": 14,
+   "gold": 75,
+   "xp": 170,
+   "combat": null,
+   "sessionTokensApprox": 1646,
+   "t": 1788815512571
+  },
+  {
+   "turn": 25,
+   "action": "Return to the drovers and wagons first.",
+   "kind": "random",
+   "narration": "Turn 25 | Day 1, 3:54 amYou leave Orvun to smooth his ruffled pride and stalk back to the idling wagons, where the drovers wait with the particular stillness of men trying not to look like they were watching. The lead drover, the one who has done most of your talking these past days, straightens as you approach, reading something in your stride that says the waiting is over.\"We going in, then?\"\"We're going in. Stay sharp past that gate. This city's got teeth, and I mean to find whose mouth they're in.\"The drover nods, passing the word back down the line with a low whistle, and the wagons groan back into motion, wheels finding their rhythm again toward the waiting shadow of the High Gate. Ashenveil's rot rises to meet you all in earnest now, smoke and brine and the deeper wrongness underneath, a city that has learned to keep its worst secrets exactly where the honest folk stop looking.🔊Lead the caravan through the High Gate.Head straight for the temple district.Find a place to stable the wagons first.Skip ahead — a montage to the next real decision.",
+   "hp": 14,
+   "maxHp": 14,
+   "gold": 75,
+   "xp": 170,
+   "combat": null,
+   "sessionTokensApprox": 1923,
+   "t": 1788815519088
+  },
+  {
+   "turn": 26,
+   "action": "Head straight for the temple district.",
+   "kind": "random",
+   "narration": "Turn 26 | Day 1, 4:39 amThe High Gate swallows the caravan whole, and Ashenveil closes around you like a fist. Streets narrow into a maze of leaning tenements and soot-black stone, the crowd thinning as the wagons rattle south and east, away from the honest bustle of the market squares toward quarters where lamplight grows scarce and doors stay shut. The drovers' faces tighten with each turning, and you can feel the city's temper change beneath your boots, the cobbles growing cracked and weed-choked, the air souring with a smell beneath the smoke, something like old wax and older rot.Ahead, where the tenements finally give way, the ruin of the old temple district sprawls under the ash-grey sky, broken spires and collapsed roofs standing like the ribs of some vast dead beast. No watchmen walk these streets. No lamps burn in the windows that still have glass. Somewhere among that wreckage, by the drover's telling and Orvun's fear, stands a fish-salters' warehouse with painted-over shutters, and a hooded thing that calls itself an alchemist while it unmakes men from the inside out.The wagons cannot go further without announcing you to the whole quarter, their wheels too loud against the broken stone, so you call the drovers to a halt at the district's ragged edge, where a fallen archway still marks the old boundary between the living city and this graveyard of ambition.\"Wagons stay here. Anyone comes sniffing around that isn't me, you scream loud enough to wake the dead in there.\"The lead drover's laugh comes out thin and humorless, but he nods, and the others fall to making camp behind the wagon wheels, weapons close at hand for once without needing to be told.🔊Search the ruins for the warehouse.Look for the painted-over shutters.Listen for any sound of the pits.",
+   "hp": 14,
+   "maxHp": 14,
+   "gold": 75,
+   "xp": 170,
+   "combat": null,
+   "sessionTokensApprox": 2855,
+   "t": 1788815532178
+  },
+  {
+   "turn": 27,
+   "action": "Search the ruins for the warehouse.",
+   "kind": "random",
+   "narration": "Turn 27 | Day 1, 4:39 amPerception checkd20: 16 -- successYou leave the drovers hunched behind their wheels and pick your way into the wreckage, boots crunching over broken glass that catches the failing light like scattered teeth. The lead drover calls after you, low, before you pass beyond easy earshot.\"Word's already crawling through the Low Quarter that some ash-colored Northlander tore a slaver crew apart at the crossroads with his bare hands. They're saying you walked through steel like it was smoke. Mind you don't walk into something worse in there.\"You grunt and leave him to his fear, threading between toppled columns and the black husks of burned-out chapels. The ruin swallows sound strangely, your own footsteps returning to you flattened and wrong, as though the broken stone remembers being a place where voices mattered and resents the silence now. Ash sifts down from a sky the color of a dying coal, and somewhere ahead, past a collapsed bell tower leaning like a drunk against its neighbor, you catch the barest thread of a smell that does not belong among ash and rot, brine and salt and something sweetly foul beneath it, the unmistakable reek of a place where fish once died by the ton and something worse now takes their place.You follow the smell like a hound follows blood, and past a shattered rose window still clinging to its frame, you see it: a long low building hunched against a courtyard wall, its shutters painted over in black so thick it swallows what little light remains, no seams of gold or lamp-glow escaping anywhere along its length. A single door faces you, iron-banded, and near it the ash on the ground has been disturbed, boot prints coming and going, fresh enough that the wind has not yet smoothed them away.🔊Approach the black-shuttered door.Circle the warehouse for another entrance.Listen at the door before moving.",
+   "hp": 14,
+   "maxHp": 14,
+   "gold": 75,
+   "xp": 170,
+   "combat": null,
+   "sessionTokensApprox": 1100,
+   "t": 1788815555450
+  },
+  {
+   "turn": 28,
+   "action": "Listen for any sound of the pits.",
+   "kind": "random",
+   "narration": "Turn 28 | Day 1, 4:39 amPerception checkd20: 13 -- successYou press yourself against the cold stone of a fallen pillar and go still, letting the ruin's silence settle back over you like dust after a footstep. Beneath the wind's low moan through empty windows, you catch it: a rhythm buried deep in the earth, faint enough that any lesser ear would mistake it for your own pulse. A dull, repeated shock, like fists on flesh, like bodies meeting stone, threading up through the foundations from someplace below the warehouse rather than within it.Muffled beneath that rhythm comes something worse, a low chorus of voices raised not in speech but in something between a roar and a chant, men's throats stretched past what men's throats should bear. It rises and breaks like surf, then goes silent all at once, the way a crowd falls quiet when a killing blow lands. The pits are not in the warehouse. They are under it, and whatever throws its voice up through solid stone to reach you here is no longer entirely something you would call human.🔊Approach the black-shuttered door.Search for a way down beneath the warehouse.Circle the building for another entrance.Do something reckless.",
+   "hp": 14,
+   "maxHp": 14,
+   "gold": 75,
+   "xp": 170,
+   "combat": null,
+   "sessionTokensApprox": 1885,
+   "t": 1788815562512
+  },
+  {
+   "turn": 29,
+   "action": "Do something reckless.",
+   "kind": "random",
+   "narration": "Turn 29 | Day 1, 4:39 amStrength checkd20: 19 -- successCaution has bought you nothing but whispers and cold ash in your teeth, so you abandon it. You stride straight for the iron-banded door and slam your boot into it, once, twice, the black-painted wood shuddering under the blow until the bar within splinters loose and the door crashes inward on groaning hinges.The dark beyond swallows the sound whole, and you stand framed in the broken doorway like a challenge thrown down, chainmail catching what dim light remains, sword already loose in its sheath. For three long heartbeats nothing answers. Then somewhere deep in the black interior, a lantern flares to life, and you see crates stacked high with the reek of old brine still clinging to them, and past those crates a wide trapdoor standing open in the floor, torchlight flickering up from below like the mouth of something waking.A figure steps into the lantern glow to meet you, tall and rawboned, a scarred face unsmiling above a leather apron stained dark with things that were never fish blood. He carries no weapon drawn, only a slow, assessing stare, the look of a man who has seen bigger brutes than you walk in through that door and none of them walk back out.\"You kicked in the wrong door, Northlander. Word travels fast in this city. Should've stayed at the crossroads with the rest of the dead men.\"🔊Demand to know who he serves.Draw your sword.Push past him toward the trapdoor.",
+   "hp": 14,
+   "maxHp": 14,
+   "gold": 75,
+   "xp": 170,
+   "combat": null,
+   "sessionTokensApprox": 2565,
+   "t": 1788815571991
+  },
+  {
+   "turn": 30,
+   "action": "Push past him toward the trapdoor.",
+   "kind": "random",
+   "narration": "Turn 30 | Day 1, 4:39 amStrength check (grapple/shove)d20: 11 -- failedYou do not waste breath on him. You drive forward, shoulder low, meaning to shove past his unweaponed bulk and take the trapdoor stairs two at a stride, straight down into whatever waits.He does not step aside.His arm snaps out and catches you across the chest like a felled beam, and for a scarred fish-gutter he moves with a speed that has no business in a man his size, driving you back a full stride with a grunt of effort that turns, halfway through, into something almost like a laugh. Up close now you catch the smell under the brine and old blood, something sweetish and wrong, and you see the vein-dark blush spreading up the side of his neck from under his collar, a stain that pulses faintly, like something alive is threaded beneath his skin.\"Elixir's still warming in me from tonight's bout. Ask around, they call me the Widowmaker down there. You're about to learn why.\"He plants himself square before the trapdoor, cracking his knuckles, and the torchlight from below throws his shadow up huge and trembling across the crates. Whatever put that strength in his arm, it is awake now, and it wants blood.🔊Draw your sword and attack.Use Power Strike.Try to shove past him again.",
+   "hp": 14,
+   "maxHp": 14,
+   "gold": 75,
+   "xp": 170,
+   "combat": {
+    "engaged": null,
+    "foes": [
+     {
+      "name": "Widowmaker",
+      "hp": 32,
+      "down": null
+     }
+    ]
+   },
+   "sessionTokensApprox": 366,
+   "t": 1788815590127
+  },
+  {
+   "turn": 31,
+   "action": "Draw my sword and attack.",
+   "kind": "random",
+   "narration": "Turn 31 | Day 1, 4:39 amAttack roll (Strength)d20: 17 -- hitDexterity save (dodge)d20: 9 -- failedSteel hisses free of the scabbard and you close the distance in a single driving step, longsword already arcing up and around for his ribs. He is fast for his bulk, faster than any man swollen with drink or muscle alone should be, but you have killed quicker men than this before the sun set on the crossroads.The blade opens a line across his forearm where he throws it up to block, biting deep enough to show white bone before the blood wells black in the lantern light. He does not scream. He barely flinches, only bares his teeth in something between pain and hunger, and the wound already seems to slow its bleeding as you watch, flesh knitting itself closed at the edges like something is stitching him back together from the inside.\"That the best you've got, Northlander?\"He surges in before you can reset your stance, one massive fist cracking toward your jaw with a speed that has no place on a barroom brawler, let alone a man who guts fish for a living.The blow catches you high on the cheek and rocks your skull like a bell struck by a hammer, stars bursting white across your vision, the taste of copper flooding your mouth. You stagger back a step, boots grinding on broken glass, and shake the ringing from your ears. The Widowmaker grins wide, blood-flecked and delighted, already closing the distance again.🔊Use Power Strike on your next attack.Brace behind Shield Wall.Aim for his throat.",
+   "hp": 7,
+   "maxHp": 14,
+   "gold": 75,
+   "xp": 170,
+   "combat": {
+    "engaged": "Widowmaker",
+    "foes": [
+     {
+      "name": "Widowmaker",
+      "hp": 24,
+      "down": null
+     }
+    ]
+   },
+   "sessionTokensApprox": 756,
+   "t": 1788815600984
+  },
+  {
+   "turn": 32,
+   "action": "Aim for his throat.",
+   "kind": "random",
+   "narration": "Turn 32 | Day 1, 4:39 amAttack roll (Strength, targeting throat)d20: 20 -- critical hitYou plant your feet on the shattered glass and drive the point of your longsword straight for the soft hollow beneath his jaw, no wasted motion, no mercy in the angle of it. This is the killing stroke, the one that ends men who shrug off lesser wounds.Steel finds its mark clean, punching through muscle and cartilage in a spray that paints the crates black in the lantern's dim glow. The Widowmaker's grin freezes, his hands flying up to claw at the ruin of his own throat, and whatever unnatural vigor the elixir poured into his veins cannot stitch shut a wound this deep, this fast. He drops to his knees with a wet, gurgling sound, blood sheeting down over the apron, and topples sideways into the crates he once guarded, dead before his skull cracks the floorboards.The warehouse falls quiet but for your own ragged breath and the drip of his blood pattering onto brine-stained wood. Beyond his corpse the trapdoor still gapes open, torchlight guttering up from the pit below, and that distant chorus of roaring throats has not stopped, has not even noticed one of its own has fallen silent forever.🔊Search the Widowmaker's body.Descend through the trapdoor.Examine the crates first.",
+   "hp": 7,
+   "maxHp": 14,
+   "gold": 75,
+   "xp": 278,
+   "combat": null,
+   "sessionTokensApprox": 1097,
+   "t": 1788815609257
+  },
+  {
+   "turn": 33,
+   "action": "Examine the crates first.",
+   "kind": "random",
+   "narration": "Turn 33 | Day 1, 4:39 amInvestigation checkd20: 16 -- success\"Widowmaker,\" you mutter, wiping your blade clean on his apron. \"Should've picked a smaller title.\"You turn from the corpse and set to the crates stacked against the wall, prying the nearest lid free with the tip of your sword. Salt fish long gone to rot fills the top layer, packed in brine gone black and stinking, a cover meant to turn away any nose not desperate enough to dig deeper. Beneath the rotted fish your fingers find something harder wrapped in oilcloth, small clay vials nested in straw, each stoppered with wax and marked with a burned sigil, a serpent coiled around a crown.One vial has cracked, its contents long since dried to a rust-colored crust, but the others hold liquid the color of a healing bruise, thick and faintly luminous even in the dim lantern light. This is what fed the Widowmaker's borrowed strength, you are certain of it, poured down some fighter's throat before he stepped into the pit below to earn his master a purse of coin. You could carry a vial of it back into daylight, proof enough to hang a name to this butchery, if you can stomach touching the stuff at all.🔊Pocket a vial and descend the trapdoor.Search the rest of the crates.Head down to the pits now.",
+   "hp": 7,
+   "maxHp": 14,
+   "gold": 75,
+   "xp": 278,
+   "combat": null,
+   "sessionTokensApprox": 2038,
+   "t": 1788815620297
+  },
+  {
+   "turn": 34,
+   "action": "Pocket a vial and descend the trapdoor.",
+   "kind": "random",
+   "narration": "Turn 34 | Day 1, 4:49 amYou wrap the vial in a scrap of oilcloth and tuck it inside your jerkin, close to the skin where it will not shatter, evidence enough to hang a rope around a hooded man's neck if you live to bring it before someone who matters. The rest of the crates you leave to rot with their fish. Whatever answers wait for you, they are below, not here among the salt and straw.You cross to the trapdoor and set your boot on the first rung of the ladder bolted into the shaft, torchlight rising to meet you in a wash of orange heat, and with it the reek of sweat, blood, and something sharper beneath both, like scorched copper. The chorus of throats grows louder as you descend, no longer muffled by stone, close enough now that you can hear the words some of them are screaming, if they are still words at all. Your boots strike packed earth at the bottom of the ladder, and the pit opens before you, a ring of raw stone walls, torches guttering in iron brackets, and a crowd of shadowed figures pressed close around a sunken fighting floor stained black with old blood.🔊Scan the crowd for who runs this.Watch the current bout.Move toward the fighting floor.",
+   "hp": 7,
+   "maxHp": 14,
+   "gold": 75,
+   "xp": 278,
+   "combat": null,
+   "sessionTokensApprox": 2937,
+   "t": 1788815629148
+  },
+  {
+   "turn": 35,
+   "action": "Head down to the pits now.",
+   "kind": "random",
+   "narration": "Turn 35 | Day 1, 4:54 amYou reach the bottom of the shaft and step onto packed earth, torchlight washing orange across your face, the pit opening wide before you in a ring of raw stone. The crowd presses thick along the edges, ragged robes and fine cloaks shoulder to shoulder, all their voices braided into one hungry roar aimed down at the sunken floor. There, a shape still moves among the wreckage of the last bout, someone or something that has not yet been named to you, and you have not yet spoken to a soul down here. Whatever became of that hooded figure blocking the trapdoor above, it happened out of your sight, a rumor the pit itself might answer if you ask the right throat.🔊Grab a spectator and ask who runs this.Study the fighter on the floor.Push toward the pit's edge.Do something reckless.",
+   "hp": 7,
+   "maxHp": 14,
+   "gold": 75,
+   "xp": 278,
+   "combat": null,
+   "sessionTokensApprox": 827,
+   "t": 1788815645019
+  },
+  {
+   "turn": 36,
+   "action": "Study the fighter on the floor.",
+   "kind": "random",
+   "narration": "Turn 36 | Day 1, 4:54 amYou push toward the pit's edge and fix your eyes on the fighter below. He is broad through the shoulders, stripped to the waist, skin slick with sweat and something darker, and where a blade has opened his ribs the wound is already knitting closed, pink flesh crawling shut like a slow-blinking eye. His breath comes in ragged heaves, too fast for a man merely tired, and his eyes have gone glassy and wide, fixed on nothing, the pupils blown black despite the torchlight. A brand scars his forearm, raw and half-healed, a serpent coiled about a crown, the same mark burned into dead men you have already left behind you on this road. He staggers upright to face a new opponent shoved into the ring, and you can see it now, the way his muscles bunch too fast, too hard, tendons standing out like rigging under a storm.🔊Grab a spectator and ask who runs this.Watch the fight play out.Search the crowd for the Alchemist.",
+   "hp": 7,
+   "maxHp": 14,
+   "gold": 75,
+   "xp": 278,
+   "combat": null,
+   "sessionTokensApprox": 1592,
+   "t": 1788815652460
+  },
+  {
+   "turn": 37,
+   "action": "Search the crowd for the Alchemist.",
+   "kind": "random",
+   "narration": "Turn 37 | Day 1, 4:54 amPerception checkd20: 13 -- failedYou turn your back on the ring and let your eyes rove the packed bodies along the ledge, hunting for a shape that does not belong, a hood where there should be a bare head, stillness where there should be hunger. The crowd is a wall of rot and finery both, ash-stained laborers rubbing shoulders with cloaked gamblers who reek of temple incense and old coin, all of them screaming for blood in one voice. No one stands apart. No one watches with a merchant's cold eye instead of a gambler's hot one.Nothing marks itself as your quarry, not yet, no raised dais, no huddle of guards around a hooded master. Whoever runs this pit keeps himself hidden well, or simply is not here tonight, content to let coin and screaming men do his work while he counts profit somewhere out of the torchlight. A bookmaker near the ladder shaft is taking bets loud enough to hear over the roar, a wiry man with ink-stained fingers and a ledger of names shouted rather than written, and he seems to know every face in this crowd by reputation if not by sight.🔊Corner the bookmaker for answers.Wait and watch who collects the coin.Push down onto the fighting floor itself.",
+   "hp": 7,
+   "maxHp": 14,
+   "gold": 75,
+   "xp": 278,
+   "combat": null,
+   "sessionTokensApprox": 1906,
+   "t": 1788815660825
+  },
+  {
+   "turn": 38,
+   "action": "Wait and watch who collects the coin.",
+   "kind": "random",
+   "narration": "Turn 38 | Day 1, 4:54 amYou melt back against the stone wall and let the crowd's noise wash over you, patient as a wolf watching a herd for the limping one. The wiry man near the ladder shaft shouts odds and slaps coin into waiting palms, but he pockets nothing himself, passing every purse back through the crowd to a broad-shouldered woman leaning against the far wall, her arms crossed, a knife worn openly at her hip like a badge. She counts each purse by weight alone, never opening one, and drops them one by one into a sack chained to her belt. When the wounded fighter below finally crumples for good under a killing blow, she is the one who steps toward the ladder shaft first, murmuring something to a robed figure waiting at its foot who has not moved or spoken this whole time, hood drawn low despite the pit's heat.\"There,\" you breathe, low enough for no one but yourself.The hood does not turn your way, but something about the stillness of that figure feels like being watched all the same.🔊Follow the woman with the coin sack.Approach the hooded figure directly.Keep watching from the shadows.",
+   "hp": 7,
+   "maxHp": 14,
+   "gold": 75,
+   "xp": 278,
+   "combat": null,
+   "sessionTokensApprox": 2714,
+   "t": 1788815669772
+  },
+  {
+   "turn": 39,
+   "action": "Approach the hooded figure directly.",
+   "kind": "random",
+   "narration": "Turn 39 | Day 1, 4:54 amYou push off the wall and shoulder through the crowd, ignoring the jostling elbows and the reek of sweat and incense, your eyes fixed on the hood that has not moved once. The coin-woman sees you coming and her hand drifts to the knife at her hip, but she does not step between you and her master, not yet. You close the distance until you stand within arm's reach of the still figure, close enough now to see the hood conceals nothing but shadow deeper than the torchlight should allow, no face catching the orange light, no breath stirring the cloth.\"You're the one they answer to,\" you say, flat, no question in it. \"The Shadow Alchemist. Or you know where he hides.\"The hood tilts, slow, unhurried, and when the voice comes it is dry as old paper dragged over stone, neither man's nor woman's, pitched low enough that only you and the coin-woman could hear it over the crowd's roar.\"You reek of the Widowmaker's blood,\" the voice says. \"Bold, to wear it into my house.\"The coin-woman's knife clears its sheath an inch, waiting on a word.🔊Demand to know where Valerius hides.Draw steel before the knife comes free.Threaten the coin-woman to force answers.",
+   "hp": 7,
+   "maxHp": 14,
+   "gold": 75,
+   "xp": 278,
+   "combat": null,
+   "sessionTokensApprox": 752,
+   "t": 1788815688207
+  },
+  {
+   "turn": 40,
+   "action": "Demand to know where Valerius hides.",
+   "kind": "random",
+   "narration": "Turn 40 | Day 1, 4:54 amYou plant your boots and let your hand fall to the hilt at your side, not drawing, just resting there where the hooded thing can see it plain.\"Valerius,\" you growl. \"Where does he hide. Tell me now, or I start taking this place apart stone by stone until I find him myself.\"The hood is silent a long moment, long enough that the coin-woman's grip tightens on her knife, and the crowd's roar seems to dim around this one small pocket of stillness. Then the dry voice answers, and there is something like amusement buried in its rasp, cold and patient as a spider watching a fly test the edges of its web.\"Valerius does not hide,\" they say. \"He waits. As I have waited, since you first kicked in a door that was never locked against fools.\" The hood tilts toward the coin-woman. \"Show him what waiting has bought us.\"The woman does not draw further. Instead she reaches into her belt pouch and flings something small and hard at your feet, a scrap of leather that lands in the dust and unrolls to show its brand, a serpent devouring a crown, and beneath it, scratched crude and recent, a name you left bleeding on the ash road behind you.\"Nolan Grimtide sends his regards,\" the figure says. \"He was only the first debt. You will meet the second before you leave this pit.\"🔊Demand to know what debt they mean.Draw steel now, patience spent.Ask who the second debt is.",
+   "hp": 7,
+   "maxHp": 14,
+   "gold": 75,
+   "xp": 278,
+   "combat": null,
+   "sessionTokensApprox": 1148,
+   "t": 1788815697962
+  },
+  {
+   "turn": 41,
+   "action": "Ask who the second debt is.",
+   "kind": "random",
+   "narration": "Turn 41 | Day 1, 4:54 amYou keep your voice level, though your knuckles have gone white on the hilt.\"Who,\" you say. \"Give me a name, or a face, or I stop asking and start cutting until one falls out of you.\"The hood tilts again, that same slow patience, as if your threats are a wind against stone.\"You will know him when he stands across the pit from you,\" they say. \"He wore your name once, before Valerius gave him a better one. He remembers you fondly. He remembers the scar you left him fondly less.\" A dry sound escapes the hood that might be laughter. \"The next bout is not far off. Watch the floor, Northlander. You may find an old friend waiting on it.\"The coin-woman sheathes her knife at last, though her eyes never leave you, and somewhere below the crowd's roar swells anew, fresh torches carried out to ring the pit for another round.🔊Push toward the pit's edge to see who fights next.Press the figure for the man's true name.Step back and ready your blade.Skip ahead — a montage to the next real decision.",
+   "hp": 7,
+   "maxHp": 14,
+   "gold": 75,
+   "xp": 278,
+   "combat": null,
+   "sessionTokensApprox": 1831,
+   "t": 1788815705772
+  },
+  {
+   "turn": 42,
+   "action": "Skip ahead — a montage to the next real decision.",
+   "kind": "random",
+   "narration": "Turn 42 | Day 2, 6:54 amThe hood withdraws into the crowd's churn, and you let it go, patience worn thin but not yet broken. You spend the waiting hours prowling the ledge and the shadowed corners of the pit, marking exits, counting guards, memorizing the faces of men who might stand between you and the ladder shaft if steel comes out. You corner a limping handler for scraps of talk and learn the bouts run in threes before the crowd tires and thins toward dawn, and twice you catch the coin-woman watching you from across the torchlight, unsmiling, patient as her master.Then the crowd's roar changes pitch, rising sharp and hungry, and torches are carried out fresh to ring the pit floor. A gate groans open on the far side of the ring, and a big shape is shoved forward into the light, stumbling, chains dragging loose from broken shackles. He straightens slow, and the torchlight finds a brand on his bared shoulder, serpent and crown, and a face beneath the scars that you know, that you have not seen in years, twisted now into something that only wears the shape of a man you once called friend.🔊Call out his old name.Draw steel and ready yourself.Search the crowd for the hooded figure's reaction.Skip ahead — a montage to the next real decision.",
+   "hp": 7,
+   "maxHp": 14,
+   "gold": 75,
+   "xp": 278,
+   "combat": null,
+   "sessionTokensApprox": 2711,
+   "t": 1788815713745
+  },
+  {
+   "turn": 43,
+   "action": "Search the crowd for the hooded figure's reaction.",
+   "kind": "random",
+   "narration": "Turn 43 | Day 2, 6:54 amYour eyes rake the ledge, hunting that stillness among the swaying, howling mass. You find the hood at last, planted exactly where it stood before, unmoved by the roar breaking around it like water round a stone. No face turns to catch the torchlight. No breath stirs the cloth. But something in the tilt of that hood has sharpened, leaning forward now, drinking in the moment with an eagerness the voice never let show, and you understand with cold certainty that this is no idle bout being staged for coin. This is a test, and you are the one being measured.Below, the broken man who wore your name shakes chains from his wrists and rolls his shoulders, and the crowd's noise breaks over him like surf.🔊Step down into the pit to face him.Call his name before the fight starts.Look once more for a way to stop this.Skip ahead — a montage to the next real decision.",
+   "hp": 7,
+   "maxHp": 14,
+   "gold": 75,
+   "xp": 278,
+   "combat": null,
+   "sessionTokensApprox": 232,
+   "t": 1788815729106
+  },
+  {
+   "turn": 44,
+   "action": "Step down into the pit to face him.",
+   "kind": "random",
+   "narration": "Turn 44 | Day 2, 9:00 pmYou drop over the ledge and land hard on packed earth, the crowd's roar swallowing you whole. Across the ring the branded man lifts his head, and something flickers behind the ruin of his eyes, a flash of recognition fighting through whatever Valerius poured into him. Torchlight throws your shadows long across the churned dirt, and the gate behind him groans shut, sealing the only way out that is not through him or through you.\"I know that scar,\" you say, low, testing him. \"I put it there.\"He does not answer with words. He answers by lowering his shoulder and charging, and the crowd's scream breaks like a wave over the pit.🔊Meet his charge with steel.Try once more to reach the man beneath.Sidestep and look for an opening.",
+   "hp": 7,
+   "maxHp": 14,
+   "gold": 75,
+   "xp": 278,
+   "combat": {
+    "engaged": null,
+    "foes": [
+     {
+      "name": "Branded Fighter",
+      "hp": 18,
+      "down": null
+     }
+    ]
+   },
+   "sessionTokensApprox": 941,
+   "t": 1788815735852
+  },
+  {
+   "turn": 45,
+   "action": "Meet his charge with steel.",
+   "kind": "random",
+   "narration": "Turn 45 | Day 2, 9:00 pmStrength checkd20: 17 -- successDexterity saving throwd20: 11 -- failedYou plant your boots and let him come, steel already singing free of the scabbard. He hits like a landslide, all mindless weight and borrowed strength, but you have killed bigger men than this in narrower spaces. You drive your blade up and in as he closes, aiming for the meat above his hip where the brand-fed muscle still bleeds like any other.Steel bites deep, grinding on bone, and he roars a sound with no words left in it, more animal now than the man you once knew. Blood sheets black in the torchlight but he does not fall, does not even slow, his fist already swinging round in a hammer-blow that catches your shoulder and spins you half off your feet.Pain screams down your arm, but you keep your grip on the hilt and your feet under you, and the crowd above howls louder for the blood already spilled.🔊Press the attack while he's wounded.Call his name, try to break through.Brace behind Shield Wall and let him tire.",
+   "hp": 1,
+   "maxHp": 14,
+   "gold": 75,
+   "xp": 278,
+   "combat": {
+    "engaged": "Branded Fighter",
+    "foes": [
+     {
+      "name": "Branded Fighter",
+      "hp": 9,
+      "down": null
+     }
+    ]
+   },
+   "sessionTokensApprox": 1214,
+   "t": 1788815744094
+  },
+  {
+   "turn": 46,
+   "action": "Press the attack while he's wounded.",
+   "kind": "random",
+   "narration": "Turn 46 | Day 2, 9:00 pmStrength checkd20: 15 -- successDexterity saving throwd20: 6 -- failedYou bull forward through the pain, ignoring the fire in your shoulder, driving your blade in a rising arc for the wound already opened. He is slower now, blood loss dragging at even his stolen strength, but slower for him is still fast enough to kill a careless man.The blade catches him across the ribs and he staggers, one knee buckling into the dirt, blood pouring black from the reopened wound. But even dying he is dangerous, and his fist comes up from below in a last desperate arc, catching you under the jaw with bone-jarring force.Your vision swims red and white, the torchlight fracturing into streaks, and you feel your knees start to go even as you fight to keep your blade raised between you and whatever comes next.🔊Struggle — fight for consciousness, crawl, cling to life.Yield — let go and trust whoever finds you.",
+   "hp": 0,
+   "maxHp": 14,
+   "gold": 75,
+   "xp": 278,
+   "combat": null,
+   "sessionTokensApprox": 1489,
+   "t": 1788815750577
+  },
+  {
+   "turn": 47,
+   "action": "Struggle — fight for consciousness, crawl, cling to life",
+   "kind": "downed-struggle",
+   "narration": "Turn 47 | Day 2, 9:00 pmConstitution saving throwd20: 16 -- successThe world tilts and goes to black water, but you fight it, clawing back up through the dark by will alone. Somewhere above the crowd's roar has changed its shape, no longer bloodthirst but confusion, murmurs rippling through the mob at the sight of the Northlander gone down on the packed earth. You feel dirt under your cheek, taste copper, and force your eyes to stay open by pure stubborn hate of dying here, in a hole, for coin that was never yours to begin with.Through swimming vision you see the branded man standing over you, chest heaving, blood sheeting from the wounds you gave him, but he does not finish it. His fist trembles at his side, some last scrap of the man he used to be wrestling against whatever Valerius poured into his veins, and the hesitation buys you the one thing you have left: time.\"Enough,\" the hooded figure calls, voice cutting flat across the roar. \"He does not die tonight. Drag him up.\"Rough hands seize your arms, not gentle, but not killing either, and you are hauled up out of the dirt into torchlight and jeering faces before the dark finally takes you all the way down.🔊Wake and take stock of your surroundings.Try to move, test your bonds.Listen for who else is near.Rest and recover — you are badly hurt.",
+   "hp": 4,
+   "maxHp": 14,
+   "gold": 75,
+   "xp": 278,
+   "combat": null,
+   "sessionTokensApprox": 2357,
+   "t": 1788815760417
+  },
+  {
+   "turn": 48,
+   "action": "I make camp and rest until I am recovered.",
+   "kind": "rest",
+   "narration": "Turn 48 | Day 3, 6:00 amYou do not wake to a proper camp. There is no fire, no watch to keep, only a narrow cell of raw stone cut off the fighting floor, straw underfoot and a bucket in the corner for the smell to explain itself. Someone has thrown a rough blanket over you, whether out of mercy or simple economy you cannot say, and the ache in your shoulder has dulled to a throbbing bruise instead of a live wound. You sleep hard and dreamless, the way only exhaustion and blood loss can buy a man, and when you finally stir the torches beyond the cell door have burned low toward morning.Your body has knit what it can on its own, though the bruises still mark you deep purple beneath the chainmail's weight, and somewhere beyond the stone you hear the pit already stirring awake, feet and low voices, the business of Ashenveil's underworld never truly sleeping at all.🔊Search the cell for a way out.Listen at the door for voices.Call out and see who answers.",
+   "hp": 23,
+   "maxHp": 23,
+   "gold": 75,
+   "xp": 278,
+   "combat": null,
+   "sessionTokensApprox": 3010,
+   "t": 1788815767406
+  },
+  {
+   "turn": 49,
+   "action": "Call out and see who answers.",
+   "kind": "random",
+   "narration": "Turn 49 | Day 3, 6:00 amYou beat a fist against the cell door and shout into the dark, voice raw with sleep and old pain. No footsteps come running, no answer at all for a long stretch of silence broken only by the distant murmur of the pit stirring somewhere beyond stone. Then, faint but clear, a voice answers from farther down the passage, dry as ash sifting over dead coals, the same voice that called off your death the night before.\"Awake, then,\" it says, unhurried. \"Good. Valerius does not waste what still has use in it.\"Footsteps follow at last, unhurried, deliberate, the tread of someone who has never once needed to run from anything in this place.🔊Demand they open the door.Ask what use they mean.Wait and see who comes.Do something reckless.",
+   "hp": 23,
+   "maxHp": 23,
+   "gold": 75,
+   "xp": 278,
+   "combat": null,
+   "sessionTokensApprox": 730,
+   "t": 1788815784503
+  },
+  {
+   "turn": 50,
+   "action": "Demand they open the door.",
+   "kind": "random",
+   "narration": "Turn 50 | Day 3, 6:00 amYou slam your palm flat against the door and put the old iron of command back into your voice, the one that used to steady drovers on a bad road.\"Open it,\" you snarl. \"Face me proper, or keep hiding behind wood like the coward you are.\"A dry sound answers, something that might be laughter if laughter had no warmth left in it at all. Bolts grind back regardless, and the door swings inward on a groan of old hinges, torchlight spilling across the straw and across you, still bruised, still half on your feet. The hooded figure stands beyond it, still faceless in the gloom of that deep cowl, hands folded before them, utterly unarmed and utterly unafraid.\"There,\" they say. \"Now look at me and tell me again that I hide.\"Behind the hood, past their shoulder, you catch the knife-armed coin-woman lingering at the passage's turn, watching this exchange the way a hawk watches a snake it has already decided not to strike.🔊Ask what they want from you now.Demand answers about Valerius.Try to shove past toward the ladder.",
+   "hp": 23,
+   "maxHp": 23,
+   "gold": 75,
+   "xp": 278,
+   "combat": null,
+   "sessionTokensApprox": 1008,
+   "t": 1788815791172
+  }
+ ],
+ "errors": [],
+ "raw": [
+  {
+   "turn": 1,
+   "raw": "You raise a fist, sharp, and the lead wagon's brakes shriek in answer. The oxen bawl as the drovers haul them still, and up and down the short column you hear steel clear leather, buckles cinched tight in the ash-wind. That casual voice from the treeline stops too, cut off mid-word, and the silence it leaves behind is worse than the sound was. Somewhere in the brush a bowstring creaks under a thumb's pressure, and you know, in your gut where such things live, that you have already been seen.\n\n[QUEST:An Unwanted Reunion|active|Survive a targeted ambush on the caravan and learn who has come to collect an old debt.]\n[QUEST_STEP:An Unwanted Reunion|Survive the ambush|false]\n[QUEST_STEP:An Unwanted Reunion|Identify the attackers|false]\n[WARES:none]\n[TIME_ADVANCE:2m]\n[SUGGEST:Draw your longsword and charge the treeline|Shout a challenge into the brush|Order the drovers to take cover]"
+  },
+  {
+   "turn": 2,
+   "raw": "Steel rasps free and settles cold and sure in your fist, chainmail shifting like a second skin as you plant your boots wide. Your eyes rake the treeline, ash-pale trunks and black shadow, searching for the glint of a buckle or the wrong shape of a branch. Then you find them, three, four, more, men rising up out of the scrub like the dead climbing out of shallow graves, and one of them laughs, low and delighted, as if he has been waiting years for this exact moment. He steps into the open first, broad as a door, a notched cutlass loose in his hand, and something in the set of his jaw claws up out of your memory before he even speaks.\n\n[SAY:Nolan Grimtide]\"Well now,\" he calls, grinning through a beard gone gray with road-dust, \"if it isn't the Northland dog himself, walking right back into the pen.\"\n\n[NPC:Nolan Grimtide|smug, armed|enemy]\n[NPC_PRONOUN:Nolan Grimtide|he/him]\n[TIME_ADVANCE:1m]\n[SUGGEST:Demand to know how he knows your name|Charge Nolan before the others move|Order the drovers to scatter for the trees]"
+  },
+  {
+   "turn": 3,
+   "raw": "[SAY:Korrag]\"Down! Get behind the wagons, now!\" you roar, and the drovers do not need telling twice, they scatter for the wheels and the packed crates like rabbits gone to ground. Nolan's grin only widens at that, unhurried, a man watching a fight he has already decided the ending of. Behind him the treeline stirs, more shapes peeling away from bark and shadow, spreading wide to box the road, and you count five now, six, closing at a walk because they know you cannot outrun what is coming. The oxen scream and lunge against their yokes, and somewhere a drover sobs a prayer to some god that will not be listening, not out here, not in the ash and the dying light.\n\n[SAY:Nolan Grimtide]\"No need for all that,\" Nolan says, spreading empty hands though his cutlass never leaves his grip, \"Valerius don't want you dead, Korrag. Wants you home.\"\n\n[TIME_ADVANCE:1m]\n[SUGGEST:Refuse and demand they leave|Ask what Valerius wants with you|Attack Nolan now]"
+  },
+  {
+   "turn": 4,
+   "raw": "[SAY:Korrag]\"Valerius can rot,\" you snarl, longsword leveled at Nolan's throat. \"Turn around and walk back into whatever hole you crawled from, or I'll open every one of you up right here.\"\n\nNolan's grin does not falter, it only sharpens, like a man savoring a joke only he understands. Behind him the ring of slavers tightens, unhurried, confident, the confidence of wolves who have run this exact hunt before. One of them, younger, hungrier, breaks formation with a short barking laugh and lunges for the nearest drover cowering by the wheel.\n\n[COMBAT_START:Nolan Grimtide|18|14|4|1d8|steady]\n[COMBAT_STATS:STR:14|DEX:12|CON:13|INT:11|WIS:10|CHA:14|CR:2]\n[COMBAT_START:Slaver Thug|11|12|3|1d6|reckless]\n[COMBAT_STATS:STR:13|DEX:11|CON:12|INT:8|WIS:9|CHA:8|CR:1/2]\n[COMBAT_ROUND:1]\n[TIME_ADVANCE:10s]\n[SUGGEST:Cut down the thug going for the drover|Charge straight at Nolan|Fall back to defend the wagon]"
+  },
+  {
+   "turn": 5,
+   "raw": "Power Strike declared. You close the gap in three long strides, ash kicking up behind your heels, and swing the longsword in a rising arc meant to open him collar to hip.\n\n[DICE:Strength check (attack roll)|17|hit]\n\nSteel bites deep into Nolan's shoulder, and he staggers back with a grunt torn ragged from his throat, cutlass dropping half a foot before he wrenches it back up. Blood sheets dark down his forearm, soaking into the road-dust, and for the first time that smug grin cracks into something closer to rage.\n\n[ENEMY_HP:Nolan Grimtide|-11]\n[SAY:Nolan Grimtide]\"Still fast,\" he spits, circling wide now, favoring the ruined arm. \"Fine. We do this the hard way.\"\n\nThe Slaver Thug reaches the drover cowering by the wheel and hauls him up by the collar, blade flashing toward his throat, more threat than intent, a hostage snatched quick and ugly.\n\n[TIME_ADVANCE:10s]\n[SUGGEST:Break off and save the drover|Press the attack on wounded Nolan|Throw something to distract the thug]"
+  },
+  {
+   "turn": 6,
+   "raw": "You wrench back from Nolan, boots skidding in loose ash, and plant yourself between the wagon wheel and the Slaver Thug's raised blade. Shield Wall braces through your stance, chainmail locked tight, shoulder squared to take whatever comes.\n\n[CONDITION:Shield Wall|until your next turn|Korrag's braced stance]\n\nThe thug hesitates half a heartbeat, drover still fisted in his off hand, weighing whether a hostage is worth dying for against a wall of Northland muscle and steel. Nolan barks a laugh behind you, wet with pain but still mocking, and puts weight back on his good leg.\n\n[SAY:Nolan Grimtide]\"Careful now,\" he rasps at the thug, \"don't let the big dog bite.\"\n\nThe thug shoves the drover down hard into the dirt instead, choosing steel over hostage, and lunges at you with a wild overhand cut.\n\n[DICE:Dexterity saving throw (thug's attack vs you)|9|failed]\n\nHis blade skids off your shield-braced arm, absorbed and turned, barely a sting through the chainmail.\n\n[HP:-0]\n[TIME_ADVANCE:10s]\n[SUGGEST:Cut down the reckless thug|Turn back on wounded Nolan|Check on the fallen drover]"
+  },
+  {
+   "turn": 7,
+   "raw": "Power Strike declared. You pivot off the wagon wheel and drive your longsword through the thug's overextended guard, putting your whole shoulder into it.\n\n[DICE:Strength check (attack roll)|19|hit]\n\nThe blade goes in under his ribs and comes out red, and he folds around the wound with a strangled cry, cutlass falling from suddenly nerveless fingers into the ash.\n\n[ENEMY_HP:Slaver Thug|-11]\n[ENEMY_SLAIN:Slaver Thug]\n\nHe's down before he finishes falling, dead weight crumpling into the dirt beside the drover he tried to drag off, and the drover scrambles back on hands and heels, wide-eyed, gasping. Nolan's laugh has gone entirely, his face gone tight and pale beneath the blood loss, and he backs a step further from the wagon, cutlass wavering in his grip.\n\n[SAY:Nolan Grimtide]\"You've got teeth, Northlander. Valerius said you would.\"\n\n[TIME_ADVANCE:10s]\n[SUGGEST:Press Nolan while he's wavering|Demand he call off the rest|Check the drover is unhurt]"
+  },
+  {
+   "turn": 8,
+   "raw": "You don't press the sword, you throw it. Longsword end over end, blade catching the ash-grey light, straight for the hollow of Nolan's throat where the gorget gapes.\n\n[DICE:Strength check (improvised thrown weapon attack)|20|critical hit]\n\nThe blade takes him just under the jaw, punching clean through and out the back of his neck, and Nolan Grimtide goes down like a puppet with the strings cut, still wearing that half-formed word on his lips, cutlass ringing off stone as it falls from dead fingers. The wolves around the wagon go utterly silent, and somewhere in the treeline a raven bursts up screaming into the ash-colored sky.\n\n[ENEMY_SLAIN:Nolan Grimtide]\n[CANON_TXN_BEGIN:txn1|npc-death|Nolan Grimtide|-|An Unwanted Reunion]\n[NPC:Nolan Grimtide|dead|enemy]\n[QUEST_STEP:An Unwanted Reunion|Survive the ambush|true]\n[QUEST_STEP:An Unwanted Reunion|Identify the attackers|true]\n[QUEST:An Unwanted Reunion|completed]\n[XP:15]\n[GOLD:20]\n[CANON_TXN_END:txn1]\n\nThe remaining slavers stare at their fallen leader, then at you, empty-handed and breathing hard, blood-flecked and towering amid the wreckage of their ambush. One of them drops his blade in the ash without a word and bolts for the treeline, and the rest are only a heartbeat behind him, scattering like crows off a corpse.\n\n[COMBAT_END:victory]\n[ITEM_GAINED:Nolan's Cutlass]\n[TIME_ADVANCE:20s]\n[SUGGEST:Retrieve your longsword from the body|Search Nolan's corpse|Rally the shaken drovers]"
+  },
+  {
+   "turn": 9,
+   "raw": "You crouch over the body and turn out what pockets and pouches the man kept, cold ash sifting between your fingers. A drover behind you, still shaking, mutters low to another as if you can't hear.\n\n[SAY:Drover]\"They'll say Grimtide's crew got cut down to a man by some giant out of the north, wait and see. By the time it reaches Ashenveil it'll be twenty of us he killed bare-handed.\"\n\n[WHISPER:Word will travel to Ashenveil that a lone Northlander butchered Nolan Grimtide's whole slaver crew bare-handed at the crossroads.]\n\nNolan's coin purse yields little, a handful of silver and copper, no gold worth the counting. But knotted at his belt you find a strip of tanned hide branded with a sigil you don't recognize, a coiled shape like a snake swallowing its own crown, and beneath his shirt collar, half-healed into old pale scar tissue, the same mark burned into his own flesh.\n\n[ITEM_GAINED:Branded hide strip (Nolan Grimtide's)]\n[LORE:Nolan bore a brand on his own body matching a sigil carved into a strip of hide he carried, a coiled serpent devouring a crown.]\n[SUGGEST:Examine the brand more closely|Ask the drover if he knows the sigil|Search the rest of the ambush site]"
+  },
+  {
+   "turn": 10,
+   "raw": "You straighten, tuck the hide strip through your belt, and turn on the drovers still crouched behind wagon wheels and crates. Your voice carries flat and hard across the crossroads, the kind of tone that leaves no room for panic to keep breathing.\n\n[SAY:Korrag]\"On your feet. It's done. Get the oxen calmed and check the wheels, we've lost enough daylight already.\"\n\nThey rise slow, shamefaced, one still trembling as he brushes ash from his knees, but they move to the task, hands finding rope and yoke and the familiar motions of work to steady themselves. The bodies of the ambush lie scattered across the packed earth, dark stains soaking into the dust, and the smell of blood hangs sharp under the wind's bitter char.\n\n[LOCATION_STATE:Bodies of Nolan Grimtide's slaver crew and bloodstains mark the crossroads where the ambush was fought]\n[ITEM_DEF:Branded hide strip|category=quest|effect=A strip of tanned hide bearing a coiled serpent devouring a crown, matching a brand burned into Nolan Grimtide's flesh. No known magical property, but the sigil may be recognized by those familiar with Valerius's cult.|uses=none, not consumable|value=0 gp]\n[TIME_ADVANCE:15m]\n[SUGGEST:Ask the drovers about Valerius|Push on toward Ashenveil|Search the ambush site for more clues]"
+  },
+  {
+   "turn": 11,
+   "raw": "You catch the nearest drover by the shoulder before he can bury himself back in his work, an older man with ash ground into the creases of his face, and force him to meet your eyes.\n\n[SAY:Korrag]\"Valerius. That name mean anything to you?\"\n\nThe drover's hands still on the yoke strap. He shakes his head too quickly, the way a man does when he wants a question to have never been asked.\n\n[SAY:Drover]\"Only what every trader hears whispered south of the gate. That the fighting pits under Ashenveil have got a new master, and men don't come back from owing him money. That's all I know, I swear it. We just haul crates, friend, we don't ask whose crates.\"\n\nHe pulls free of your grip and hurries back to the oxen, refusing to look at the bodies scattered behind you. You get nothing more from the others, only frightened glances and the same tight silence. Whatever Valerius is, his name alone is enough to make working men flinch and go quiet.\n\n[ARC_COMPLETE:An Unwanted Reunion]\n[XP:15]\n[GOLD:15]\n[QUEST:The Gilded Cage|offered|Infiltrate or investigate a clandestine fighting arena in Ashenveil to find the source of the fighters' unnatural strength.]\n[TIME_ADVANCE:10m]\n[SUGGEST:Push the caravan on toward Ashenveil|Press the drover harder for details|Study the brand again before moving]"
+  },
+  {
+   "turn": 12,
+   "raw": "The name settles into you like a hook set deep, a promise of blood and answers both. You will find this Valerius soon enough, but first there is a cage of gold and screaming men waiting in Ashenveil, and something rotten feeding it.\n\n[SAY:Korrag]\"The Gilded Cage,\" you mutter, testing the shape of the words. \"Fighting pits under a new master. I know that story. I lived it once.\"\n\nYou raise your voice, calling the drovers back to the wagons with a jerk of your chin toward the South Road.\n\n[SAY:Korrag]\"Enough standing in blood. Ashenveil's still ahead of us. Move!\"\n\nThe wheels groan back into motion, oxen lowing as the caravan lurches south past the ash-drifted trees, leaving the dead where they fell for crows and worse things to find.\n\n[QUEST:The Gilded Cage|active]\n[QUEST_STEP:The Gilded Cage|Find the source of the fighters' unnatural strength|false]\n[QUEST_STEP:The Gilded Cage|Locate the clandestine fighting arena in Ashenveil|false]\n[TIME_ADVANCE:20m]\n[SUGGEST:Press on toward the High Gate|Ask the drovers what they know of the pits|Check the road for further ambush]"
+  },
+  {
+   "turn": 13,
+   "raw": "[SCENE_CAST:Korrag]\n\nThe caravan rattles on beneath a sky the color of old iron, wheels chewing through ash-dust as you fall into step beside the lead wagon. The drover who spoke before keeps his eyes on the road, but you press anyway, low and hard.\n\n[SAY:Korrag]\"The pits. Tell me what you've heard, all of it. Don't dress it up.\"\n\nHe glances sideways, weighing whether silence or talk is the safer road.\n\n[SAY:Drover]\"Word is they fight men who shouldn't still be standing. Half dead from wounds that'd drop an ox, and they get back up snarling. Some say it's drink, some say it's a needle. Whatever it is, the ones who take it don't stay right in the head afterward. My cousin saw a bout in the lower city, said a man tore another's arm off with his teeth and just kept fighting after, blood pouring down his own chin. They call the man who sells it the Shadow Alchemist. Nobody's seen his face and lived to brag on it.\"\n\nThe wagon jolts over a rut, and he falls silent again, done saying more than he wanted to.\n\n[LORE:Common folk whisper of fighters in Ashenveil's pits who take an elixir from a hooded figure called the Shadow Alchemist, granting monstrous strength and unraveling the mind.]\n[TIME_ADVANCE:15m]\n[SUGGEST:Ask if he knows where the pits are hidden|Press him on the Shadow Alchemist's identity|Ride ahead and scout the High Gate]"
+  },
+  {
+   "turn": 14,
+   "raw": "You lean in closer, close enough that the drover cannot pretend not to hear you over the creak of the wagon.\n\n[SAY:Korrag]\"The Shadow Alchemist. A name, a face, anything. Somebody always knows something.\"\n\nThe drover's jaw works like he is chewing on the question before he lets it out.\n\n[SAY:Drover]\"Nothing solid, I swear it on my mother's grave. Some say he's a priest gone wrong, robes and all, works out of the old temple district where the city stopped bothering to keep the watch posted. Others say that's just a story to scare children. All I know for certain is the elixir's real, because men who drink it end up dead or worse, and somebody's getting rich selling it. That's a mortal man's greed talking, whatever else moves behind it.\"\n\nHe crosses himself, some old ashland ward against evil, and goes quiet, done offering more than fear will let him.\n\n[LORE:Rumor places the Shadow Alchemist's operation near Ashenveil's old temple district, though the drover cannot confirm it.]\n[TIME_ADVANCE:10m]\n[SUGGEST:Ask if he's ever seen the temple district himself|Let the matter rest and watch the road|Ask about Valerius's connection to the pits]"
+  },
+  {
+   "turn": 15,
+   "raw": "You fall back from the wagon's edge and let the drover keep his silence, some things a man is better off not chewing on twice. The road stretches south beneath the ash-pale sky, packed earth rutted deep by a thousand years of wheels before yours, and the wind carries that same bitter char it has carried since dawn. You keep your hand near your sword hilt and your eyes on the treeline, because crossroads have taught you what waits in shadow twice already today.\n\nThe land begins to change as you march, ash giving way to blackened stubble where crops once grew, and far off you catch the first grey smear of smoke that is not wildfire but chimney and forge, the breath of a city waking to its own corruption. Ashenveil waits ahead, patient as a spider in a web built from other men's fear.\n\n[TIME_ADVANCE:2h]\n[SUGGEST:Push on toward the High Gate|Ask the drovers about Ashenveil's watch|Scan the road ahead for danger]"
+  },
+  {
+   "turn": 16,
+   "raw": "Your eyes narrow against the wind, raking the road where it bends between two shoulders of blackened hill. Nothing moves but ash devils spinning thin across the ruts, and a carrion bird wheeling low over something dead in the ditch grass.\n\n[DICE:Wisdom check|16|success]\n\nYou mark a break in the brush where the earth has been disturbed recently, boot prints pressed deep and fresh, three men at least, moving parallel to the road rather than crossing it. Whoever they are, they are shadowing the caravan rather than blocking it, watching rather than striking, and that patience unsettles you more than another ambush would.\n\n[SKILL_SUCCESS:Perception]\n[TIME_ADVANCE:10m]\n[SUGGEST:Warn the drovers to stay alert|Investigate the boot prints closer|Press on and watch the brush]"
+  },
+  {
+   "turn": 17,
+   "raw": "[NO_CHANGE]\n\nThe shadows have not struck yet, only watched, so you keep the wagons rolling and your gaze hard on the treeline. Ash sifts down through the grey light as the caravan grinds forward, wheels crunching over the blackened stubble, and you catch one flicker of movement far back in the brush before it stills again like a deer freezing mid-step. Whoever they are, they know their business, keeping their distance and their patience, waiting on something you have not yet given them.\n\n[TIME_ADVANCE:20m]\n[SUGGEST:Signal the drovers to pick up the pace|Call out a challenge to the brush|Keep pressing on toward Ashenveil]"
+  },
+  {
+   "turn": 18,
+   "raw": "The road eats the hours the way it eats everything else out here, slow and grinding. Twice more you catch the shadowing men keeping pace through the brush, and twice more they melt away when you turn to face them, content to watch and wait rather than close the distance. The wagons roll past burned-out steadings and fields gone to black rot, the drovers grown quiet with the nearness of the city, and you keep your sword arm loose and ready through it all. By the time the sun bleeds low and orange through the ash-haze, the walls of Ashenveil rise ahead of you at last, a jagged crown of stone and smoke, and the High Gate stands open like a mouth waiting to swallow the caravan whole.\n\n[SKILL_SUCCESS:Perception]\n[TIME_ADVANCE:4h]\n[LOCATION:Ashenveil]\n[SUGGEST:Approach the High Gate|Warn the drovers to be ready|Look for the shadowing men one last time]"
+  },
+  {
+   "turn": 19,
+   "raw": "[CONDITION_REMOVED:Shield Wall]\n[SCENE_CAST:Drover]\n\nYou raise a fist and the wagons slow, wheels groaning to a near-halt just short of the High Gate's shadow. The drovers look to you with the same hollow, ash-rimmed eyes they have worn since the crossroads.\n\n[SAY:Korrag]\"Eyes open past the gate. City like this eats the careless.\"\n\nThe nearest drover, the one whose tongue has loosened twice already on this road, gives a grim nod and passes the word down the line with a low whistle. Ahead, the High Gate stands open under a sky gone the color of an old bruise, guardsmen slouched in its shadow with spears more for show than use, and beyond them Ashenveil's rot breathes out to meet you, coal smoke and brine and something fouler underneath both.\n\n[TIME_ADVANCE:5m]\n[SUGGEST:Approach the High Gate guards|Head for the Low Quarter|Ask about the old temple district]"
+  },
+  {
+   "turn": 20,
+   "raw": "You leave the wagons idling short of the gate and stride toward the slouched guardsmen, their spears more habit than threat. One straightens as you approach, a broad-shouldered man with a scar bisecting one eyebrow, watching you the way a man watches a stray dog that might have teeth.\n\n[SAY:Korrag]\"The old temple district. Where's that lie in this rot heap?\"\n\n[NPC:Orvun Islevane|neutral, guarded|acquaintance]\n[NPC_PRONOUN:Orvun Islevane|he/him]\n\nThe guardsman's eyes flick to his fellow before answering, a habit of men who have learned some questions are worth remembering who asked them.\n\n[SAY:Orvun Islevane]\"South and east, past the Low Quarter, where the old gods' bones still stand. Watch doesn't patrol there anymore, not since the roof of Saint Ammon's fell in on a whole congregation and something walked out of the rubble that wasn't a priest. You'd have to be a fool or desperate to go looking in that quarter after dark.\"\n\nHe looks you over again, taking in the chainmail, the sword-calluses, the set of your jaw.\n\n[SAY:Orvun Islevane]\"Which are you?\"\n\n[DECISION:Korrag asked the High Gate watch directly about the old temple district.]\n[TIME_ADVANCE:15m]\n[SUGGEST:Tell him you're both|Ask him more about Saint Ammon's fall|Head toward the Low Quarter now]"
+  },
+  {
+   "turn": 21,
+   "raw": "[SAY:Korrag]\"Saint Ammon's. What happened there.\"\n\nOrvun shifts his spear to lean on it, the way old men lean on canes, though he is not so old, just worn thin by a city that wears everyone thin eventually.\n\n[SAY:Orvun Islevane]\"Three years back now. Cult moved in under the temple before anyone knew to stop them, some old order that worshipped down in the crypts before Ammon's lot ever laid the first stone. Ground gave way one night, mid-sermon, whole nave folded into whatever they'd been digging under it. Watch went in after, lost two men to something in the dark that didn't leave bodies behind to bury. After that the captain drew a line on the map and said the district wasn't ours to keep anymore.\"\n\nHe spits to the side, an old habit against old fear.\n\n[SAY:Orvun Islevane]\"Folk still go missing down there sometimes. Debtors, mostly, or fools looking for treasure the collapse never really buried. Nobody official goes looking for them.\"\n\nHis eyes narrow slightly, some private calculation passing behind them.\n\n[SAY:Orvun Islevane]\"You've the look of a man with a reason to ask. That reason worth anything to me, or are we done here?\"\n\n[LORE:The old temple district was abandoned by the city watch after Saint Ammon's temple collapsed three years ago, and something inhuman was said to walk out of the ruins.]\n[TIME_ADVANCE:10m]\n[SUGGEST:Offer him gold for more details|Tell him you're hunting the Shadow Alchemist|Brush past him toward the Low Quarter]"
+  },
+  {
+   "turn": 22,
+   "raw": "Orvun's spear stops leaning. It comes upright, slow, the way a man's spine goes straight when a name lands somewhere it shouldn't.\n\n[SAY:Korrag]\"There's a hooded rat calling himself the Shadow Alchemist working out of that district. Selling something to the pit fighters that turns them into things that don't die easy. I mean to find him.\"\n\nThe guardsman's guarded look sharpens into something closer to fear held very still. He glances past you, back toward the gatehouse, as though the name itself might have ears.\n\n[SAY:Orvun Islevane]\"Keep your voice down, Northlander. That's not a name spoken loose in daylight, not this close to the walls.\"\n\nHe lowers his voice further, leaning in.\n\n[SAY:Orvun Islevane]\"I don't know him. Nobody knows him, that's the whole trouble of it. But I've heard the pit-masters pay well for silence, and men who ask after him too loudly tend to stop being seen. If you're set on it, that's your grave to dig. Not mine to stop you.\"\n\nHe studies you a moment longer, weighing something.\n\n[SAY:Orvun Islevane]\"Ten gold says I never saw you ask. Ten more and I might remember something useful.\"\n\n[NPC:Orvun Islevane|wary, calculating|acquaintance]\n[LORE:Common folk whisper of fighters in Ashenveil's pits who take an elixir from a hooded figure called the Shadow Alchemist, granting monstrous strength and unraveling the mind.]\n[TIME_ADVANCE:10m]\n[SUGGEST:Pay him the twenty gold|Refuse and push past him|Threaten him for the information]"
+  },
+  {
+   "turn": 23,
+   "raw": "You reach out and seize the front of Orvun's cloak, dragging him off his spear and into the gate's shadow, close enough to smell the fear-sweat under his mail. His fellow guardsmen startle, spears half-raised, but you have already put your body between them and the only man who matters.\n\n[SAY:Korrag]\"You'll tell me what you know, and you'll tell me now, or I walk into that district anyway and let every debt-skipping fool who ever begged you for coin know it was you who sent me blind.\"\n\n[DICE:Intimidation check|19|success]\n[SKILL_SUCCESS:Intimidation]\n\nOrvun's bravado cracks like thin ice. His hands come up, not to fight, but to plead, and the words spill out of him fast and low, meant only for your ears.\n\n[SAY:Orvun Islevane]\"Gods, all right, all right! There's a warehouse, one of the old fish-salters' halls near the temple district's edge, still standing when half the street around it isn't. Wagons go in at night with the shutters painted over. I've seen the marks on the ones that come out again, brands, like a collar burned into the wrist. That's all I know, I swear it on my mother's bones, that's all!\"\n\nHe shudders, glancing past you at his gawking fellow guards, humiliation and terror fighting for space on his face.\n\n[SAY:Orvun Islevane]\"Now let me go before they see more than they already have.\"\n\nYou release him. He staggers back, smoothing his cloak with shaking hands, and the other guardsmen look away fast, suddenly very interested in the horizon. Orvun's fear has bought you gold's worth of truth without spending a coin, but you have made an enemy of his pride, and pride is a debt paid slow and ugly in a city like this.\n\n[NPC:Orvun Islevane|shaken, resentful|wary acquaintance]\n[RELATIONSHIP_DYNAMIC:Orvun Islevane|humiliated, cooperating under duress]\n[LORE:Rumor places the Shadow Alchemist's operation near Ashenveil's old temple district, though the drover cannot confirm it.]\n[QUEST_STEP:The Gilded Cage|Locate the clandestine fighting arena in Ashenveil|false]\n[TIME_ADVANCE:10m]\n[SUGGEST:Head for the old fish-salters' warehouse|Return to the drovers and the wagons|Ask Orvun about the branded wrist-marks]"
+  },
+  {
+   "turn": 24,
+   "raw": "Orvun's eyes dart sideways again, checking who might be listening, but the fear in him has already found its groove, and words come easier now that the worst of the telling is done.\n\n[SAY:Orvun Islevane]\"Seen three, maybe four of them pass through this gate since midsummer. Always at night, always moving fast, like something was chasing them that wasn't there. The mark's burned deep, wrist to forearm, a shape like a snake eating a crown. One of them, a big brute, tried to buy passage out of the city with a fistful of gold and shaking hands. Kept saying it itched. Kept scratching at it till it bled.\"\n\nHe swallows hard, and for a moment the guardsman's swagger is gone entirely, replaced by something rawer.\n\n[SAY:Orvun Islevane]\"Captain wrote it off as pit-fighter madness, too much wine and too many blows to the skull. But I've stood this gate eleven years. I know madness. That wasn't it. That man looked like something was still in him, wearing his skin from the inside.\"\n\nHe straightens his cloak one final time, some scrap of composure reclaimed.\n\n[SAY:Orvun Islevane]\"That's everything I've got, Northlander. Don't come back asking more, and don't tell anyone where you heard it.\"\n\nThe brand he describes needs no further explanation between you. You have seen its twin already, burned into a strip of hide taken off a dead man's belt.\n\n[LORE:A brand shaped like a serpent devouring a crown has been seen on at least three or four people passing through the High Gate since midsummer, always moving at night as if pursued.]\n[TIME_ADVANCE:10m]\n[SUGGEST:Head for the old fish-salters' warehouse|Return to the drovers and wagons first|Press Orvun on where the branded man went]"
+  },
+  {
+   "turn": 25,
+   "raw": "You leave Orvun to smooth his ruffled pride and stalk back to the idling wagons, where the drovers wait with the particular stillness of men trying not to look like they were watching. The lead drover, the one who has done most of your talking these past days, straightens as you approach, reading something in your stride that says the waiting is over.\n\n[SAY:Drover]\"We going in, then?\"\n\n[SAY:Korrag]\"We're going in. Stay sharp past that gate. This city's got teeth, and I mean to find whose mouth they're in.\"\n\nThe drover nods, passing the word back down the line with a low whistle, and the wagons groan back into motion, wheels finding their rhythm again toward the waiting shadow of the High Gate. Ashenveil's rot rises to meet you all in earnest now, smoke and brine and the deeper wrongness underneath, a city that has learned to keep its worst secrets exactly where the honest folk stop looking.\n\n[SUBLOCATION_LEAVE]\n[TIME_ADVANCE:5m]\n[SUGGEST:Lead the caravan through the High Gate|Head straight for the temple district|Find a place to stable the wagons first]"
+  },
+  {
+   "turn": 26,
+   "raw": "The High Gate swallows the caravan whole, and Ashenveil closes around you like a fist. Streets narrow into a maze of leaning tenements and soot-black stone, the crowd thinning as the wagons rattle south and east, away from the honest bustle of the market squares toward quarters where lamplight grows scarce and doors stay shut. The drovers' faces tighten with each turning, and you can feel the city's temper change beneath your boots, the cobbles growing cracked and weed-choked, the air souring with a smell beneath the smoke, something like old wax and older rot.\n\nAhead, where the tenements finally give way, the ruin of the old temple district sprawls under the ash-grey sky, broken spires and collapsed roofs standing like the ribs of some vast dead beast. No watchmen walk these streets. No lamps burn in the windows that still have glass. Somewhere among that wreckage, by the drover's telling and Orvun's fear, stands a fish-salters' warehouse with painted-over shutters, and a hooded thing that calls itself an alchemist while it unmakes men from the inside out.\n\n[LOCATION:The Temple District, Ashenveil]\n[LOCATION_DESC:A ruin of broken spires and roofless naves sprawling south and east of the Low Quarter, where Saint Ammon's temple swallowed its own congregation three years past. No watch patrols here. Rubble chokes the old processional streets, and shattered stained glass glints like teeth in the gutters. Somewhere within stands a converted fish-salters' warehouse with shutters painted black.]\n[LOCATION_SIZE:large|40]\n[TIME_ADVANCE:45m]\n\nThe wagons cannot go further without announcing you to the whole quarter, their wheels too loud against the broken stone, so you call the drovers to a halt at the district's ragged edge, where a fallen archway still marks the old boundary between the living city and this graveyard of ambition.\n\n[SAY:Korrag]\"Wagons stay here. Anyone comes sniffing around that isn't me, you scream loud enough to wake the dead in there.\"\n\nThe lead drover's laugh comes out thin and humorless, but he nods, and the others fall to making camp behind the wagon wheels, weapons close at hand for once without needing to be told.\n\n[SUGGEST:Search the ruins for the warehouse|Look for the painted-over shutters|Listen for any sound of the pits]"
+  },
+  {
+   "turn": 27,
+   "raw": "You leave the drovers hunched behind their wheels and pick your way into the wreckage, boots crunching over broken glass that catches the failing light like scattered teeth. The lead drover calls after you, low, before you pass beyond easy earshot.\n\n[SAY:Drover]\"Word's already crawling through the Low Quarter that some ash-colored Northlander tore a slaver crew apart at the crossroads with his bare hands. They're saying you walked through steel like it was smoke. Mind you don't walk into something worse in there.\"\n\n[WHISPER:A Northlander butchered an entire slaver crew bare-handed at the crossroads, and now stalks alone into the temple ruins.]\n\nYou grunt and leave him to his fear, threading between toppled columns and the black husks of burned-out chapels. The ruin swallows sound strangely, your own footsteps returning to you flattened and wrong, as though the broken stone remembers being a place where voices mattered and resents the silence now. Ash sifts down from a sky the color of a dying coal, and somewhere ahead, past a collapsed bell tower leaning like a drunk against its neighbor, you catch the barest thread of a smell that does not belong among ash and rot, brine and salt and something sweetly foul beneath it, the unmistakable reek of a place where fish once died by the ton and something worse now takes their place.\n\n[WARES:none]\n\n[DICE:Perception check|16|success]\n[SKILL_SUCCESS:Perception]\n\nYou follow the smell like a hound follows blood, and past a shattered rose window still clinging to its frame, you see it: a long low building hunched against a courtyard wall, its shutters painted over in black so thick it swallows what little light remains, no seams of gold or lamp-glow escaping anywhere along its length. A single door faces you, iron-banded, and near it the ash on the ground has been disturbed, boot prints coming and going, fresh enough that the wind has not yet smoothed them away.\n\n[SUGGEST:Approach the black-shuttered door|Circle the warehouse for another entrance|Listen at the door before moving]"
+  },
+  {
+   "turn": 28,
+   "raw": "[SCENE_CAST:none]\n\nYou press yourself against the cold stone of a fallen pillar and go still, letting the ruin's silence settle back over you like dust after a footstep. Beneath the wind's low moan through empty windows, you catch it: a rhythm buried deep in the earth, faint enough that any lesser ear would mistake it for your own pulse. A dull, repeated shock, like fists on flesh, like bodies meeting stone, threading up through the foundations from someplace below the warehouse rather than within it.\n\n[DICE:Perception check|13|success]\n[SKILL_SUCCESS:Perception]\n\nMuffled beneath that rhythm comes something worse, a low chorus of voices raised not in speech but in something between a roar and a chant, men's throats stretched past what men's throats should bear. It rises and breaks like surf, then goes silent all at once, the way a crowd falls quiet when a killing blow lands. The pits are not in the warehouse. They are under it, and whatever throws its voice up through solid stone to reach you here is no longer entirely something you would call human.\n\n[SUGGEST:Approach the black-shuttered door|Search for a way down beneath the warehouse|Circle the building for another entrance]"
+  },
+  {
+   "turn": 29,
+   "raw": "Caution has bought you nothing but whispers and cold ash in your teeth, so you abandon it. You stride straight for the iron-banded door and slam your boot into it, once, twice, the black-painted wood shuddering under the blow until the bar within splinters loose and the door crashes inward on groaning hinges.\n\n[DICE:Strength check|19|success]\n\nThe dark beyond swallows the sound whole, and you stand framed in the broken doorway like a challenge thrown down, chainmail catching what dim light remains, sword already loose in its sheath. For three long heartbeats nothing answers. Then somewhere deep in the black interior, a lantern flares to life, and you see crates stacked high with the reek of old brine still clinging to them, and past those crates a wide trapdoor standing open in the floor, torchlight flickering up from below like the mouth of something waking.\n\nA figure steps into the lantern glow to meet you, tall and rawboned, a scarred face unsmiling above a leather apron stained dark with things that were never fish blood. He carries no weapon drawn, only a slow, assessing stare, the look of a man who has seen bigger brutes than you walk in through that door and none of them walk back out.\n\n[SAY:?]\"You kicked in the wrong door, Northlander. Word travels fast in this city. Should've stayed at the crossroads with the rest of the dead men.\"\n\n[NPC:?|hostile, unarmed but confident|enemy]\n[SCENE_REF:warehouse_man|?]\n\n[SUGGEST:Demand to know who he serves|Draw your sword|Push past him toward the trapdoor]"
+  },
+  {
+   "turn": 30,
+   "raw": "You do not waste breath on him. You drive forward, shoulder low, meaning to shove past his unweaponed bulk and take the trapdoor stairs two at a stride, straight down into whatever waits.\n\nHe does not step aside.\n\n[DICE:Strength check (grapple/shove)|11|failed]\n\nHis arm snaps out and catches you across the chest like a felled beam, and for a scarred fish-gutter he moves with a speed that has no business in a man his size, driving you back a full stride with a grunt of effort that turns, halfway through, into something almost like a laugh. Up close now you catch the smell under the brine and old blood, something sweetish and wrong, and you see the vein-dark blush spreading up the side of his neck from under his collar, a stain that pulses faintly, like something alive is threaded beneath his skin.\n\n[SAY:?]\"Elixir's still warming in me from tonight's bout. Ask around, they call me the Widowmaker down there. You're about to learn why.\"\n\nHe plants himself square before the trapdoor, cracking his knuckles, and the torchlight from below throws his shadow up huge and trembling across the crates. Whatever put that strength in his arm, it is awake now, and it wants blood.\n\n[COMBAT_START:Widowmaker|32|13|+5|1d8+3|steady]\n[COMBAT_STATS:STR:18|DEX:12|CON:16|INT:9|WIS:10|CHA:11|CR:2]\n[NPC:?|hostile, empowered, blocking the trapdoor|enemy]\n\n[SUGGEST:Draw your sword and attack|Use Power Strike|Try to shove past him again]"
+  },
+  {
+   "turn": 31,
+   "raw": "Steel hisses free of the scabbard and you close the distance in a single driving step, longsword already arcing up and around for his ribs. He is fast for his bulk, faster than any man swollen with drink or muscle alone should be, but you have killed quicker men than this before the sun set on the crossroads.\n\n[DICE:Attack roll (Strength)|17|hit]\n\nThe blade opens a line across his forearm where he throws it up to block, biting deep enough to show white bone before the blood wells black in the lantern light. He does not scream. He barely flinches, only bares his teeth in something between pain and hunger, and the wound already seems to slow its bleeding as you watch, flesh knitting itself closed at the edges like something is stitching him back together from the inside.\n\n[ENEMY_HP:-8]\n\n[SAY:?]\"That the best you've got, Northlander?\"\n\nHe surges in before you can reset your stance, one massive fist cracking toward your jaw with a speed that has no place on a barroom brawler, let alone a man who guts fish for a living.\n\n[DICE:Dexterity save (dodge)|9|failed]\n\n[HP:-7]\n\nThe blow catches you high on the cheek and rocks your skull like a bell struck by a hammer, stars bursting white across your vision, the taste of copper flooding your mouth. You stagger back a step, boots grinding on broken glass, and shake the ringing from your ears. The Widowmaker grins wide, blood-flecked and delighted, already closing the distance again.\n\n[SUGGEST:Use Power Strike on your next attack|Brace behind Shield Wall|Aim for his throat]"
+  },
+  {
+   "turn": 32,
+   "raw": "You plant your feet on the shattered glass and drive the point of your longsword straight for the soft hollow beneath his jaw, no wasted motion, no mercy in the angle of it. This is the killing stroke, the one that ends men who shrug off lesser wounds.\n\n[DICE:Attack roll (Strength, targeting throat)|20|critical hit]\n\nSteel finds its mark clean, punching through muscle and cartilage in a spray that paints the crates black in the lantern's dim glow. The Widowmaker's grin freezes, his hands flying up to claw at the ruin of his own throat, and whatever unnatural vigor the elixir poured into his veins cannot stitch shut a wound this deep, this fast. He drops to his knees with a wet, gurgling sound, blood sheeting down over the apron, and topples sideways into the crates he once guarded, dead before his skull cracks the floorboards.\n\n[ENEMY_HP:-24]\n[ENEMY_SLAIN:?]\n[COMBAT_END:victory]\n[NPC:?|dead|enemy]\n\nThe warehouse falls quiet but for your own ragged breath and the drip of his blood pattering onto brine-stained wood. Beyond his corpse the trapdoor still gapes open, torchlight guttering up from the pit below, and that distant chorus of roaring throats has not stopped, has not even noticed one of its own has fallen silent forever.\n\n[XP:8]\n\n[SUGGEST:Search the Widowmaker's body|Descend through the trapdoor|Examine the crates first]"
+  },
+  {
+   "turn": 33,
+   "raw": "[SCENE_CAST:Korrag]\n\n[LOCATION_STATE:iron-banded door kicked in and hangs broken on shrieking hinges; brine-stained crates near the trapdoor pooled with the Widowmaker's blood]\n\n[SAY:Korrag]\"Widowmaker,\" you mutter, wiping your blade clean on his apron. \"Should've picked a smaller title.\"\n\n[CANON_TXN_BEGIN:txn1|npc-death|?|warehouse_man|-]\n[NPC:?|dead|enemy]\n[ENEMY_SLAIN:?]\n[XP:8]\n[CANON_TXN_END:txn1]\n\nYou turn from the corpse and set to the crates stacked against the wall, prying the nearest lid free with the tip of your sword. Salt fish long gone to rot fills the top layer, packed in brine gone black and stinking, a cover meant to turn away any nose not desperate enough to dig deeper. Beneath the rotted fish your fingers find something harder wrapped in oilcloth, small clay vials nested in straw, each stoppered with wax and marked with a burned sigil, a serpent coiled around a crown.\n\n[DICE:Investigation check|16|success]\n[SKILL_SUCCESS:Investigation]\n\nOne vial has cracked, its contents long since dried to a rust-colored crust, but the others hold liquid the color of a healing bruise, thick and faintly luminous even in the dim lantern light. This is what fed the Widowmaker's borrowed strength, you are certain of it, poured down some fighter's throat before he stepped into the pit below to earn his master a purse of coin. You could carry a vial of it back into daylight, proof enough to hang a name to this butchery, if you can stomach touching the stuff at all.\n\n[ITEM_GAINED:Vial of the Shadow Alchemist's elixir]\n[QUEST_STEP:The Gilded Cage|Find the source of the fighters' unnatural strength|true]\n\n[SUGGEST:Pocket a vial and descend the trapdoor|Search the rest of the crates|Head down to the pits now]"
+  },
+  {
+   "turn": 34,
+   "raw": "[ITEM_DEF:Vial of the Shadow Alchemist's elixir|category=consumable|effect=Grants brief unnatural strength and rapid wound-closing to whoever drinks it, at a cost to body and mind not yet understood|uses=single use|value=40 gp]\n\nYou wrap the vial in a scrap of oilcloth and tuck it inside your jerkin, close to the skin where it will not shatter, evidence enough to hang a rope around a hooded man's neck if you live to bring it before someone who matters. The rest of the crates you leave to rot with their fish. Whatever answers wait for you, they are below, not here among the salt and straw.\n\nYou cross to the trapdoor and set your boot on the first rung of the ladder bolted into the shaft, torchlight rising to meet you in a wash of orange heat, and with it the reek of sweat, blood, and something sharper beneath both, like scorched copper. The chorus of throats grows louder as you descend, no longer muffled by stone, close enough now that you can hear the words some of them are screaming, if they are still words at all. Your boots strike packed earth at the bottom of the ladder, and the pit opens before you, a ring of raw stone walls, torches guttering in iron brackets, and a crowd of shadowed figures pressed close around a sunken fighting floor stained black with old blood.\n\n[SUBLOCATION:The Gilded Cage (fighting pits)]\n[LOCATION:The Gilded Cage, beneath the Temple District]\n[TIME_ADVANCE:10m]\n\n[SUGGEST:Scan the crowd for who runs this|Watch the current bout|Move toward the fighting floor]"
+  },
+  {
+   "turn": 35,
+   "raw": "[ITEM_KEPT:Vial of the Shadow Alchemist's elixir]\n\nYou reach the bottom of the shaft and step onto packed earth, torchlight washing orange across your face, the pit opening wide before you in a ring of raw stone. The crowd presses thick along the edges, ragged robes and fine cloaks shoulder to shoulder, all their voices braided into one hungry roar aimed down at the sunken floor. There, a shape still moves among the wreckage of the last bout, someone or something that has not yet been named to you, and you have not yet spoken to a soul down here. Whatever became of that hooded figure blocking the trapdoor above, it happened out of your sight, a rumor the pit itself might answer if you ask the right throat.\n\n[LOCATION:The Gilded Cage, beneath the Temple District]\n[SUBLOCATION:The Gilded Cage (fighting pits)]\n[TIME_ADVANCE:5m]\n\n[SUGGEST:Grab a spectator and ask who runs this|Study the fighter on the floor|Push toward the pit's edge]"
+  },
+  {
+   "turn": 36,
+   "raw": "[TIME_CHECK:late night]\n\n[LOCATION_DESC:A ring of packed earth sunk below a natural stone bowl, ringed by a raised ledge where the crowd stands three deep; torches burn in iron brackets along the walls, and a single wooden ladder climbs back up through the trapdoor shaft.]\n[LOCATION_SIZE:medium|5]\n[SCENE_CAST:none]\n\nYou push toward the pit's edge and fix your eyes on the fighter below. He is broad through the shoulders, stripped to the waist, skin slick with sweat and something darker, and where a blade has opened his ribs the wound is already knitting closed, pink flesh crawling shut like a slow-blinking eye. His breath comes in ragged heaves, too fast for a man merely tired, and his eyes have gone glassy and wide, fixed on nothing, the pupils blown black despite the torchlight. A brand scars his forearm, raw and half-healed, a serpent coiled about a crown, the same mark burned into dead men you have already left behind you on this road. He staggers upright to face a new opponent shoved into the ring, and you can see it now, the way his muscles bunch too fast, too hard, tendons standing out like rigging under a storm.\n\n[SUGGEST:Grab a spectator and ask who runs this|Watch the fight play out|Search the crowd for the Alchemist]"
+  },
+  {
+   "turn": 37,
+   "raw": "[TIME_CHECK:late night]\n\nYou turn your back on the ring and let your eyes rove the packed bodies along the ledge, hunting for a shape that does not belong, a hood where there should be a bare head, stillness where there should be hunger. The crowd is a wall of rot and finery both, ash-stained laborers rubbing shoulders with cloaked gamblers who reek of temple incense and old coin, all of them screaming for blood in one voice. No one stands apart. No one watches with a merchant's cold eye instead of a gambler's hot one.\n\n[DICE:Perception check|13|failed]\n\nNothing marks itself as your quarry, not yet, no raised dais, no huddle of guards around a hooded master. Whoever runs this pit keeps himself hidden well, or simply is not here tonight, content to let coin and screaming men do his work while he counts profit somewhere out of the torchlight. A bookmaker near the ladder shaft is taking bets loud enough to hear over the roar, a wiry man with ink-stained fingers and a ledger of names shouted rather than written, and he seems to know every face in this crowd by reputation if not by sight.\n\n[SUGGEST:Corner the bookmaker for answers|Wait and watch who collects the coin|Push down onto the fighting floor itself]"
+  },
+  {
+   "turn": 38,
+   "raw": "[RETCON:removed the ledger/ink-stained bookkeeping imagery from the bookmaker's description]\n\n[NO_CHANGE:no death occurred this scene; the hooded figure at the trapdoor above was never confirmed slain on screen]\n\nYou melt back against the stone wall and let the crowd's noise wash over you, patient as a wolf watching a herd for the limping one. The wiry man near the ladder shaft shouts odds and slaps coin into waiting palms, but he pockets nothing himself, passing every purse back through the crowd to a broad-shouldered woman leaning against the far wall, her arms crossed, a knife worn openly at her hip like a badge. She counts each purse by weight alone, never opening one, and drops them one by one into a sack chained to her belt. When the wounded fighter below finally crumples for good under a killing blow, she is the one who steps toward the ladder shaft first, murmuring something to a robed figure waiting at its foot who has not moved or spoken this whole time, hood drawn low despite the pit's heat.\n\n[SAY:Korrag]\"There,\" you breathe, low enough for no one but yourself.\n\nThe hood does not turn your way, but something about the stillness of that figure feels like being watched all the same.\n\n[SCENE_REF:hooded_figure|?]\n\n[SUGGEST:Follow the woman with the coin sack|Approach the hooded figure directly|Keep watching from the shadows]"
+  },
+  {
+   "turn": 39,
+   "raw": "[NO_CHANGE:no death has occurred in this scene; the hooded figure remains alive and unidentified]\n\nYou push off the wall and shoulder through the crowd, ignoring the jostling elbows and the reek of sweat and incense, your eyes fixed on the hood that has not moved once. The coin-woman sees you coming and her hand drifts to the knife at her hip, but she does not step between you and her master, not yet. You close the distance until you stand within arm's reach of the still figure, close enough now to see the hood conceals nothing but shadow deeper than the torchlight should allow, no face catching the orange light, no breath stirring the cloth.\n\n[SAY:Korrag]\"You're the one they answer to,\" you say, flat, no question in it. \"The Shadow Alchemist. Or you know where he hides.\"\n\nThe hood tilts, slow, unhurried, and when the voice comes it is dry as old paper dragged over stone, neither man's nor woman's, pitched low enough that only you and the coin-woman could hear it over the crowd's roar.\n\n[SAY:?]\"You reek of the Widowmaker's blood,\" the voice says. \"Bold, to wear it into my house.\"\n\nThe coin-woman's knife clears its sheath an inch, waiting on a word.\n\n[NPC:?|hostile, testing you|enemy]\n[NPC_PRONOUN:?|they/them]\n\n[SUGGEST:Demand to know where Valerius hides|Draw steel before the knife comes free|Threaten the coin-woman to force answers]"
+  },
+  {
+   "turn": 40,
+   "raw": "You plant your boots and let your hand fall to the hilt at your side, not drawing, just resting there where the hooded thing can see it plain.\n\n[SAY:Korrag]\"Valerius,\" you growl. \"Where does he hide. Tell me now, or I start taking this place apart stone by stone until I find him myself.\"\n\nThe hood is silent a long moment, long enough that the coin-woman's grip tightens on her knife, and the crowd's roar seems to dim around this one small pocket of stillness. Then the dry voice answers, and there is something like amusement buried in its rasp, cold and patient as a spider watching a fly test the edges of its web.\n\n[SAY:?]\"Valerius does not hide,\" they say. \"He waits. As I have waited, since you first kicked in a door that was never locked against fools.\" The hood tilts toward the coin-woman. \"Show him what waiting has bought us.\"\n\nThe woman does not draw further. Instead she reaches into her belt pouch and flings something small and hard at your feet, a scrap of leather that lands in the dust and unrolls to show its brand, a serpent devouring a crown, and beneath it, scratched crude and recent, a name you left bleeding on the ash road behind you.\n\n[SAY:?]\"Nolan Grimtide sends his regards,\" the figure says. \"He was only the first debt. You will meet the second before you leave this pit.\"\n\n[LORE:The hooded figure claims Valerius does not hide but waits, and speaks of Nolan Grimtide's death as an unpaid debt owed by Korrag]\n\n[SUGGEST:Demand to know what debt they mean|Draw steel now, patience spent|Ask who the second debt is]"
+  },
+  {
+   "turn": 41,
+   "raw": "[NO_CHANGE:no death occurred; the hooded figure and the coin-woman remain alive]\n\nYou keep your voice level, though your knuckles have gone white on the hilt.\n\n[SAY:Korrag]\"Who,\" you say. \"Give me a name, or a face, or I stop asking and start cutting until one falls out of you.\"\n\nThe hood tilts again, that same slow patience, as if your threats are a wind against stone.\n\n[SAY:?]\"You will know him when he stands across the pit from you,\" they say. \"He wore your name once, before Valerius gave him a better one. He remembers you fondly. He remembers the scar you left him fondly less.\" A dry sound escapes the hood that might be laughter. \"The next bout is not far off. Watch the floor, Northlander. You may find an old friend waiting on it.\"\n\nThe coin-woman sheathes her knife at last, though her eyes never leave you, and somewhere below the crowd's roar swells anew, fresh torches carried out to ring the pit for another round.\n\n[LORE:The hooded figure warns that Korrag's next opponent in the pit is someone who once bore his name and remembers a scar Korrag gave him]\n\n[SUGGEST:Push toward the pit's edge to see who fights next|Press the figure for the man's true name|Step back and ready your blade]"
+  },
+  {
+   "turn": 42,
+   "raw": "[NO_CHANGE:no death occurred; the hooded figure remains alive]\n\nThe hood withdraws into the crowd's churn, and you let it go, patience worn thin but not yet broken. You spend the waiting hours prowling the ledge and the shadowed corners of the pit, marking exits, counting guards, memorizing the faces of men who might stand between you and the ladder shaft if steel comes out. You corner a limping handler for scraps of talk and learn the bouts run in threes before the crowd tires and thins toward dawn, and twice you catch the coin-woman watching you from across the torchlight, unsmiling, patient as her master.\n\n[SKILL_SUCCESS:Investigation]\n[TIME_ADVANCE:2h]\n\nThen the crowd's roar changes pitch, rising sharp and hungry, and torches are carried out fresh to ring the pit floor. A gate groans open on the far side of the ring, and a big shape is shoved forward into the light, stumbling, chains dragging loose from broken shackles. He straightens slow, and the torchlight finds a brand on his bared shoulder, serpent and crown, and a face beneath the scars that you know, that you have not seen in years, twisted now into something that only wears the shape of a man you once called friend.\n\n[SUGGEST:Call out his old name|Draw steel and ready yourself|Search the crowd for the hooded figure's reaction]"
+  },
+  {
+   "turn": 43,
+   "raw": "[TIME_CHECK:night]\n\nYour eyes rake the ledge, hunting that stillness among the swaying, howling mass. You find the hood at last, planted exactly where it stood before, unmoved by the roar breaking around it like water round a stone. No face turns to catch the torchlight. No breath stirs the cloth. But something in the tilt of that hood has sharpened, leaning forward now, drinking in the moment with an eagerness the voice never let show, and you understand with cold certainty that this is no idle bout being staged for coin. This is a test, and you are the one being measured.\n\n[SKILL_SUCCESS:Perception]\n\nBelow, the broken man who wore your name shakes chains from his wrists and rolls his shoulders, and the crowd's noise breaks over him like surf.\n\n[SUGGEST:Step down into the pit to face him|Call his name before the fight starts|Look once more for a way to stop this]"
+  },
+  {
+   "turn": 44,
+   "raw": "[TIME:night]\n[NO_CHANGE:no death occurred; the hooded figure remains alive]\n\nYou drop over the ledge and land hard on packed earth, the crowd's roar swallowing you whole. Across the ring the branded man lifts his head, and something flickers behind the ruin of his eyes, a flash of recognition fighting through whatever Valerius poured into him. Torchlight throws your shadows long across the churned dirt, and the gate behind him groans shut, sealing the only way out that is not through him or through you.\n\n[SAY:Korrag]\"I know that scar,\" you say, low, testing him. \"I put it there.\"\n\nHe does not answer with words. He answers by lowering his shoulder and charging, and the crowd's scream breaks like a wave over the pit.\n\n[COMBAT_START:Branded Fighter|18|13|4|1d8+3|hostile]\n[COMBAT_STATS:STR:17|DEX:12|CON:15|INT:8|WIS:8|CHA:9|CR:2]\n[COMBAT_RESIST:necrotic]\n\n[SUGGEST:Meet his charge with steel|Try once more to reach the man beneath|Sidestep and look for an opening]"
+  },
+  {
+   "turn": 45,
+   "raw": "You plant your boots and let him come, steel already singing free of the scabbard. He hits like a landslide, all mindless weight and borrowed strength, but you have killed bigger men than this in narrower spaces. You drive your blade up and in as he closes, aiming for the meat above his hip where the brand-fed muscle still bleeds like any other.\n\n[DICE:Strength check|17|success]\n[SPELL_USED:Power Strike]\n\nSteel bites deep, grinding on bone, and he roars a sound with no words left in it, more animal now than the man you once knew. Blood sheets black in the torchlight but he does not fall, does not even slow, his fist already swinging round in a hammer-blow that catches your shoulder and spins you half off your feet.\n\n[ENEMY_HP:-9]\n[DICE:Dexterity saving throw|11|failed]\n[HP:-6]\n\nPain screams down your arm, but you keep your grip on the hilt and your feet under you, and the crowd above howls louder for the blood already spilled.\n\n[SUGGEST:Press the attack while he's wounded|Call his name, try to break through|Brace behind Shield Wall and let him tire]"
+  },
+  {
+   "turn": 46,
+   "raw": "You bull forward through the pain, ignoring the fire in your shoulder, driving your blade in a rising arc for the wound already opened. He is slower now, blood loss dragging at even his stolen strength, but slower for him is still fast enough to kill a careless man.\n\n[DICE:Strength check|15|success]\n[SPELL_USED:Power Strike]\n\nThe blade catches him across the ribs and he staggers, one knee buckling into the dirt, blood pouring black from the reopened wound. But even dying he is dangerous, and his fist comes up from below in a last desperate arc, catching you under the jaw with bone-jarring force.\n\n[ENEMY_HP:-11]\n[DICE:Dexterity saving throw|6|failed]\n[HP:-7]\n\nYour vision swims red and white, the torchlight fracturing into streaks, and you feel your knees start to go even as you fight to keep your blade raised between you and whatever comes next.\n\n[CONDITION:Dazed|until end of next turn|Branded Fighter's blow to the jaw]\n\n[SUGGEST:Fight through the dizziness and strike again|Fall back and try to create distance|Brace and try to weather the next blow]"
+  },
+  {
+   "turn": 47,
+   "raw": "The world tilts and goes to black water, but you fight it, clawing back up through the dark by will alone. Somewhere above the crowd's roar has changed its shape, no longer bloodthirst but confusion, murmurs rippling through the mob at the sight of the Northlander gone down on the packed earth. You feel dirt under your cheek, taste copper, and force your eyes to stay open by pure stubborn hate of dying here, in a hole, for coin that was never yours to begin with.\n\n[DICE:Constitution saving throw|16|success]\n\nThrough swimming vision you see the branded man standing over you, chest heaving, blood sheeting from the wounds you gave him, but he does not finish it. His fist trembles at his side, some last scrap of the man he used to be wrestling against whatever Valerius poured into his veins, and the hesitation buys you the one thing you have left: time.\n\n[SAY:?]\"Enough,\" the hooded figure calls, voice cutting flat across the roar. \"He does not die tonight. Drag him up.\"\n\nRough hands seize your arms, not gentle, but not killing either, and you are hauled up out of the dirt into torchlight and jeering faces before the dark finally takes you all the way down.\n\n[DOWNED_RESOLVED:intervened|the hooded figure called off the killing blow and had Korrag dragged out of the pit alive]\n[HP:+4]\n[LOCATION_STATE:the fighting pit floor is churned and blood-soaked from the duel between Korrag and the Branded Fighter]\n\n[SUGGEST:Wake and take stock of your surroundings|Try to move, test your bonds|Listen for who else is near]"
+  },
+  {
+   "turn": 48,
+   "raw": "[NO_CHANGE:no death occurred; the hooded figure and the Branded Fighter remain alive]\n\nYou do not wake to a proper camp. There is no fire, no watch to keep, only a narrow cell of raw stone cut off the fighting floor, straw underfoot and a bucket in the corner for the smell to explain itself. Someone has thrown a rough blanket over you, whether out of mercy or simple economy you cannot say, and the ache in your shoulder has dulled to a throbbing bruise instead of a live wound. You sleep hard and dreamless, the way only exhaustion and blood loss can buy a man, and when you finally stir the torches beyond the cell door have burned low toward morning.\n\n[REST:long]\n[HP:+3]\n[TIME:dawn]\n\nYour body has knit what it can on its own, though the bruises still mark you deep purple beneath the chainmail's weight, and somewhere beyond the stone you hear the pit already stirring awake, feet and low voices, the business of Ashenveil's underworld never truly sleeping at all.\n\n[SUGGEST:Search the cell for a way out|Listen at the door for voices|Call out and see who answers]"
+  },
+  {
+   "turn": 49,
+   "raw": "[SCENE_CAST:none]\n\nYou beat a fist against the cell door and shout into the dark, voice raw with sleep and old pain. No footsteps come running, no answer at all for a long stretch of silence broken only by the distant murmur of the pit stirring somewhere beyond stone. Then, faint but clear, a voice answers from farther down the passage, dry as ash sifting over dead coals, the same voice that called off your death the night before.\n\n[SAY:?]\"Awake, then,\" it says, unhurried. \"Good. Valerius does not waste what still has use in it.\"\n\nFootsteps follow at last, unhurried, deliberate, the tread of someone who has never once needed to run from anything in this place.\n\n[SUGGEST:Demand they open the door|Ask what use they mean|Wait and see who comes]"
+  },
+  {
+   "turn": 50,
+   "raw": "You slam your palm flat against the door and put the old iron of command back into your voice, the one that used to steady drovers on a bad road.\n\n[SAY:Korrag]\"Open it,\" you snarl. \"Face me proper, or keep hiding behind wood like the coward you are.\"\n\nA dry sound answers, something that might be laughter if laughter had no warmth left in it at all. Bolts grind back regardless, and the door swings inward on a groan of old hinges, torchlight spilling across the straw and across you, still bruised, still half on your feet. The hooded figure stands beyond it, still faceless in the gloom of that deep cowl, hands folded before them, utterly unarmed and utterly unafraid.\n\n[SCENE_REF:hooded_figure|?]\n\n[SAY:?]\"There,\" they say. \"Now look at me and tell me again that I hide.\"\n\nBehind the hood, past their shoulder, you catch the knife-armed coin-woman lingering at the passage's turn, watching this exchange the way a hawk watches a snake it has already decided not to strike.\n\n[SUGGEST:Ask what they want from you now|Demand answers about Valerius|Try to shove past toward the ladder]"
+  }
+ ]
+}
