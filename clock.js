@@ -380,6 +380,7 @@ function scheduleDue(){
 // record in memory.archive.expiredSchedules, never a silent vanish.
 var SCHEDULE_ESCALATE_MIN=3*MIN_PER_HOUR;   // overdue this long → the engine note demands resolution
 var SCHEDULE_EXPIRE_MIN=2*MIN_PER_DAY;      // overdue this long → auto-retired (loudly)
+var SCHEDULE_NEAR_MIN=6*MIN_PER_HOUR;       // #369: a pending entry this close is asked to show in the fiction, never as a number
 
 // Retire every schedule entry that outlived its escalation window. Returns the retired entries.
 // Called from the applyMutsTable tail (beside stampQuestCompletion) so it runs on every real
@@ -663,7 +664,7 @@ function buildClockBlock(){
   var s="CAMPAIGN CLOCK: "+clockFmt(c.min)+" (days run dawn to dawn — 00h00m elapsed-of-day is dawn, ~6am).\n";
   if(pending.length){
     s+="UPCOMING (computed from the clock — never invent or restate these numbers):\n";
-    var i;for(i=0;i<pending.length;i++)s+="  - "+pending[i].label+" ("+fmtGap(pending[i].dueMin-c.min)+")\n";
+    var i;for(i=0;i<pending.length;i++)s+="  - "+pending[i].label+" ("+fmtGap(pending[i].dueMin-c.min)+")"+((pending[i].dueMin-c.min)<=SCHEDULE_NEAR_MIN?" — near: let the fiction feel it now (a glance at the sky, a counted hour, someone's nerves), never the number":"")+"\n";/* #369 */
   }
   if(due.length){
     s+="HAPPENING NOW (these came due — narrate them; a long-elapsed one already happened, so narrate it as such, not as arriving this instant):\n";

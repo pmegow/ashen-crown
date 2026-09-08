@@ -1788,8 +1788,17 @@ function detectDatedCommitment(clean){
   var s=String(clean||"").replace(/\s+/g," ").trim();if(!s||s.length>900)return null;
   var money=/\b(?:gold|gp|silver|sp|copper|cp|pay|payment|owe|owed|deliver|delivery|ready)\b/i;
   var interval=/\b(?:call\s+it|in|within|after)\s+(?:\d+|one|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve)\s+(?:minutes?|hours?|days?|weeks?)\b/i;
-  var mm=s.match(money),im=s.match(interval);if(!mm||!im||Math.abs(mm.index-im.index)>160||/\b(?:if|could|might|maybe|hypothetically)\b/i.test(s))return null;
-  var at=im.index,start=Math.max(0,at-130),end=Math.min(s.length,at+130);return s.slice(start,end);
+  var hypo=/\b(?:if|could|might|maybe|hypothetically)\b/i.test(s);
+  var mm=s.match(money),im=s.match(interval);
+  if(mm&&im&&Math.abs(mm.index-im.index)<=160&&!hypo){var at=im.index,start=Math.max(0,at-130),end=Math.min(s.length,at+130);return s.slice(start,end);}
+  /* #369 (panel second pass, Harper 3): the second axis — a promise or a threat with a stated HORIZON ("before the new
+     moon", "on the night of the low tide", "give me a day, maybe two") beside a commitment cue. Two live positives on the
+     owner's campaign went unregistered and drove the back half anyway; the note asks, the GM decides. */
+  var horizon=/\b(?:(?:before|by|until|till|after|on)\s+(?:the\s+)?(?:new\s+moon|full\s+moon|next\s+(?:tide|low\s+tide|high\s+tide|dawn|moon|market\s+day)|night\s+of\s+the\s+\w+(?:\s+\w+)?|dawn|dusk|nightfall|sunrise|sunset|morning|noon|midnight|tomorrow|first\s+light)|tonight|give\s+me\s+(?:a|an|one|two|three)\s+(?:day|days|hour|hours|night|nights)|within\s+the\s+(?:hour|day|night|week))\b/i;
+  var cue=/\b(?:will|shall|must|arrive|arrives|arriving|come|comes|coming|due|deliver|delivered|report|reports|attack|strike|strikes|return|returns|expect|expected|have\s+a\s+name|be\s+here|be\s+there|move|moves|sail|sails|hang|hangs|burn|burns)\b|'ll\b/i;
+  var hypoH=/\b(?:if|could|would|hypothetically)\b/i.test(s);/* "maybe two" is a hedged horizon, not a hypothetical */
+  var hm=s.match(horizon),cm=s.match(cue);if(!hm||!cm||Math.abs(hm.index-cm.index)>160||hypoH)return null;
+  var hat=hm.index,hs=Math.max(0,hat-130),he=Math.min(s.length,hat+130);return s.slice(hs,he);
 }
 // W4 observers store at most one candidate per axis. They detect gaps and arm GM-decides notes;
 // no prose path mutates location, clock, quests, schedules, or future-event lifecycle.
