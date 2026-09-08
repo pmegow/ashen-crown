@@ -399,8 +399,8 @@ button, a, .sc, .fp, .qa, label, select, input, textarea {
       <button id="api-byok-toggle" style="background:none;border:none;color:var(--t2);font-size:12px;font-family:var(--font);cursor:pointer;padding:0;">I have my own API keys &#9662;</button>
       <div id="api-byok-sec" style="display:none;margin-top:12px;">
         <p style="font-size:12px;color:var(--t2);margin-bottom:6px;text-align:left;">Anthropic API key <span style="font-size:11px;color:#555;">(stored locally, sent only to api.anthropic.com)</span></p>
-        <input type="password" id="api-input" placeholder="sk-ant-..." autocomplete="one-time-code"/><button class="btn-p" id="api-btn">Enter the world</button>
-        <div style="margin-top:16px;border-top:1px solid var(--brd);padding-top:12px;"><p style="font-size:12px;color:var(--t2);margin-bottom:6px;text-align:left;">fal.ai key <span style="opacity:0.6;">(optional — enables scene image generation)</span></p><input type="password" id="fal-input" placeholder="fal_key_..." autocomplete="one-time-code"/><p style="font-size:11px;color:var(--t2);text-align:left;margin-top:4px;">Get a free key at <span style="color:var(--acc);">fal.ai</span>. Stored locally.</p></div>
+        <form id="api-form" style="display:contents"><input type="password" id="api-input" placeholder="sk-ant-..." autocomplete="one-time-code"/><button class="btn-p" id="api-btn" type="button">Enter the world</button></form>
+        <div style="margin-top:16px;border-top:1px solid var(--brd);padding-top:12px;"><p style="font-size:12px;color:var(--t2);margin-bottom:6px;text-align:left;">fal.ai key <span style="opacity:0.6;">(optional — enables scene image generation)</span></p><form id="fal-form" style="display:contents"><input type="password" id="fal-input" placeholder="fal_key_..." autocomplete="one-time-code"/></form><p style="font-size:11px;color:var(--t2);text-align:left;margin-top:4px;">Get a free key at <span style="color:var(--acc);">fal.ai</span>. Stored locally.</p></div>
       </div>
     </div></div></div>
 <div id="char-screen">

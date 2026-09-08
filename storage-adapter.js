@@ -551,7 +551,7 @@ var storageAdapter = (function() {
       worldState.usage.lastSyncBytes = _syncPayloadBytes;
       if (_syncPayloadBytes > 2*1024*1024 && !_syncSizeWarned) {
         _syncSizeWarned = true;
-        console.warn("[storage] sync payload is " + (_syncPayloadBytes/1024/1024).toFixed(1) + " MB");
+        console.info("[storage] sync payload is " + (_syncPayloadBytes/1024/1024).toFixed(1) + " MB (#92 compression is the fix; the toast below fires once per campaign)");/* #377: a size notice is not a warning */
         // v1.441: the toast is a SENTINEL, not a nag. It fired for real 2026-07-24, the dev was
         // told, TODO #92 (payload compression) is filed — and a payload PERMANENTLY over the line
         // re-toasted on every reload because the latch was per page load. Now once per CAMPAIGN,
@@ -604,7 +604,7 @@ var storageAdapter = (function() {
             // Our own (or an older) write — ack the server's turn and retry ONCE with the proof.
             // The retry OWNS the completion: it, not this attempt, decides whether the turns landed.
             _syncOk(st);
-            console.warn("[storage] sync 409 self-healed: server turn " + st + " ≤ local turn " + (worldState ? (worldState.turn||0) : 0) + " — acked and retrying once.");
+            console.info("[storage] sync 409 self-healed: server turn " + st + " ≤ local turn " + (worldState ? (worldState.turn||0) : 0) + " — acked and retrying once.");
             var _pass = _doneCb; _doneCb = null;
             _syncNow(false, true, _pass);
           } else { _onConflict(st); _fin("another device is ahead (server turn " + st + ")"); }
@@ -734,7 +734,7 @@ var storageAdapter = (function() {
     // either way (a failed push must never wedge the campaign offline) — it is only DEFERRED.
     var _dirtyAt = flushDirtyTurn();
     if (_dirtyAt == null) { _reconcileFromServer(localOk); return; }
-    console.warn("[storage] unsynced final turns from a previous session (turn " + _dirtyAt + ", page-hide flush was over the keepalive limit) — pushing before any server adopt.");
+    console.info("[storage] unsynced final turns from a previous session (turn " + _dirtyAt + ", page-hide flush was over the keepalive limit) — pushing before any server adopt.");/* #377: the expected path for a large campaign; the FAILED branch below stays a warning */
     _syncNow(false, false, function(err) {
       if (err) console.warn("[storage] the unsynced-turn push FAILED (" + err + ") — the marker stays set and retries at the next launch.");
       else if (!_bootPushToast) {

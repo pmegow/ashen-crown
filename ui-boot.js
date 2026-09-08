@@ -118,6 +118,8 @@ function wireButtons(){
   buildFileMenus(); // all three File menus render from ONE spec before any wiring binds to them
   document.getElementById("api-btn").addEventListener("click",submitKey);
   document.getElementById("api-input").addEventListener("keydown",function(e){if(e.key==="Enter")submitKey();});
+  /* #377: the two key fields sit in forms so Chrome stops warning "password field is not contained in a form"; the forms never submit */
+  ["api-form","fal-form"].forEach(function(id){var f=document.getElementById(id);if(f)f.addEventListener("submit",function(e){e.preventDefault();});});
   // §3 accounts: the first-run screen leads with sign-in; BYOK folds behind a disclosure.
   var _gh=document.getElementById("api-signin-github");if(_gh)_gh.addEventListener("click",function(){signInFromApiScreen("github");});
   var _gg=document.getElementById("api-signin-google");if(_gg)_gg.addEventListener("click",function(){signInFromApiScreen("google");});
