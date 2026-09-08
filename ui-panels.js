@@ -455,7 +455,7 @@ function activeModelLabel(){
   var m=(typeof providerModels!=="undefined"&&providerModels[activeProvider])||prov.defaultModel||"";
   return String(m).replace(/^claude-/,"").replace(/-20\d{6}$/,"");
 }
-function updateMemStatus(){if(!worldState)return;var dot=document.getElementById("memdot"),txt=document.getElementById("memstatus");var t=sessionTokens();dot.className=t>=SUMMARIZE_AT?"mdot c":t>=SUMMARIZE_AT*0.8?"mdot w":"mdot";var actPart="",sk=worldState.skeleton,i;if(sk&&sk.acts){for(i=0;i<sk.acts.length;i++){if(sk.acts[i].status==="active"){var at=sk.acts[i].title;actPart=" | "+(/^act\s/i.test(at)?at:"Act "+(i+1)+": "+at);break;}}}var mdl=activeModelLabel();
+function updateMemStatus(){if(!worldState)return;var dot=document.getElementById("memdot"),txt=document.getElementById("memstatus");var t=sessionTokens();dot.className=t>=SUMMARIZE_AT?"mdot c":t>=SUMMARIZE_AT*0.8?"mdot w":"mdot";var _al=(typeof membarActLabel==="function")?membarActLabel():null,actPart=_al?" | "+(_al.done?"<span class='mem-done'>":"")+escHtml(_al.text)+(_al.done?"</span>":""):"";/* #364 */var mdl=activeModelLabel();
 // #73 campaign clock: show the in-game day next to the turn counter. Same day number the clock
 // block feeds the GM (clockDayNumber) so player and GM never see a contradictory day. Elapsed
 // since the clock's epoch (campaign start / migration), so a save that predates the clock reads
@@ -466,7 +466,7 @@ function updateMemStatus(){if(!worldState)return;var dot=document.getElementById
 // hand the player the 0-based number the rest of the app stopped using.
 var dayPart=(typeof clockStamp==="function")?" | "+clockStamp():
   ((typeof clockDayNumber==="function")?" | Day "+clockDayNumber():"");
-txt.textContent="Memory ~"+(t>=1000?(t/1000).toFixed(1)+"k":t)+" tokens"+actPart+" | Chapters: "+memory.chapters.length+" | NPCs: "+Object.keys(memory.npcs).length+" | Turn "+worldState.turn+dayPart+" | "+APP_VERSION+(mdl?" | "+mdl:"");updateSyncBadge();updateHealthDot();}
+txt.innerHTML="Memory ~"+(t>=1000?(t/1000).toFixed(1)+"k":t)+" tokens"+actPart+" | Chapters: "+memory.chapters.length+" | NPCs: "+Object.keys(memory.npcs).length+" | Turn "+worldState.turn+escHtml(dayPart)+" | "+escHtml(APP_VERSION)+(mdl?" | "+escHtml(mdl):"");var _fe=document.getElementById("fm-ending");if(_fe)_fe.style.display=(typeof endingMenuVisible==="function"&&endingMenuVisible())?"block":"none";/* #364 */updateSyncBadge();updateHealthDot();}
 // #17 drift-health dot — thin shell over healthIndicators (helpers.js, engine-tested there).
 // Same green/amber/red classes as the token dot beside it; n/a dims. Click opens the modal.
 function updateHealthDot(){

@@ -950,17 +950,33 @@ function runEngineTests(R){
     if(engineFourthAction()&&engineFourthAction().kind==="ending")return "offered before the spine closed";
     var r=applyMuts("[ACT_COMPLETE:The Weight Below]");
     if(!worldState.spineComplete||worldState.spineComplete.act!=="The Weight Below")return "spineComplete not armed: "+JSON.stringify(r.muts);
-    var a=engineFourthAction();if(!a||a.kind!=="ending"||a.text.indexOf("Write the ending")<0||a.text.indexOf("The Iron Meridian")<0)return "button: "+JSON.stringify(a);
-    if(!endingChoiceFromText(a.text)||endingChoiceFromText("Write a letter to the harbourmaster."))return "endingChoiceFromText";
+    var a=engineFourthAction();if(a&&a.kind==="ending")return "#364: the ending is a menu item now, not the fourth button";
+    if(!endingOffered()||!endingMenuVisible())return "the offer did not arm";var et=endingOfferText();if(et.indexOf("Write the ending")<0||et.indexOf("The Iron Meridian")<0)return "offer text: "+et;
+    if(!endingChoiceFromText(et)||endingChoiceFromText("Write a letter to the harbourmaster."))return "endingChoiceFromText";
     var sk=buildSkeletonBlock();if(!/TALE IS TOLD/.test(sk)||!/ending/i.test(sk))return "skeleton block silent about the finished spine";
-    var d=endingDecide("play");if(!d||d.action!=="play"||engineFourthAction()&&engineFourthAction().kind==="ending")return "play on did not snooze: "+JSON.stringify(d);
-    worldState.turn+=ENDING_REOFFER_TURNS;a=engineFourthAction();if(!a||a.kind!=="ending")return "the offer did not return after the snooze";
+    var d=endingDecide("play");if(!d||d.action!=="play"||endingOffered())return "play on did not snooze: "+JSON.stringify(d);
+    if(!endingMenuVisible())return "#364: the menu item must ignore the snooze — a menu is not a nag";
+    worldState.turn+=ENDING_REOFFER_TURNS;if(!endingOffered())return "the offer did not return after the snooze";
     if(!/without the hero/.test(denouementSys()))return "death denouement lost its closing line";
     d=endingDecide("write");if(!d||d.action!=="ended"||!worldState.ended||!worldState.ended.spine||!worldState.denouementOwed||!campaignEnded())return "write: "+JSON.stringify(d)+" "+JSON.stringify(worldState.ended);
-    if(engineFourthAction()!==null)return "the button survived the ending";
+    if(engineFourthAction()!==null)return "the button survived the ending";if(endingMenuVisible())return "#364: the menu item survived the ending";
     var ds=denouementSys();if(/without the hero/.test(ds)||!/hero (lives|survives|stands)|threads at rest|the hero and the world/i.test(ds))return "spine denouement should end on the living hero: "+ds;
     var src=__fsForTests.readFileSync(__rootForTests+"/game.js","utf8"),i=src.indexOf("async function sendAction("),body=src.slice(i,src.indexOf("function retryLast("));
     return body.indexOf("endingChoiceFromText(")>=0&&body.indexOf("endingChoiceFromText(")<body.indexOf("var resp=await callGM(apiTxt")?true:"sendAction does not intercept the ending offer before the GM call";
+  });
+  t("#364 (owner call 2026-09-07) the ending offer moves from the fourth button to File ▸ Write the ending…, and the session bar says 'Campaign Complete' (muted orange) in place of the act: membarActLabel is the act while one is active, the done label once the spine is told or the campaign has ended; endingMenuVisible ignores the snooze and hides after the ending; engineFourthAction never returns kind ending; the menu item is generated, wired to showEndingOfferModal, and toggled by updateMemStatus",function(){
+    makeWorld();worldState.turn=40;worldState.skeleton={premise:"p",acts:[{title:"Salt",status:"completed",arcs:[]},{title:"The Long Dark",status:"active",arcs:[]},{title:"Ash",status:"pending",arcs:[]}]};delete worldState.spineComplete;
+    var l=membarActLabel();if(!l||l.done||l.text!=="Act 2: The Long Dark")return "active act label: "+JSON.stringify(l);if(endingMenuVisible())return "menu visible with a live act";
+    worldState.skeleton.acts[1].title="Act II — The Long Dark";l=membarActLabel();if(!l||l.text!=="Act II — The Long Dark")return "an authored Act prefix is kept: "+JSON.stringify(l);
+    worldState.skeleton.acts[1].status="completed";worldState.skeleton.acts[2].status="completed";l=membarActLabel();if(!l||!l.done||l.text!=="Campaign Complete")return "told spine label: "+JSON.stringify(l);if(!endingMenuVisible())return "menu hidden for a told spine";
+    worldState.spineComplete={turn:40,act:"Ash"};worldState.turn=41;endingDecide("play");if(!endingMenuVisible()||!membarActLabel().done)return "snooze must not hide the menu or the label";
+    var f=engineFourthAction();if(f&&f.kind==="ending")return "the fourth button still carries the ending";
+    endingDecide("write");if(endingMenuVisible())return "menu survived the ending";l=membarActLabel();if(!l||!l.done)return "ended campaign lost the done label: "+JSON.stringify(l);
+    worldState.skeleton=null;delete worldState.spineComplete;delete worldState.ended;if(membarActLabel()!==null)return "a skeleton-less open campaign must have no act label";
+    var gs=__fsForTests.readFileSync(__rootForTests+"/game.js","utf8"),fb=gs.slice(gs.indexOf("function engineFourthAction("),gs.indexOf("function montageDue("));if(/endingOffered\(|kind:"ending"/.test(fb))return "engineFourthAction source still references the ending";
+    var ub=__fsForTests.readFileSync(__rootForTests+"/ui-boot.js","utf8");if(ub.indexOf("btn(p+\"ending\"")<0||ub.indexOf("hidden:true")<0)return "menu item not generated hidden";if(!/getElementById\("fm-ending"\)\.addEventListener\("click",function\(\)\{closeAllMenus\(\);if\(typeof showEndingOfferModal==="function"\)showEndingOfferModal\(\);/.test(ub))return "menu item not wired to the ending modal";
+    var up=__fsForTests.readFileSync(__rootForTests+"/ui-panels.js","utf8"),um=up.slice(up.indexOf("function updateMemStatus("),up.indexOf("function updateHealthDot("));if(um.indexOf("membarActLabel()")<0||um.indexOf("class='mem-done'")<0||um.indexOf("endingMenuVisible()")<0||um.indexOf("txt.textContent=")>=0)return "updateMemStatus does not render the label span / toggle the menu / escape through innerHTML";
+    var ih=__fsForTests.readFileSync(__rootForTests+"/index.html","utf8");return /\.mem-done\{color:var\(--warn\);font-weight:bold/.test(ih)?true:"no .mem-done rule";
   });
   t("the tier-unlock spell picker scrolls its bench (owner call 2026-09-03: twelve tier-3 cards pushed Confirm off the screen) — the list sits in a box about seven cards tall with its own scrollbar; the header and Confirm stay outside it",function(){
     var src=__fsForTests.readFileSync(__rootForTests+"/game.js","utf8"),i=src.indexOf("function showSpellUnlockModal("),body=src.slice(i,src.indexOf("function spuToggle("));
@@ -982,8 +998,8 @@ function runEngineTests(R){
     worldState.skeleton={premise:"p",acts:[{title:"A",status:"completed",completedTurn:30,arcs:[]},{title:"B",status:"completed",completedTurn:117,arcs:[]},{title:"C",status:"completed",completedTurn:145,arcs:[]}]};delete worldState.spineComplete;
     if(!endingOffered())return "no offer for a told spine without the stamp";
     if(!worldState.spineComplete||worldState.spineComplete.act!=="C"||worldState.spineComplete.turn!==145||!worldState.spineComplete.backfilled)return "backfill: "+JSON.stringify(worldState.spineComplete);
-    var a=engineFourthAction();if(!a||a.kind!=="ending")return "button: "+JSON.stringify(a);
-    worldState.skeleton.acts[2].status="active";delete worldState.spineComplete;return endingOffered()?"offered with a live act":true;
+    if(!endingMenuVisible())return "#364: menu item hidden for a backfilled told spine";
+    worldState.skeleton.acts[2].status="active";delete worldState.spineComplete;return endingOffered()||endingMenuVisible()?"offered with a live act":true;
   });
   t("#326 a quest-outcome envelope that carries an identity (gemini fills the evidence slot with the relevant NPC — 2 of 4 receipts in the t147 comb) has the identity IGNORED, not the whole claim refused: the quest completes, the receipt commits with '-' in both slots, a warning names it",function(){
     makeWorld();worldState.turn=137;worldState.sceneRefs={active:{frames:[]},sealed:[]};worldState.canonTxns=[];

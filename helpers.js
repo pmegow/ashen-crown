@@ -1232,6 +1232,15 @@ function endingOffered(){
   /* #325b: a save whose last act closed before v1.800 carries no stamp — derive it from the skeleton and backfill (the lazy-stamp precedent) */
   if(!sc&&spineTold()){var _acts=worldState.skeleton.acts,_last=_acts[_acts.length-1];sc=worldState.spineComplete={turn:_last.completedTurn||worldState.turn,act:_last.title||"",backfilled:true};}
   if(!sc)return false;if(typeof sc.snoozedUntil==="number"&&worldState.turn<sc.snoozedUntil)return false;return true;}
+// #364 (owner call 2026-09-07): the ending offer leaves the fourth button for the File menu, and the
+// session bar carries the signal the button used to — "Campaign Complete" in place of the act.
+// Pure over state. membarActLabel → {text,done}; endingMenuVisible ignores the snooze (a menu is
+// not a nag) and hides once the campaign has ended.
+function membarActLabel(){var ws=(typeof worldState!=="undefined")?worldState:null;if(!ws)return null;
+  if(campaignEnded()||ws.spineComplete||spineTold())return {text:"Campaign Complete",done:true};
+  var sk=ws.skeleton,i;if(sk&&sk.acts){for(i=0;i<sk.acts.length;i++){if(sk.acts[i].status==="active"){var at=sk.acts[i].title||"";return {text:/^act\s/i.test(at)?at:"Act "+(i+1)+": "+at,done:false};}}}
+  return null;}
+function endingMenuVisible(){return !!(typeof worldState!=="undefined"&&worldState&&!campaignEnded()&&(worldState.spineComplete||spineTold()));}
 function campaignEnded(){return !!(typeof worldState!=="undefined"&&worldState&&worldState.ended);}
 // #300: the only two moves a downed hero has — the engine authors these buttons, no model call.
 // #301: the two moves after Death has answered — engine buttons, no model call; typed text routes to one.

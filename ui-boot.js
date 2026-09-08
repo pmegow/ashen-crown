@@ -48,6 +48,7 @@ function buildFileMenus(){
     h+=btn(p+"account","&#128100; Account&hellip;",0);/* §3 gateway: subscription status, turn allowance, GM routing, sign out */
     h+=btn(p+"home","&#127968; Home",0);/* #290: bibles, designer, curated shelf, the account library */
     h+=g?btn(p+"carmode","&#128663; Car Mode",0):btn(null,"&#128663; Car Mode",0,{dim:true});
+    if(g)h+=btn(p+"ending","&#9997; Write the ending&hellip;",0,{hidden:true,color:"var(--warn)",extra:"font-weight:bold;"});/* #364: shown by updateMemStatus while the tale is told and the campaign is open */
     h+=sep();
     var sl=(g?btn(p+"export","Save Game (local)",0):btn(null,"Save Game (local)",0,{dim:true}))
       +fileLbl(sf.imp+"import-inp","Load Game (local)",0)
@@ -243,6 +244,7 @@ function wireButtons(){
   // (import-char-btn is already wired in the shared _menus loop above — audit E66 removed the duplicate here)
   document.getElementById("fm-newgame").addEventListener("click",newGame);
   document.getElementById("fm-carmode").addEventListener("click",function(){closeAllMenus();showCarMode();});
+  document.getElementById("fm-ending").addEventListener("click",function(){closeAllMenus();if(typeof showEndingOfferModal==="function")showEndingOfferModal();});/* #364 */
   document.getElementById("car-close-btn").addEventListener("click",hideCarMode);
   document.getElementById("car-tap-btn").addEventListener("click",_carTap);
   document.getElementById("car-prev-btn").addEventListener("click",_carPrev);

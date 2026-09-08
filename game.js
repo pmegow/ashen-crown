@@ -167,7 +167,7 @@ function engineFourthAction(){
   if(!worldState||!worldState.character)return null;
   var c=worldState.character,i;
   if(!worldState.combat&&typeof c.hp==="number"&&typeof c.maxHp==="number"&&c.hp<c.maxHp/2)return {kind:"rest",text:"Rest and recover — you are badly hurt."};
-  if(typeof endingOffered==="function"&&endingOffered())return {kind:"ending",text:endingOfferText()};/* #325: the authored tale is told — the ending is offered, never forced */
+  /* #364: the ending offer no longer rides this button — it lives in File ▸ Write the ending… (endingMenuVisible) and the journal; the beat slot is the ladder's again */
   var wounded=typeof c.hp==="number"&&c.hp<c.maxHp,hurtOrAfflicted=wounded||((c.conditions||[]).length>0);
   if(hurtOrAfflicted&&typeof itemLookup==="function"){for(i=0;i<(c.inventory||[]).length;i++){var it=c.inventory[i],e=itemLookup(it);if(e&&e.category==="consumable"&&e.effect&&e.effect!=="N/A")return {kind:"use",text:"Use your "+(typeof _invBase==="function"?_invBase(it):it)+"."};}}
   var q=worldState.questLog||[];for(i=0;i<q.length;i++)if(q[i]&&q[i].status==="offered")return {kind:"accept",text:"Accept the offer: "+q[i].title+"."};
