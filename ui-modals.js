@@ -67,6 +67,9 @@ function toggleSuggestInband(){suggestInband=!suggestInband;store.set(SUGGEST_IN
 function loadSuggestInband(){var v=store.get(SUGGEST_INBAND_K);suggestInband=(v==null||v==="")?true:v==="1";eachMenuEl("inband-cb",function(cb){cb.checked=suggestInband;});}
 /* #329: the player-rolls-dice switch — off = today's GM-rolled [DICE:] contract. Toggling changes the stable prompt once. */
 function togglePlayerDice(){playerRollsDice=!playerRollsDice;store.set(PLAYER_DICE_K,playerRollsDice?"1":"0");eachMenuEl("dice-cb",function(cb){cb.checked=playerRollsDice;});showToast(playerRollsDice?"You roll the dice \u2014 the GM stops at each check":"The GM rolls again");}
+/* #371: the stake-clause switch — off = the pre-#371 MECHANICS line, byte-identical (rollback). */
+function toggleDiceStake(){diceStakeClause=!diceStakeClause;store.set(DICE_STAKE_K,diceStakeClause?"1":"0");eachMenuEl("stake-cb",function(cb){cb.checked=diceStakeClause;});showToast(diceStakeClause?"The GM names the stake before a roll":"Stake clause off \u2014 rolls as before");}
+function loadDiceStake(){var v=store.get(DICE_STAKE_K);diceStakeClause=(v==null||v==="")?true:v==="1";eachMenuEl("stake-cb",function(cb){cb.checked=diceStakeClause;});}
 function loadPlayerDice(){var v=store.get(PLAYER_DICE_K);playerRollsDice=v==="1";eachMenuEl("dice-cb",function(cb){cb.checked=playerRollsDice;});}
 function loadAdultMode(){var v=store.get(ADK);adultMode=!!(v&&v==="1");eachMenuEl("adult-cb",function(cb){cb.checked=adultMode;});}
 function loadLegacySettings(){legacyCharsOn=store.get(LEGACY_ON_K)==="1";var pv=parseInt(store.get(LEGACY_PCT_K)||"5",10);legacyChancePct=(isNaN(pv)||pv<1)?5:Math.min(100,pv);eachMenuEl("legacy-cb",function(el){el.checked=legacyCharsOn;});eachMenuEl("legacy-pct",function(el){el.value=legacyChancePct;});}

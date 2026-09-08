@@ -141,6 +141,9 @@ var suggestInband=true;
 // [CHECK:label|mod|DC n] and stops; the chip reads "d20 · click to roll"; the click rolls client-side
 // and a silent continuation carries the result. Off: today's [DICE:] contract, byte-for-byte.
 var PLAYER_DICE_K="tnd_player_dice_v1";
+// #371 (owner 2026-09-07: try it, make it easy to roll back): the stake clause — say what failure would cost before a roll,
+// and do not roll when nothing is at risk. File ▸ Settings checkbox; OFF restores the byte-identical MECHANICS line.
+var DICE_STAKE_K="tnd_dice_stake_v1";var diceStakeClause=true;
 var playerRollsDice=false;
 var COMBAT_SLAIN_CAP=12;    // #299: the combat-slain ring — every foe slain at a combat close (rostered or not), so a chapter summary citing a rolled foe's death validates as combat canon instead of opening a W2 conflict
 var MONTAGE_AFTER_TURNS=6;  // #308: this many committed turns at one place with no fight and no move → the fourth button offers a MONTAGE (one paragraph, hours advance, land at the next decision)
@@ -382,7 +385,7 @@ var PROVIDERS={
   }
 };
 var carMode=false;
-var APP_VERSION="v1.855";
+var APP_VERSION="v1.856";
 // #290: the home page's one-shot blueprint handoff — home.html writes {bp,at} here and navigates to
 // the game; initState (no save) / newGame consume it into _applyBlueprint. ONE name for both sides.
 // #307: the home page's QUICK START handoff — a pre-made hero + a curated blueprint, consumed at boot by

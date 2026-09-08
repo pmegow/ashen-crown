@@ -1903,6 +1903,10 @@ function healthGrowthTelemetry(ws,mem){
   }
   return stores;
 }
+// #371: successes / filed rolls over the last window of the dice record (#350). Pure.
+function diceOutcomeRatio(ws,window){var log=(ws&&ws.diceLog)||[],n=(typeof window==="number")?window:40,i,filed=0,s=0,f=0;
+  for(i=Math.max(0,log.length-n);i<log.length;i++){var o=String(log[i].outcome||"").toLowerCase();if(!o)continue;if(/succ|pass|hit|crit/.test(o)){filed++;s++;}else if(/fail|miss/.test(o)){filed++;f++;}}
+  return {filed:filed,successes:s,failures:f};}
 function healthIndicators(ws,mem,withGrowth){
   var items=[],i,j;
   function push(id,label,level,detail){items.push({id:id,label:label,level:level,detail:detail});}
@@ -2018,6 +2022,11 @@ function healthIndicators(ws,mem,withGrowth){
   // Plain-language action hints (owner ruling 2026-08-14: every WATCH/PROBLEM carries a
   // <25-word "what this means / what to do" line — the raw detail is accurate but useless
   // to a player). The word cap is CONTRACT, enforced by an engine test, not by discipline.
+  // #371: rolled-outcome ratio — "10/10" is a number a human can judge (a high-level ladder working, or a
+  // narrator declining to roll); measurement only, never a note.
+  var dr=diceOutcomeRatio(ws);
+  if(dr.filed<3)push("dice","Rolled outcomes","na","too few filed rolls to judge ("+dr.filed+")");
+  else push("dice","Rolled outcomes",(dr.failures===0&&dr.filed>=8)?"warn":"ok",dr.successes+" of the last "+dr.filed+" filed rolls succeeded"+(dr.failures===0?" — not one failure on record":""));
   var HINTS={
     rag:{bad:"Past scenes aren't reaching the GM — memory questions get invented answers. Submit a report if this stays red.",
          warn:"Past scenes aren't reaching the GM lately. Watch it — submit a report if it goes red."},
@@ -2028,6 +2037,7 @@ function healthIndicators(ws,mem,withGrowth){
     quest:{warn:"The engine is nudging the GM to review or close it — if it lingers a few turns, ask about it in-story."},
     anomaly:{bad:"A canon claim (often a death or its rewards) was refused and withheld. If the story owes you something, submit a report.",
              warn:"Self-correcting state (memory retries or a clock check) — no action needed unless it persists; then submit a report."},
+    dice:{warn:"Every filed roll succeeded. Either a high-level skills ladder is doing its job or the GM is not rolling when something is at risk — judge by the scenes, and check File ▸ Settings ▸ Name the stake before a roll."},
     transport:{bad:"Heavy provider load-shedding — most turns need retries. Consider switching model for this session; report if it continues.",
                warn:"The AI provider is shedding load — turns retry and feel slower. Usually clears on its own; report if it lasts all session."}
   };

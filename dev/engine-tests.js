@@ -16480,6 +16480,28 @@ t("genderLabel: F→Female, NB→Non-binary, else Male (incl. unset)",function()
     var gs=__fsForTests.readFileSync(__rootForTests+"/game.js","utf8");return /resolveNpcName\(name\):name;\n\s*var _spc=\(typeof findCompanionChar==="function"\)\?findCompanionChar\(nm\):null;if\(_spc&&_spc\.name\)nm=_spc\.name;/.test(gs)?true:"the speaker tally does not resolve the short form to the party member";
     }finally{showToast=_st;}
   });
+  section("#371 — the stake clause behind a switch, and the rolled-outcome ratio");
+  t("#371 the stake clause rides both MECHANICS contracts while diceStakeClause is on and vanishes byte-identically when it is off; the File menu carries the checkbox wired to toggleDiceStake and loaded at boot",function(){
+    makeWorld();var was=diceStakeClause,wasP=playerRollsDice;try{
+      diceStakeClause=true;playerRollsDice=false;var on=buildSysPrompt().stable;if(on.indexOf("say in one clause what failure would cost")<0||on.indexOf("If nothing is genuinely at risk, do not roll")<0)return "clause missing with the switch on";
+      diceStakeClause=false;var off=buildSysPrompt().stable;if(off.indexOf("what failure would cost")>=0)return "clause survived the switch";
+      var onCut=on.replace(diceStakeText.call(null)||"","");diceStakeClause=true;var clause=diceStakeText();diceStakeClause=false;if(on.replace(clause,"")!==off)return "the switch changes more than the clause";
+      playerRollsDice=true;diceStakeClause=true;var pr=buildSysPrompt().stable;if(pr.indexOf("THE PLAYER ROLLS")<0||pr.indexOf("what failure would cost")<0)return "the player-rolls contract lost the clause";
+      var ub=__fsForTests.readFileSync(__rootForTests+"/ui-boot.js","utf8");if(ub.indexOf("chk(p+\"stake-cb\",\"Name the stake before a roll\"")<0||ub.indexOf("[\"stake-cb\",toggleDiceStake]")<0||ub.indexOf("loadDiceStake();")<0||!/\["adult-cb","inband-cb","dice-cb","stake-cb"/.test(ub))return "File menu checkbox not generated, wired, kept-open or loaded";
+      var um=__fsForTests.readFileSync(__rootForTests+"/ui-modals.js","utf8");return /function toggleDiceStake\(\)\{diceStakeClause=!diceStakeClause;store\.set\(DICE_STAKE_K/.test(um)&&/function loadDiceStake\(\)/.test(um)?true:"toggle/load missing";
+    }finally{diceStakeClause=was;playerRollsDice=wasP;}
+  });
+  t("#371 diceOutcomeRatio counts successes and failures over the last window of the dice record and the drift-health readout carries it: fewer than three filed rolls is n/a, a failure on record is ok, eight-plus successes with no failure is warn with a hint",function(){
+    makeWorld();worldState.diceLog=[];var r0=diceOutcomeRatio(worldState);if(r0.filed!==0)return "empty log";
+    var h0=healthIndicators(worldState).items.filter(function(x){return x.id==="dice";})[0];if(!h0||h0.level!=="na")return "empty log must read n/a: "+JSON.stringify(h0);
+    var i;for(i=0;i<10;i++)diceLogFile({by:"gm",label:"Stealth check",total:15,outcome:"success",t:i+1});
+    var r=diceOutcomeRatio(worldState);if(r.filed!==10||r.successes!==10||r.failures!==0)return "ten successes: "+JSON.stringify(r);
+    var h=healthIndicators(worldState),it=h.items.filter(function(x){return x.id==="dice";})[0];if(!it||it.level!=="warn"||!/10 of the last 10 filed rolls succeeded/.test(it.detail)||!/not one failure/.test(it.detail)||!it.hint)return "readout: "+JSON.stringify(it);
+    diceLogFile({by:"gm",label:"Athletics check",total:6,outcome:"failed",t:11});r=diceOutcomeRatio(worldState);if(r.filed!==11||r.failures!==1)return "one failure: "+JSON.stringify(r);
+    it=healthIndicators(worldState).items.filter(function(x){return x.id==="dice";})[0];if(!it||it.level!=="ok"||!/10 of the last 11/.test(it.detail))return "ok after a failure: "+JSON.stringify(it);
+    diceLogFile({by:"gm",label:"x",total:1,outcome:"",t:12});if(diceOutcomeRatio(worldState).filed!==11)return "an outcome-less entry counted";
+    for(i=0;i<50;i++)diceLogFile({by:"gm",label:"y",total:9,outcome:"failure",t:20+i});r=diceOutcomeRatio(worldState);return r.filed===40&&r.failures===40?true:"window: "+JSON.stringify(r);
+  });
   t("the #131 founding case, SUPERSEDED by #142: [TIME:dawn] at 3:15 pm now skips-and-demands instead of silently jumping 14.75h", function(){
     // Original expectation (v1.531 era): roll +885m to next dawn. #142 (user-ruled after the
     // t1524 19-hour jump): a dawn-crossing top-up >6h is presumed a MISLABEL — the same shape
