@@ -978,6 +978,21 @@ function runEngineTests(R){
     var up=__fsForTests.readFileSync(__rootForTests+"/ui-panels.js","utf8"),um=up.slice(up.indexOf("function updateMemStatus("),up.indexOf("function updateHealthDot("));if(um.indexOf("membarActLabel()")<0||um.indexOf("class='mem-done'")<0||um.indexOf("endingMenuVisible()")<0||um.indexOf("txt.textContent=")>=0)return "updateMemStatus does not render the label span / toggle the menu / escape through innerHTML";
     var ih=__fsForTests.readFileSync(__rootForTests+"/index.html","utf8");return /\.mem-done\{color:var\(--warn\);font-weight:bold/.test(ih)?true:"no .mem-done rule";
   });
+  t("#366 the coda has a state of its own: codaState() is true only when the spine is told (stamped or derived), no act is active and the campaign is open; the skeleton block then swaps the arc PACING text for the epilogue PACING line (byte-identical otherwise); csXpMeter says the story is what advances now (an earned level still says rest to claim); the ui-sheets meter sites pass the predicate",function(){
+    makeWorld();worldState.turn=200;worldState.campName="X";var c=worldState.character;c.hp=c.maxHp;
+    worldState.skeleton={premise:"p",acts:[{title:"A",status:"completed",completedTurn:50,arcs:[]},{title:"B",status:"active",goal:"g",turningPoint:"tp",arcs:[{title:"arc",objective:"o",status:"active"}]}]};delete worldState.spineComplete;delete worldState.ended;
+    if(codaState())return "coda with a live act";var live=buildSkeletonBlock();if(live.indexOf("Drive scenes toward the CURRENT arc")<0||live.indexOf("PACING (epilogue)")>=0)return "live act lost its arc pacing";
+    var m=csXpMeter(c.xp||0,c.level||1,codaState());if(m.coda||/story is what advances/.test(m.tail))return "meter read coda outside one";
+    worldState.skeleton.acts[1].status="completed";worldState.skeleton.acts[1].arcs[0].status="completed";/* told, no stamp */
+    if(!codaState())return "derived told spine is not a coda";var coda=buildSkeletonBlock();if(coda.indexOf("PACING (epilogue)")<0||coda.indexOf("Drive scenes toward the CURRENT arc")>=0||coda.indexOf("[ARC_COMPLETE:] or [ACT_COMPLETE:]")<0)return "coda block still drives toward an arc: "+coda.slice(-400);
+    m=csXpMeter(c.xp||0,c.level||1,true);if(!m.coda||m.tail!=="The story is what advances now"||!/ XP$/.test(m.lbl)||typeof m.pct!=="number")return "coda meter: "+JSON.stringify(m);
+    var X=classXpLevels(),lv=c.level||1;if(lv<X.length){m=csXpMeter(X[lv],lv,true);if(!/ready/.test(m.tail)||m.coda)return "an earned level must still say rest to claim in a coda: "+JSON.stringify(m);}
+    worldState.ended={turn:201,cause:"the tale is told",spine:true};if(codaState())return "an ended campaign is not a coda";delete worldState.ended;
+    worldState.skeleton=null;delete worldState.spineComplete;if(codaState())return "no skeleton, no coda";
+    var us=__fsForTests.readFileSync(__rootForTests+"/ui-sheets.js","utf8");if((us.match(/csXpMeter\([^)]*codaState\(\)\)/g)||[]).length!==2)return "both sheet meter sites must pass codaState()";
+    var as=__fsForTests.readFileSync(__rootForTests+"/api.js","utf8"),sb=as.slice(as.indexOf("function buildSkeletonBlock("),as.indexOf("var CODA_PACING_NOTE"));
+    return /lines\.push\(\(typeof codaState==="function"&&codaState\(\)\)\?CODA_PACING_NOTE:pacingNote\);/.test(sb)&&!/lines\.push\(pacingNote\);/.test(sb)?true:"the skeleton block must push exactly one of the two pacing notes through codaState()";
+  });
   t("the tier-unlock spell picker scrolls its bench (owner call 2026-09-03: twelve tier-3 cards pushed Confirm off the screen) — the list sits in a box about seven cards tall with its own scrollbar; the header and Confirm stay outside it",function(){
     var src=__fsForTests.readFileSync(__rootForTests+"/game.js","utf8"),i=src.indexOf("function showSpellUnlockModal("),body=src.slice(i,src.indexOf("function spuToggle("));
     var list=body.indexOf("id='spu-list'"),confirm=body.indexOf("id='spu-confirm'"),head=body.indexOf("Spells Unlocked");

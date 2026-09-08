@@ -2319,9 +2319,13 @@ function buildSkeletonBlock(){
     // sensibility (a generic "investigation → gather clues" line is what flattened campaigns into procedure).
     if(activeArcs.length===1&&!activeArcs[0].dnaHint&&activeArcs[0].type)pacingNote+="\nThe current arc is "+activeArcs[0].type+"-focused. Shape encounters and scenes accordingly: "+(activeArcs[0].type==="investigation"?"clues, interrogation, deduction, piecing together evidence":activeArcs[0].type==="exploration"?"travel, discovery, environmental challenges, mapping unknown territory":activeArcs[0].type==="social"?"politics, alliances, persuasion, betrayal, negotiation":activeArcs[0].type==="combat"?"battles, sieges, hunts, tactical encounters":"varied challenges")+".";
   }
-  lines.push(pacingNote);
+  /* #366: with the spine told and no act active the arc text above has no referent ("drive toward the CURRENT arc" rode
+     every one of the owner's hundred coda turns under the #325 epilogue line). One predicate, one swap; a save that is
+     not in a coda gets the byte-identical note it always got. */
+  lines.push((typeof codaState==="function"&&codaState())?CODA_PACING_NOTE:pacingNote);
   return lines.join("\n")+"\n\n";
 }
+var CODA_PACING_NOTE="PACING (epilogue): the authored spine is complete and no arc is running. Do not drive toward an arc, and do not emit [ARC_COMPLETE:] or [ACT_COMPLETE:]. Pace by consequence instead: the open schedules and future events, what the record says is unfinished, and the companions' own agendas. A quiet scene may stay quiet; a scene ends where the fiction ends it, not on a turn count. Episodes may rise and close on their own — a QUEST offered and completed is still the record's shape for them.";
 // ── #52 skills bible injection ───────────────────────────────────────────────
 // buildSkillMechanicsDoc — the STABLE-half skills ladder. Rendered entirely from
 // skills_bible.js data (SKILL_LEVEL_MECHANICS + the untrained lists), all of it constant,

@@ -1240,6 +1240,11 @@ function membarActLabel(){var ws=(typeof worldState!=="undefined")?worldState:nu
   if(campaignEnded()||ws.spineComplete||spineTold())return {text:"Campaign Complete",done:true};
   var sk=ws.skeleton,i;if(sk&&sk.acts){for(i=0;i<sk.acts.length;i++){if(sk.acts[i].status==="active"){var at=sk.acts[i].title||"";return {text:/^act\s/i.test(at)?at:"Act "+(i+1)+": "+at,done:false};}}}
   return null;}
+// #366: THE coda predicate — the authored spine is told (or stamped), no act is active, the campaign
+// is open. One derived truth with several consumers (the post-spine PACING line, the XP meter, and
+// any future consequence detector that must stay quiet during an earned rest). Pure over state.
+function codaState(){var ws=(typeof worldState!=="undefined")?worldState:null;if(!ws||campaignEnded())return false;
+  if(!(ws.spineComplete||spineTold()))return false;var sk=ws.skeleton,i;if(sk&&sk.acts)for(i=0;i<sk.acts.length;i++)if(sk.acts[i]&&sk.acts[i].status==="active")return false;return true;}
 function endingMenuVisible(){return !!(typeof worldState!=="undefined"&&worldState&&!campaignEnded()&&(worldState.spineComplete||spineTold()));}
 function campaignEnded(){return !!(typeof worldState!=="undefined"&&worldState&&worldState.ended);}
 // #300: the only two moves a downed hero has — the engine authors these buttons, no model call.
@@ -1253,8 +1258,9 @@ function downedChoices(){return ["Struggle — fight for consciousness, crawl, c
 // displays kept the pre-bible lvl>=10 ceiling, so a Level 10 sheet claimed "Max level" with a
 // full bar while the engine would happily ding 11 at the next gate (the Ammut t1431 report).
 // "Max level" now means the END of the curve; the bar is progress within the current band.
-function csXpMeter(xp,lvl){
+function csXpMeter(xp,lvl,coda){
   var X=classXpLevels(),next=lvl<X.length?X[lvl]:null,prev=X[lvl-1]||0;
+  if(coda&&!(next!==null&&xp>=next))return {lbl:xp+" XP",tail:"The story is what advances now",pct:next===null?100:Math.max(0,Math.min(100,Math.round(((xp-prev)/Math.max(1,next-prev))*100))),coda:true};/* #366: post-spine, the act and boss paymasters cannot fire — say so instead of "0.3% to Lv 18" (an earned level still lands at camp, #349) */
   var pct=next===null?100:Math.max(0,Math.min(100,Math.round(((xp-prev)/Math.max(1,next-prev))*100)));// low clamp: xp below the level floor rendered width:-N% — invalid CSS, dropped, div defaulted to FULL (the Morwen full-bar lie)
   if(next!==null&&xp>=next)return {lbl:xp+" / "+next+" XP",tail:"Lv "+(lvl+1)+" ready \u2014 rest to claim",pct:100};/* #349: the level is earned, the camp lands it */
   return {lbl:next===null?xp+" XP":xp+" / "+next+" XP",tail:next===null?"Max level":"Next: Lv "+(lvl+1),pct:pct};

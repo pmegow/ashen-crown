@@ -21,7 +21,7 @@ function csHeroHeader(c){
   var genderLbl=genderLabel(c.gender);/* #11③: shared mapping */
   var subnm=c.subraceNm?c.subraceNm+" ":"";
   var clsLine=escHtml(subnm+(c.ancestry||"")+" "+(c.cls||"")+(c.archetypeNm?" ["+c.archetypeNm+"]":""));/* companion sheets are model-generated (#22/UA18) */
-  var lvl=c.level||1,xpm=csXpMeter(c.xp||0,lvl);
+  var lvl=c.level||1,xpm=csXpMeter(c.xp||0,lvl,typeof codaState==="function"&&codaState());/* #366 */
   return {genderLbl:genderLbl,clsLine:clsLine,lvl:lvl,xpm:xpm};
 }
 // #50 QOL: drop an inventory item from a live sheet. owner ""=player, else companion name.
@@ -442,7 +442,7 @@ function showNpcSheet(name){
   if(sheet){
     var gLbl=genderLabel(sheet.gender);/* #11③: shared mapping */
     var clsLine=escHtml((sheet.subraceNm?sheet.subraceNm+" ":"")+(sheet.ancestry||"")+" "+(sheet.cls||"")+(sheet.archetypeNm?" ["+sheet.archetypeNm+"]":""));/* model-generated sheet fields (#22/UA18) */
-    var lvl=sheet.level||1,xpm=csXpMeter(sheet.xp||0,lvl);/* (sheet.xp||0) guard so a missing xp doesn't render NaN → full bar (audit E62) */
+    var lvl=sheet.level||1,xpm=csXpMeter(sheet.xp||0,lvl,typeof codaState==="function"&&codaState());/* #366 *//* (sheet.xp||0) guard so a missing xp doesn't render NaN → full bar (audit E62) */
     var playBtn=isParty?"<button id='npc-play-btn' title='Switch to playing as "+escHtml(name)+"' style='background:none;border:none;color:var(--acc);cursor:pointer;font-size:16px;padding:0 4px;margin-left:6px;vertical-align:middle;line-height:1;opacity:0.8;' onmouseover='this.style.opacity=1' onmouseout='this.style.opacity=0.8'>▶</button>":"";
     // TODO #1 P1 (multiplayer D1/D8): the PC/NPC toggle — radio-style pair, highlighted side =
     // current status. Flips wsNpc.isPC (roster-level; rides the sync blob). The ▶ play button
