@@ -3204,7 +3204,7 @@ async function campaignDenouement(){
 // #325: the player's answer to the offered ending. "write" closes the campaign exactly like the fourth
 // death (ended + denouementOwed → campaignDenouement writes the epilogue from the record, the living-
 // hero variant); "play" snoozes the offer for ENDING_REOFFER_TURNS. Pure over state; the DOM modal calls it.
-function endingDecide(choice){
+function endingDecide(choice,closing){
   if(!worldState||!worldState.spineComplete||(typeof campaignEnded==="function"&&campaignEnded()))return null;
   if(choice==="write"){
     worldState.ended={turn:worldState.turn,cause:"the tale is told",at:Date.now(),spine:true,deaths:(worldState.respawns||0)};
@@ -3214,6 +3214,7 @@ function endingDecide(choice){
     return {action:"ended"};
   }
   worldState.spineComplete.snoozedUntil=worldState.turn+((typeof ENDING_REOFFER_TURNS==="number")?ENDING_REOFFER_TURNS:15);
+  var _cl=String(closing||"").trim().slice(0,160);if(_cl)worldState.spineComplete.closing=_cl;/* #367: the smallest fourth act — one line the two authors agreed on, held beside the stamp */
   if(typeof saveAll==="function")saveAll();
   return {action:"play"};
 }
@@ -3222,6 +3223,8 @@ function fileDenouement(text){
   var t=String(text||"").trim();if(!t)return;
   if(typeof logTranscript==="function")logTranscript("gm",t,t,undefined,{denouement:true});
   if(memory){if(!memory.chapters)memory.chapters=[];memory.chapters.push({turn:worldState.turn,summary:"DENOUEMENT: "+t.slice(0,600)});}
+  /* #367: the closing paragraph names what the tale changed in the hero — filed as a defining moment, so a legacy hero carries it into the next campaign */
+  var _paras=t.split(/\n\s*\n/),_lastP=String(_paras[_paras.length-1]||"").trim();if(_lastP&&typeof fileCoreMemory==="function")fileCoreMemory("ending",worldState.character&&worldState.character.name,_lastP.slice(0,240));
   delete worldState.denouementOwed;
   if(!worldState.ended)worldState.ended={turn:worldState.turn,cause:"the story closed",at:Date.now()};
   if(typeof saveAll==="function")saveAll();

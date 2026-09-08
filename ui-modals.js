@@ -849,10 +849,11 @@ function showEndingOfferModal(){
   var m=modalShell("ending-modal",
     "<div style='font-size:20px;margin-bottom:8px;'>The tale is told</div>"
     +"<div style='font-size:13px;color:var(--t1);line-height:1.5;'>Every act of <b>"+nm+"</b> is complete. Write the ending now \u2014 the campaign closes and its epilogue is written from everything that happened \u2014 or play on and call for it later.</div>"
+    +"<input id='ending-closing' type='text' maxlength='160' placeholder='Optional: how does it end? (e.g. after Sable, we go home)' style='width:100%;box-sizing:border-box;margin-top:14px;padding:8px 10px;font-family:var(--font);font-size:13px;background:var(--bg2);border:1px solid var(--brd);border-radius:var(--r);color:var(--t0);'>"/* #367 */
     +"<div style='display:flex;gap:10px;margin-top:18px;'><button id='ending-play' style='flex:1;padding:10px;font-family:var(--font);background:var(--bg2);border:1px solid var(--brd);border-radius:var(--r);color:var(--t1);cursor:pointer;'>Play on</button>"
     +"<button id='ending-write' style='flex:1;padding:10px;font-family:var(--font);background:var(--acc);border:none;border-radius:var(--r);color:var(--on-acc);font-weight:bold;cursor:pointer;'>Write the ending</button></div>",
     {maxWidth:440,outside:true});
-  document.getElementById("ending-play").onclick=function(){m.remove();endingDecide("play");if(typeof syncUI==="function")syncUI();};
+  document.getElementById("ending-play").onclick=function(){var _cl=(document.getElementById("ending-closing")||{}).value;m.remove();endingDecide("play",_cl);if(_cl&&String(_cl).trim()&&typeof showToast==="function")showToast("Closing condition kept: "+String(_cl).trim().slice(0,80));if(typeof syncUI==="function")syncUI();};
   document.getElementById("ending-write").onclick=function(){m.remove();endingDecide("write");};
 }
 function showCampaignEndedModal(cause){

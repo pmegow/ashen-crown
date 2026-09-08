@@ -641,9 +641,9 @@ function buildHoursNote(){
 }
 // #301: the DENOUEMENT — the campaign's closing chapter, asked of the GM when the fourth death lands or the
 // player walks onward. Drawn from what the campaign actually recorded; written in the campaign's voice.
-var DENOUEMENT_SYS="You are the Game Master closing a FINISHED campaign. Write its denouement: prose only, no tags, no headings, no meta commentary, 300-500 words. Honour every recorded fact below; invent nothing that contradicts them; leave the unfinished threads unfinished, named. End on the world going on without the hero.";
+var DENOUEMENT_SYS="You are the Game Master closing a FINISHED campaign. Write its denouement: prose only, no tags, no headings, no meta commentary, 300-500 words. Honour every recorded fact below; invent nothing that contradicts them; leave the unfinished threads unfinished, named. End on the world going on without the hero. Close with one short paragraph naming what the tale changed in the hero, or refused to change.";
 // #325: the spine's own ending — the hero LIVES. Same denouement, a different last line.
-var DENOUEMENT_SYS_TOLD="You are the Game Master closing a FINISHED campaign whose authored tale has been told to its last act. Write its denouement: prose only, no tags, no headings, no meta commentary, 300-500 words. Honour every recorded fact below; invent nothing that contradicts them; leave the unfinished threads unfinished, named. The hero lives: end on the hero and the world they made, the story's threads at rest.";
+var DENOUEMENT_SYS_TOLD="You are the Game Master closing a FINISHED campaign whose authored tale has been told to its last act. Write its denouement: prose only, no tags, no headings, no meta commentary, 300-500 words. Honour every recorded fact below; invent nothing that contradicts them; leave the unfinished threads unfinished, named. The hero lives: end on the hero and the world they made, the story's threads at rest. Close with one short paragraph naming what the tale changed in the hero, or refused to change.";
 function denouementSys(){return (worldState&&worldState.ended&&worldState.ended.spine)?DENOUEMENT_SYS_TOLD:DENOUEMENT_SYS;}
 function buildDenouementPrompt(){
   var c=worldState.character,lines=[],i;
@@ -653,11 +653,31 @@ function buildDenouementPrompt(){
   var qk=Object.keys(memory.quests||{});if(qk.length){lines.push("QUESTS:");for(i=0;i<qk.length;i++){var q=memory.quests[qk[i]];lines.push("- "+qk[i]+" — "+(q.status||"")+(q.desc?": "+q.desc:""));}}
   var live=worldState.questLog||[];if(live.length){lines.push("UNFINISHED:");for(i=0;i<live.length;i++)lines.push("- "+live[i].title+" ("+live[i].status+")");}
   var cm=c.coreMemories||[];if(cm.length){lines.push("DEFINING MOMENTS:");for(i=0;i<cm.length;i++)lines.push("- t"+cm[i].turn+": "+cm[i].text);}
+  /* #367: the party and the unfired promises reach the last page. Both blocks are ""-clean for a partyless,
+     schedule-less save, so every legacy prompt stays byte-identical. */
+  var cb=buildDenouementCompanions();if(cb)lines.push(cb);
+  var pb=buildDenouementPending();if(pb)lines.push(pb);
   var d=worldState.deaths||[];if(d.length||worldState.ended){lines.push("DEATHS:");for(i=0;i<d.length;i++)lines.push("- t"+d[i].turn+": "+(d[i].cause||"slain"));if(worldState.ended)lines.push("- t"+worldState.ended.turn+": "+(worldState.ended.cause||"slain")+" — the last.");}
   var pa=(typeof AUTHORS!=="undefined"&&worldState.proseAuthor)?AUTHORS.filter(function(a){return a.id===worldState.proseAuthor;})[0]:null;
   if(pa&&pa.vc)lines.push("VOICE: "+pa.vc);
   lines.push("Write the denouement now.");
   return lines.join("\n");
+}
+// #367: living party members — relationship to the hero (both W7 axes), authored motivation, open want.
+function buildDenouementCompanions(){
+  if(!worldState||!worldState.npcs||!worldState.npcs.length||typeof livingPartyCompanions!=="function")return"";
+  var party=livingPartyCompanions(),c=worldState.character,rows=(typeof relationshipRows==="function"&&c)?relationshipRows(c,null):[],L=[],i,j;
+  for(i=0;i<party.length;i++){var p=party[i],cs=p.charSheet||{},bond="",dyn="";
+    for(j=0;j<rows.length;j++){if(rows[j]&&rows[j].entity&&rows[j].entity.toLowerCase()===String(p.name).toLowerCase()){bond=rows[j].bond||"";dyn=rows[j].dynamic||"";break;}}
+    var bits=[];if(bond)bits.push("to the hero: "+bond+(dyn?" ("+dyn+")":""));if(cs.motivation)bits.push("driven by: "+cs.motivation);if(cs.agenda&&cs.agenda.want)bits.push("still wants: "+cs.agenda.want);
+    L.push("- "+p.name+(bits.length?" — "+bits.join("; "):""));}
+  return L.length?"COMPANIONS (alive at the end — the hero's people; their unfinished wants stay unfinished, named):\n"+L.join("\n"):"";
+}
+// #367: schedules due past the last played minute are promises the story made and never kept.
+function buildDenouementPending(){
+  if(typeof schedulePending!=="function")return"";var p=schedulePending(),L=[],i;if(!p.length)return"";
+  for(i=0;i<p.length;i++)L.push("- "+p[i].label+(typeof fmtGap==="function"&&typeof clockNow==="function"?" (was due "+fmtGap(p[i].dueMin-clockNow())+")":""));
+  return "PENDING (promised, never arrived — name them as unresolved, do not resolve them):\n"+L.join("\n");
 }
 // #304 C: the turn's exact {stable, volatile} as sent — the suggestion call seconds later must send the
 // same bytes in the same blocks for the volatile breakpoint to hit. Module-local; a fresh turn overwrites it.
@@ -2260,6 +2280,7 @@ function buildSkeletonBlock(){
   if(worldState.blueprintName)lines.push("AUTHORED CAMPAIGN — this is \""+worldState.blueprintName+"\", a pre-written adventure the player deliberately chose. The acts and arcs below are its AUTHORED SPINE, not loose suggestions: steer scenes toward the CURRENT arc's objective and advance through the authored beats. Use the character's backstory, flaw, and personality to COLOR those beats — never to replace them with an unrelated emergent subplot. The player picked this story to live it; deliver it.");
   lines.push("Premise: "+sk.premise);
   if(worldState.spineComplete)lines.push("THE AUTHORED TALE IS TOLD \u2014 every act of this spine is complete (t"+worldState.spineComplete.turn+"). This is the epilogue in free play: keep faith with the record and let its consequences play out; the player may call for the ending whenever they choose (it is offered to them, not to you); do not open a new grand plot unasked.");/* #325 */
+  if(worldState.spineComplete&&worldState.spineComplete.closing)lines.push("THE PLAYER'S OWN CLOSING CONDITION (stated when they chose to play on): \""+worldState.spineComplete.closing+"\" \u2014 the tale ends there. Play toward it at the fiction's pace, never past it, and never resolve it for them.");/* #367 */
   /* #319 plot armor (owner ruling 2026-09-03): tell the GM up front who cannot die yet, so the exit is
      staged in the moment instead of retconned after a refusal. Derived from this skeleton + the roster. */
   if(typeof plotArmor==="function"){var _paL=[],_pi,_pr=worldState.npcs||[];for(_pi=0;_pi<_pr.length;_pi++){if(_pr[_pi].dead)continue;var _pa=plotArmor(_pr[_pi].name);if(_pa)_paL.push(_pr[_pi].name+" (until Act "+_pa.act+(_pa.arc?" \u201c"+_pa.arc+"\u201d":"")+" opens"+(_pa.escapes?"; "+_pa.escapes+" of "+_pa.max+" escapes spent":"")+")");}

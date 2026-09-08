@@ -1015,6 +1015,31 @@ function runEngineTests(R){
       return true;
     }catch(e){return "threw: "+String(e.stack).split(/\r?\n/).slice(0,5).join(" | ");}finally{console.error=_ce;if(_re)reportError=_re;store.del(WSK);store.del(SLK);store.del(MEM_KEY);}
   });
+  t("#367 the ending prompt sees the party: buildDenouementPrompt carries a COMPANIONS block (relationship to the hero on both axes, motivation, open want) and a PENDING block (schedules due past the last played minute), both absent — byte-identical prompt — for a partyless, schedule-less save; both denouement voices close on what the tale changed in the hero; play on keeps an optional closing condition beside spineComplete and the skeleton block carries it; fileDenouement files the closing paragraph as a defining moment",function(){
+    makeWorld();worldState.turn=300;worldState.campName="X";var c=worldState.character;c.name="Ammut";c.hp=c.maxHp;
+    worldState.skeleton={premise:"p",acts:[{title:"A",status:"completed",completedTurn:100,arcs:[]},{title:"B",status:"completed",completedTurn:290,arcs:[]}]};delete worldState.spineComplete;delete worldState.ended;
+    if(typeof clockEnsure==="function"){var ck=clockEnsure();ck.schedule=[];}
+    var bare=buildDenouementPrompt();if(/COMPANIONS|PENDING/.test(bare))return "partyless prompt grew a block";
+    if(!/what the tale changed in the hero/.test(DENOUEMENT_SYS)||!/what the tale changed in the hero/.test(DENOUEMENT_SYS_TOLD))return "denouement voices do not ask for the closing paragraph";
+    worldState.npcs.push({name:"Morwen Zethran",partyMember:true,status:"steady",charSheet:{name:"Morwen Zethran",cls:"Wizard",level:16,hp:60,maxHp:60,stats:{},abilities:[],spells:[],inventory:[],motivation:"Recover the family grimoire",agenda:{want:"take the grimoire back from the courier",kind:"story",born:280}}});
+    worldState.npcs.push({name:"Frizwick",partyMember:true,status:"steady",charSheet:{name:"Frizwick",cls:"Rogue",level:16,hp:50,maxHp:50,stats:{},abilities:[],spells:[],inventory:[]}});
+    applyMuts("[RELATIONSHIP_BOND:Morwen Zethran|Wife — chosen family][RELATIONSHIP_DYNAMIC:Morwen Zethran|warming][COMPANION_RELATIONSHIP_BOND:Morwen Zethran|Ammut|Husband — chosen family]");
+    if(typeof clockEnsure==="function"){var ck2=clockEnsure();ck2.min=1000;ck2.schedule.push({label:"Ironbriar names the magistrate",born:900,dueMin:2600});}
+    var pr=buildDenouementPrompt();
+    if(!/COMPANIONS/.test(pr)||!/Morwen Zethran — to the hero: Wife — chosen family \(warming\); driven by: Recover the family grimoire; still wants: take the grimoire back/.test(pr))return "companions block: "+JSON.stringify(pr.slice(pr.indexOf("COMPANIONS"),pr.indexOf("COMPANIONS")+600));
+    if(!/- Frizwick\n|- Frizwick$/m.test(pr))return "a companion with nothing recorded is still named: "+pr;
+    if(!/PENDING[^\n]*\n- Ironbriar names the magistrate \(was due /.test(pr))return "pending block: "+pr.slice(pr.indexOf("PENDING")-5,pr.indexOf("PENDING")+160);
+    if(pr.indexOf("COMPANIONS")>pr.indexOf("DEATHS")&&pr.indexOf("DEATHS")>=0)return "party block must precede deaths";
+    /* the closing condition */
+    worldState.spineComplete={turn:290,act:"B"};var d=endingDecide("play","  After Sable, we go home.  ");if(!d||d.action!=="play"||worldState.spineComplete.closing!=="After Sable, we go home.")return "closing not kept: "+JSON.stringify(worldState.spineComplete);
+    var sk=buildSkeletonBlock();if(sk.indexOf("CLOSING CONDITION")<0||sk.indexOf("After Sable, we go home.")<0||sk.indexOf("CLOSING CONDITION")<sk.indexOf("TALE IS TOLD"))return "skeleton block does not carry the closing condition after the epilogue line";
+    delete worldState.spineComplete.closing;endingDecide("play");if(worldState.spineComplete.closing)return "an empty play-on minted a closing";if(buildSkeletonBlock().indexOf("CLOSING CONDITION")>=0)return "closing line without a closing";
+    /* the closing paragraph becomes a defining moment */
+    c.coreMemories=[];endingDecide("write");fileDenouement("The bell was quiet.\n\nAmmut learned that home was a thing you could choose.");
+    var cm=(c.coreMemories||[]).filter(function(x){return x.kind==="ending";});if(cm.length!==1||!/home was a thing you could choose/.test(cm[0].text))return "closing paragraph not filed as a defining moment: "+JSON.stringify(c.coreMemories);
+    var um=__fsForTests.readFileSync(__rootForTests+"/ui-modals.js","utf8"),em=um.slice(um.indexOf("function showEndingOfferModal("),um.indexOf("function showCampaignEndedModal("));
+    return em.indexOf("id='ending-closing'")>=0&&/endingDecide\("play",_cl\)/.test(em)?true:"the modal does not capture the closing condition";
+  });
   t("the tier-unlock spell picker scrolls its bench (owner call 2026-09-03: twelve tier-3 cards pushed Confirm off the screen) — the list sits in a box about seven cards tall with its own scrollbar; the header and Confirm stay outside it",function(){
     var src=__fsForTests.readFileSync(__rootForTests+"/game.js","utf8"),i=src.indexOf("function showSpellUnlockModal("),body=src.slice(i,src.indexOf("function spuToggle("));
     var list=body.indexOf("id='spu-list'"),confirm=body.indexOf("id='spu-confirm'"),head=body.indexOf("Spells Unlocked");
