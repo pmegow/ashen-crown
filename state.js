@@ -311,7 +311,13 @@ function restoreTranscriptRescue(){
   }catch(e){console.error("[save] transcript rescue re-inflate failed — keeping the rescue blob",e);return false;}
 }
 function saveCore(){try{store.set(WSK,serializeWorldState());store.set(SLK,JSON.stringify(sessionLog));}catch(e){if(typeof showToast==="function")showToast("⚠ Save failed — storage full. Free space: Campaigns → \"Remove local\" on old campaigns.");console.error("[save] saveCore failed:",e);}}
-function saveMem(){try{store.set(MEM_KEY,JSON.stringify(memory));}catch(e){if(typeof showToast==="function")showToast("⚠ Memory save failed — storage full.");console.error("[save] saveMem failed:",e);}}
+// #365: memory carries its owner's campId. Stamped on save when unset; a DIFFERENT stamp is never
+// overwritten, so a half-switched pair (live worldState = B, live memory = A — the 2026-09-05 #337
+// failure that ran the Runelords campaign on the Iron Meridian's memory for 28 turns) stays
+// detectable by memoryOwnerMismatch on the next load instead of being silently adopted.
+function memoryOwnerMismatch(ws,mem){return !!(ws&&mem&&ws.campId&&mem.campId&&ws.campId!==mem.campId);}
+function memoryOwnerStamp(){if(typeof worldState!=="undefined"&&worldState&&worldState.campId&&memory&&!memory.campId)memory.campId=worldState.campId;}
+function saveMem(){try{memoryOwnerStamp();store.set(MEM_KEY,JSON.stringify(memory));}catch(e){if(typeof showToast==="function")showToast("⚠ Memory save failed — storage full.");console.error("[save] saveMem failed:",e);}}
 // #2 (quota): snapshotActiveCamp() removed from saveAll — it duplicated the ENTIRE active state (incl. portraits)
 // into tnd_camp_<id>_* on every turn, redundant with tnd_core_v10. The active campaign is still snapshotted on
 // switch-away, beforeunload, and campaign ops — the moments the snapshot is actually read. ~halves the per-turn write.
@@ -753,6 +759,7 @@ function loadState(){
   try{sessionLog=sl?JSON.parse(sl):[];}catch(e){rescueCorruptStore("sess",sl,e);sessionLog=[];}/* JP0-4: preserve + shout before degrading */
   try{if(ws){worldState=parseWorldState(ws);restoreTranscriptRescue();/* UA3: BEFORE any migrate-save — preserve the rescued transcript. */if(typeof _sumFails!=="undefined")_sumFails=worldState.summaryFailure&&typeof worldState.summaryFailure.count==="number"?worldState.summaryFailure.count:0;}}catch(e){worldState=null;return false;}
   try{if(mm){memory=JSON.parse(mm);healMemory();}else memory=blankMemory();}catch(e){rescueCorruptStore("mem",mm,e);memory=blankMemory();}/* JP0-4: covers a heal throw on VALID json too — the bytes are still the only copy */
+  if(memoryOwnerMismatch(worldState,memory)){/* #365: loud, attributable, never silent */var _own=(typeof campDisplayName==="function"&&campDisplayName(memory.campId))||memory.campId;console.error("[load] MEMORY OWNER MISMATCH — the live memory is stamped for "+memory.campId+" but the worldState is "+worldState.campId+" (#365). Play would run this campaign on another campaign's canon.");if(typeof showToast==="function")showToast("\u26a0 This campaign's memory belongs to \""+_own+"\" \u2014 Load a saved copy of "+(worldState.campName||"this campaign")+" before playing on (#365).");if(typeof reportError==="function")reportError("memory-owner","memory "+memory.campId+" under worldState "+worldState.campId,{turn:worldState.turn});}
   /* #168 W7: relationship entity migration needs THIS campaign's alias table. Parsing/healing
      memory first prevents the previously active campaign from re-keying the incoming save. */
   try{if(worldState&&migrateWorldState())saveCore();}catch(e){worldState=null;return false;}

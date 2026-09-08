@@ -993,6 +993,28 @@ function runEngineTests(R){
     var as=__fsForTests.readFileSync(__rootForTests+"/api.js","utf8"),sb=as.slice(as.indexOf("function buildSkeletonBlock("),as.indexOf("var CODA_PACING_NOTE"));
     return /lines\.push\(\(typeof codaState==="function"&&codaState\(\)\)\?CODA_PACING_NOTE:pacingNote\);/.test(sb)&&!/lines\.push\(pacingNote\);/.test(sb)?true:"the skeleton block must push exactly one of the two pacing notes through codaState()";
   });
+  t("#365 the memory knows its owner: saveMem stamps memory.campId from the worldState when unset and never overwrites a different stamp; loadState on the exact half-switched layout (#337: live worldState = B, live memory = A) is LOUD — a toast naming both campaigns, a console error, an error report — and still loads; a matching pair and an unstamped legacy memory stay silent",function(){
+    makeWorld();worldState.campId="camp_B";worldState.campName="Rise of the Runelords";memory.npcs={"Vessa Corrow":{attitude:"x",knowledge:[],events:[]}};delete memory.campId;
+    var errs=[];var _ce=console.error;console.error=function(m){errs.push(String(m));};var reps=[];var _re=(typeof reportError==="function")?reportError:null;reportError=function(c,m){reps.push(c+": "+m);};
+    try{
+      /* saveMem is stubbed in this harness — prove the stamp through the pure step it calls, and pin the call in the source */
+      memoryOwnerStamp();if(memory.campId!=="camp_B")return "memoryOwnerStamp did not stamp the owner: "+memory.campId;
+      memory.campId="camp_A";memoryOwnerStamp();if(memory.campId!=="camp_A")return "the stamp overwrote a different owner — the mismatch must stay detectable";
+      var ss=__fsForTests.readFileSync(__rootForTests+"/state.js","utf8");if(!/function saveMem\(\)\{try\{memoryOwnerStamp\(\);store\.set\(MEM_KEY/.test(ss))return "saveMem does not stamp before writing";
+      /* the half-switched layout: worldState B live, memory A live */
+      store.set(WSK,JSON.stringify(worldState));store.set(SLK,"[]");store.set(MEM_KEY,JSON.stringify(memory));__toasts.length=0;errs.length=0;reps.length=0;
+      var ok=loadState();if(!ok)return "loadState must still load the pair (the player decides what to do)";
+      var toast=__toasts.filter(function(x){return /memory belongs to/.test(x);});if(toast.length!==1||toast[0].indexOf("camp_A")<0||toast[0].indexOf("Rise of the Runelords")<0)return "no toast naming both campaigns: "+JSON.stringify(__toasts);
+      if(!errs.some(function(e){return /MEMORY OWNER MISMATCH/.test(e)&&/camp_A/.test(e)&&/camp_B/.test(e);}))return "no console error: "+JSON.stringify(errs);
+      if(!reps.some(function(r){return /^memory-owner/.test(r);}))return "no error report: "+JSON.stringify(reps);
+      if(!memoryOwnerMismatch(worldState,memory))return "memoryOwnerMismatch false on the planted pair";
+      /* matching pair: silent */
+      memory.campId="camp_B";store.set(MEM_KEY,JSON.stringify(memory));__toasts.length=0;errs.length=0;loadState();if(__toasts.some(function(x){return /memory belongs to/.test(x);})||errs.some(function(e){return /MEMORY OWNER/.test(e);}))return "a matching pair must be silent";
+      /* unstamped legacy memory: silent, and the next save stamps it */
+      delete memory.campId;store.set(MEM_KEY,JSON.stringify(memory));__toasts.length=0;loadState();if(__toasts.some(function(x){return /memory belongs to/.test(x);}))return "an unstamped legacy memory must be silent";memoryOwnerStamp();if(memory.campId!=="camp_B")return "the legacy memory was not stamped on its next save";
+      return true;
+    }catch(e){return "threw: "+String(e.stack).split(/\r?\n/).slice(0,5).join(" | ");}finally{console.error=_ce;if(_re)reportError=_re;store.del(WSK);store.del(SLK);store.del(MEM_KEY);}
+  });
   t("the tier-unlock spell picker scrolls its bench (owner call 2026-09-03: twelve tier-3 cards pushed Confirm off the screen) — the list sits in a box about seven cards tall with its own scrollbar; the header and Confirm stay outside it",function(){
     var src=__fsForTests.readFileSync(__rootForTests+"/game.js","utf8"),i=src.indexOf("function showSpellUnlockModal("),body=src.slice(i,src.indexOf("function spuToggle("));
     var list=body.indexOf("id='spu-list'"),confirm=body.indexOf("id='spu-confirm'"),head=body.indexOf("Spells Unlocked");
