@@ -2288,7 +2288,7 @@ function buildSkeletonBlock(){
   if(typeof plotArmor==="function"){var _paL=[],_pi,_pr=worldState.npcs||[];for(_pi=0;_pi<_pr.length;_pi++){if(_pr[_pi].dead)continue;var _pa=plotArmor(_pr[_pi].name);if(_pa)_paL.push(_pr[_pi].name+" (until Act "+_pa.act+(_pa.arc?" \u201c"+_pa.arc+"\u201d":"")+" opens"+(_pa.escapes?"; "+_pa.escapes+" of "+_pa.max+" escapes spent":"")+")");}
     if(_paL.length)lines.push("LOAD-BEARING CHARACTERS (plot armor \u2014 GM-eyes only): "+_paL.join("; ")+". They CANNOT die before then: if cornered, struck down or executed, they get away \u2014 a leap into the dark, a rescue at the last instant, a capture alive, a fall no body confirms \u2014 always at a COST: they leave behind something the player can take (a key, a name, a wound, a lead). Never a free escape, never the same trick twice. After "+((typeof PLOT_ARMOR_ESCAPES==="number")?PLOT_ARMOR_ESCAPES:2)+" escapes the armor is spent and the author's fallback carries the story.");}
   for(i=0;i<sk.acts.length;i++){
-    var act=sk.acts[i],label="Act "+(i+1)+": "+act.title;
+    var act=sk.acts[i],label=actLabel(i+1,act.title);/* #376: one formatter with the bar and the panel — an authored "Act 2:" is not doubled */
     if(act.status==="completed")label+=" [COMPLETED]";
     else if(act.status==="active")label+=" [CURRENT"+(act.parallel?" — PARALLEL: arcs can be pursued in any order":"")+"]";
     lines.push(label+" — Goal: "+act.goal);

@@ -1040,6 +1040,18 @@ function runEngineTests(R){
     var um=__fsForTests.readFileSync(__rootForTests+"/ui-modals.js","utf8"),em=um.slice(um.indexOf("function showEndingOfferModal("),um.indexOf("function showCampaignEndedModal("));
     return em.indexOf("id='ending-closing'")>=0&&/endingDecide\("play",_cl\)/.test(em)?true:"the modal does not capture the closing condition";
   });
+  t("#376 one act-label formatter: actLabel keeps an authored \"Act …\" title as written and prefixes any other; the quest panel compass, the session bar and the GM's skeleton block all use it, so an act titled 'Act 2: The Severing of Bloodlines' reads once on every surface and a bare title still gets its number (byte-identical to before)",function(){
+    if(actLabel(2,"Act 2: The Severing of Bloodlines")!=="Act 2: The Severing of Bloodlines"||actLabel(2,"ACT II — Blood")!=="ACT II — Blood"||actLabel(3,"The Gilded Mortuary")!=="Act 3: The Gilded Mortuary"||actLabel(1,"Action Stations")!=="Act 1: Action Stations"||actLabel(1,"")!=="Act 1: ")return "actLabel table";
+    makeWorld();worldState.turn=40;worldState.skeleton={premise:"p",acts:[{title:"Act 1: The Hollow",status:"completed",goal:"g",arcs:[]},{title:"Act 2: The Severing of Bloodlines",status:"active",goal:"g2",turningPoint:"tp",arcs:[{title:"The Gilded Mortuary of House Morne",objective:"o",status:"active"}]}]};delete worldState.spineComplete;
+    var qb=questBearingText(questBearing());if(!/^Act 2: The Severing of Bloodlines$/m.test(qb)||/Act 2: Act 2/.test(qb))return "quest panel doubles the act: "+qb;
+    var ml=membarActLabel();if(!ml||ml.text!=="Act 2: The Severing of Bloodlines")return "session bar: "+JSON.stringify(ml);
+    var sk=buildSkeletonBlock();if(/Act 2: Act 2/.test(sk)||/Act 1: Act 1/.test(sk)||sk.indexOf("Act 2: The Severing of Bloodlines [CURRENT")<0)return "skeleton block doubles the act: "+sk.slice(sk.indexOf("Act 1"),sk.indexOf("Act 1")+200);
+    worldState.skeleton.acts[1].title="The Severing of Bloodlines";worldState.skeleton.acts[0].title="The Hollow";
+    if(!/^Act 2: The Severing of Bloodlines$/m.test(questBearingText(questBearing()))||membarActLabel().text!=="Act 2: The Severing of Bloodlines"||buildSkeletonBlock().indexOf("Act 2: The Severing of Bloodlines [CURRENT")<0)return "a bare title lost its number";
+    var hs=__fsForTests.readFileSync(__rootForTests+"/helpers.js","utf8"),as=__fsForTests.readFileSync(__rootForTests+"/api.js","utf8");
+    if((hs.match(/"Act "\+/g)||[]).length!==1)return "helpers.js formats the act label outside actLabel";if(/"Act "\+\(i\+1\)\+": "\+act\.title/.test(as))return "api.js still formats the act label itself";
+    return true;
+  });
   t("the tier-unlock spell picker scrolls its bench (owner call 2026-09-03: twelve tier-3 cards pushed Confirm off the screen) — the list sits in a box about seven cards tall with its own scrollbar; the header and Confirm stay outside it",function(){
     var src=__fsForTests.readFileSync(__rootForTests+"/game.js","utf8"),i=src.indexOf("function showSpellUnlockModal("),body=src.slice(i,src.indexOf("function spuToggle("));
     var list=body.indexOf("id='spu-list'"),confirm=body.indexOf("id='spu-confirm'"),head=body.indexOf("Spells Unlocked");

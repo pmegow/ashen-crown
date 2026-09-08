@@ -59,6 +59,10 @@ function img2imgStrength(cfg){
 // be"). Titles ONLY — an arc's objective and an act's goal are the author's spine and routinely state
 // outcomes the player has not discovered. Pure over worldState.skeleton; null when there is nothing
 // to point at (no skeleton, no active act). Between arcs the act still shows.
+// #376 (owner call 2026-09-08): ONE act-label formatter for the status bar, the quest panel and the GM's skeleton
+// block. An authored title that already opens with "Act …" ("Act 2: The Severing of Bloodlines") is kept as written;
+// any other title gets "Act N: " in front. Three surfaces used to format this three ways and two of them doubled it.
+function actLabel(n,title){var at=String(title||"");return /^act\s/i.test(at)?at:"Act "+n+": "+at;}
 function questBearing(){
   var sk=(typeof worldState!=="undefined"&&worldState&&worldState.skeleton)||null;if(!sk||!sk.acts)return null;
   var i,j;for(i=0;i<sk.acts.length;i++){var a=sk.acts[i];if(!a||a.status!=="active")continue;
@@ -68,7 +72,7 @@ function questBearing(){
   return null;
 }
 function questBearingText(b){
-  if(!b)return "";var s="Act "+b.actN+": "+b.actTitle;
+  if(!b)return "";var s=actLabel(b.actN,b.actTitle);/* #376 */
   if(b.arcN)s+="\nArc "+b.arcN+"/"+b.arcOf+" \u201c"+b.arcTitle+"\u201d";
   return s;
 }
@@ -1249,7 +1253,7 @@ function endingOffered(){
 // not a nag) and hides once the campaign has ended.
 function membarActLabel(){var ws=(typeof worldState!=="undefined")?worldState:null;if(!ws)return null;
   if(campaignEnded()||ws.spineComplete||spineTold())return {text:"Campaign Complete",done:true};
-  var sk=ws.skeleton,i;if(sk&&sk.acts){for(i=0;i<sk.acts.length;i++){if(sk.acts[i].status==="active"){var at=sk.acts[i].title||"";return {text:/^act\s/i.test(at)?at:"Act "+(i+1)+": "+at,done:false};}}}
+  var sk=ws.skeleton,i;if(sk&&sk.acts){for(i=0;i<sk.acts.length;i++){if(sk.acts[i].status==="active"){return {text:actLabel(i+1,sk.acts[i].title),done:false};/* #376 */}}}
   return null;}
 // #366: THE coda predicate — the authored spine is told (or stamped), no act is active, the campaign
 // is open. One derived truth with several consumers (the post-spine PACING line, the XP meter, and
