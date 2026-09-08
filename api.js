@@ -596,7 +596,7 @@ function buildPartyHistoriesBlock(){
     var pers="";if(cs.trait)pers+=" trait — "+cs.trait+";";if(cs.flaw)pers+=" flaw — "+cs.flaw+";";if(cs.motivation)pers+=" motivation — "+cs.motivation+";";
     L.push("- "+party[i].name+": "+(cs.backstory||"(no recorded history)")+(pers?"\n  Personality:"+pers:""));}
   if(!L.length)return"";
-  return "PARTY HISTORIES — who each of the party was before this story and what drives them (authored canon — the player first, then each companion; a character's own wants, remarks and refusals grow from THIS, never from invention):\n"+L.join("\n")+"\n\n";
+  return "PARTY HISTORIES — who each of the party was before this story and what drives them (authored canon — the player first, then each companion; a character's own wants, remarks and refusals grow from THIS, never from invention). A companion's FLAW must cost the party something visible now and then — a refusal, a withheld truth, a concession not given — and a companion may be right where the player is wrong, and refuse; trait and flaw govern how they speak in quiet and intimate scenes too. A flaw is not forever: when a companion acts AGAINST it at a defining moment, on screen and unasked, file [COMPANION_GROWTH:Name|the flaw|what replaced it] — rare, earned, never requested:\n"+L.join("\n")+"\n\n";
 }
 // ── #330 companions with agendas — the four asks ───────────────────────────────────────────
 // ① the recruitment ask is RETIRED (owner ruling 2026-09-05, #347): it fired once for every companion who
@@ -1304,7 +1304,7 @@ function buildRelationshipAudit(){
   function fmt(who,sheet,owner){
     var rows=relationshipRows(sheet,owner);
     for(j=0;j<rows.length;j++){var r=rows[j];if(!r||!r.entity||!r.bond)continue;
-      lines.push("- "+who+" → "+r.entity+": \""+r.bond+"\""+(r.bondTurn?" (since t"+r.bondTurn+")":" (long-standing)"));}
+      lines.push("- "+who+" → "+r.entity+": \""+r.bond+"\""+(r.bondTurn?" (since t"+r.bondTurn+")":" (long-standing)"));}/* #370: the dynamic VALUE never rides the durable audit (W7 contract) — the ask below teaches non-combat postures instead */
   }
   fmt(c.name,c,null);
   var _raParty=livingPartyCompanions();/* #6: shared party scan */
@@ -1314,7 +1314,7 @@ function buildRelationshipAudit(){
   if(!eventDue&&!timerDue)return"";
   if(!lines.length&&!eventDue){worldState.lastRelAudit=worldState.turn;return"";}/* nothing to re-ground; consume the window so the first filed bond isn't audited one turn later */
   worldState.lastRelAudit=worldState.turn;delete worldState.relAuditDue;
-  return "[ENGINE NOTE — RELATIONSHIP AUDIT (not a player action): below is every durable BOND in the party"+(eventDue?"; the party's composition just changed, so re-ground them now":"")+". For EACH: if it still matches the fiction, leave it alone. If durable canon has genuinely changed, use the explicit RELATIONSHIP_BOND tag (existing-bond changes require confirmation on a later response); if only the current posture changed, use RELATIONSHIP_DYNAMIC. Bonds clearly established but MISSING below must be filed now with the corresponding player or COMPANION tag.\n"+(lines.length?lines.join("\n"):"- (none recorded yet)")+"]";
+  return "[ENGINE NOTE — RELATIONSHIP AUDIT (not a player action): below is every durable BOND in the party"+(eventDue?"; the party's composition just changed, so re-ground them now":"")+". Each bond also carries a changeable DYNAMIC — a posture such as warming, owed a favor, wary, or tender, not only a fighting stance; if it has moved, [RELATIONSHIP_DYNAMIC:entity|posture]. For EACH: if it still matches the fiction, leave it alone. If durable canon has genuinely changed, use the explicit RELATIONSHIP_BOND tag (existing-bond changes require confirmation on a later response); if only the current posture changed, use RELATIONSHIP_DYNAMIC. Bonds clearly established but MISSING below must be filed now with the corresponding player or COMPANION tag.\n"+(lines.length?lines.join("\n"):"- (none recorded yet)")+"]";
 }
 // #57 leg C: fork healing — the summarize extractor may PROPOSE that two on-file NPCs are the
 // same person (the t378 "Woman in Bronze"/Daeris class: zero shared name tokens, invisible to

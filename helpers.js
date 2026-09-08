@@ -154,6 +154,15 @@ function parseSuggestTag(body){var out=[],parts=String(body||"").split("|"),i;fo
 // is the ceiling — a companion never leaves over a want. The pure half lives here.
 // kind is "peaceful" or "violent" (owner 2026-09-04: no shared stem, so no substring can ever misfile one as the other).
 function agendaKindOf(k){k=String(k||"").toLowerCase();if(/peace|non/.test(k))return "peaceful";return /viol|blood|kill|avenge|slay/.test(k)?"violent":"peaceful";}
+// #370 (owner ruling 2026-09-07): a flaw is malleable. companionGrow rewrites the sheet's flaw when the GM files
+// [COMPANION_GROWTH:Name|the flaw|what replaced it]; the old flaw must be the one on the sheet (a shared content
+// word), the old text is kept in growth[], and the caller files the defining moment and toasts. Null = refused.
+function companionGrow(cs,oldFlaw,newFlaw,turn){
+  if(!cs||!cs.flaw||!newFlaw)return null;var was=String(cs.flaw),o=String(oldFlaw||"").toLowerCase(),w=was.toLowerCase();
+  var ok=!!o&&(w.indexOf(o)>=0||o.indexOf(w)>=0);if(!ok){var ot=o.split(/[^a-z]+/).filter(function(x){return x.length>=4;}),i;for(i=0;i<ot.length&&!ok;i++)if(w.indexOf(ot[i])>=0)ok=true;}
+  if(!ok)return null;var now=String(newFlaw).trim().slice(0,160);if(!now||now.toLowerCase()===w)return null;
+  if(!cs.growth)cs.growth=[];cs.growth.push({was:was,now:now,turn:turn});cs.flaw=now;return {old:was,now:now};
+}
 function agendaFile(cs,want,kind,source,turn){
   if(!cs||!want)return null;var rec={want:String(want).trim().slice(0,160),kind:agendaKindOf(kind),source:source||"gm",born:turn};
   if(!cs.agenda){rec.since=turn;rec.lastBeat=(typeof clockNow==="function")?clockNow():0;cs.agenda=rec;return "active";}

@@ -799,6 +799,7 @@ function speakerVoiceMap(sp,text){
 // Alias-tolerant lookup: the model may write "Belor" for the sheet filed as "Sheriff Belor Hemlock".
 function _speakerVoiceSubject(name){
   var nm=(typeof resolveNpcName==="function")?resolveNpcName(name):name;
+  var _spc=(typeof findCompanionChar==="function")?findCompanionChar(nm):null;if(_spc&&_spc.name)nm=_spc.name;/* #370: "Morwen" and "Morwen Zethran" are one speaker */
   if(!worldState)return null;
   var c=worldState.character;
   if(c&&c.name===nm)return {char:c,owner:c};
