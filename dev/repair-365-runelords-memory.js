@@ -37,6 +37,9 @@ function rec(op, detail, preimage) { var r = { op: op, detail: detail }; if (pre
 function skip(op, why) { RECEIPTS.push({ op: op, skipped: why }); console.log("  ⊘ " + op + " — " + why); }
 function clone(x) { return JSON.parse(JSON.stringify(x)); }
 function turnOf(e) { var k, ks = ["turn", "t", "at", "born"]; for (k = 0; k < ks.length; k++) if (e && typeof e[ks[k]] === "number") return e[ks[k]]; return null; }
+// a record the foreign memory holds that the native one lacks is adopted whole when it was born AFTER the native turn
+// (Runelords play on the wrong memory); an older one is the other campaign's and is dropped.
+function bornAfter(turns) { var i; for (i = 0; i < turns.length; i++) if (typeof turns[i] === "number" && turns[i] > NT) return true; return false; }
 function union(a, b) { var out = (a || []).slice(), i; for (i = 0; i < (b || []).length; i++) if (out.indexOf(b[i]) < 0) out.push(b[i]); return out; }
 
 var mem = clone(nat.memory), fm = frn.memory, ws = frn.worldState;
@@ -74,12 +77,12 @@ newQ.forEach(function (k) {
 // 5. the NPC entries both memories hold — native record as the base, the coda's additions on top
 Object.keys(fm.npcs).forEach(function (n) {
   var f = fm.npcs[n], b = mem.npcs[n];
-  if (!b) { skip("npcs.merge", n + " is not in the native memory — foreign record, dropped"); return; }
+  if (!b) { var ft = [f.lastSeenTurn, f.lastMentioned].concat((f.events || []).map(turnOf)); if (bornAfter(ft)) { mem.npcs[n] = clone(f); rec("npcs.adopt", n + " (first met after t" + NT + ", last seen t" + f.lastSeenTurn + ")"); } else skip("npcs.merge", n + " is not in the native memory — foreign record, dropped"); return; }
   var pre = clone(b);
   var lateEv = (f.events || []).filter(function (e) { return (turnOf(e) || 0) > NT; });
   b.events = (b.events || []).concat(clone(lateEv));
   var addedK = 0; (f.knowledge || []).forEach(function (k) { if (b.knowledge.indexOf(k) < 0) { b.knowledge.push(k); addedK++; } });
-  if (f.attitude && f.attitude !== b.attitude) b.attitude = f.attitude;
+  if (f.attitude && f.attitude !== b.attitude && !/^(?:unspecified|unknown)/i.test(f.attitude)) b.attitude = f.attitude;
   ["lastSeenTurn", "lastMentioned"].forEach(function (k) { if (typeof f[k] === "number" && (typeof b[k] !== "number" || f[k] > b[k])) b[k] = f[k]; });
   if (f.lastSeenAt && (f.lastSeenTurn || 0) >= (pre.lastSeenTurn || 0)) { b.lastSeenAt = f.lastSeenAt; if (f.lastSeenSrc) b.lastSeenSrc = f.lastSeenSrc; }
   b.aliases = union(b.aliases, f.aliases);
@@ -90,7 +93,7 @@ Object.keys(fm.npcs).forEach(function (n) {
 // 6. locations: the coda's Sandpoint visit onto the native record
 Object.keys(fm.locations).forEach(function (k) {
   var f = fm.locations[k], b = mem.locations[k];
-  if (!b) { skip("locations.merge", k + " — foreign record, dropped"); return; }
+  if (!b) { if (bornAfter(f.visited || [])) { mem.locations[k] = clone(f); rec("locations.adopt", k + " (visited t" + (f.visited || []).join(", t") + ")"); } else skip("locations.merge", k + " — foreign record, dropped"); return; }
   var pre = clone(b), lateV = (f.visited || []).filter(function (t) { return t > NT; });
   b.visited = union(b.visited, lateV); b.notes = union(b.notes, (f.notes || []).filter(function (x) { return (turnOf(x) || 0) > NT; }));
   rec("locations.merge", k + ": +" + lateV.length + " visit(s)", pre);
@@ -99,7 +102,7 @@ Object.keys(fm.locations).forEach(function (k) {
 // 7. map: the two Sandpoint nodes the coda re-created — guestbook, visits, npcs, mentions onto the native nodes
 Object.keys(fm.map.nodes).forEach(function (k) {
   var f = fm.map.nodes[k], b = mem.map.nodes[k];
-  if (!b) { skip("map.merge", k + " — foreign node, dropped"); return; }
+  if (!b) { if (bornAfter([f.firstVisit, f.lastVisit])) { mem.map.nodes[k] = clone(f); rec("map.adopt", k + " (first visit t" + f.firstVisit + ")"); } else skip("map.merge", k + " — foreign node, dropped"); return; }
   var pre = clone(b);
   b.visits = (b.visits || 0) + (f.visits || 0);
   if (typeof f.lastVisit === "number" && f.lastVisit > (b.lastVisit || 0)) b.lastVisit = f.lastVisit;
