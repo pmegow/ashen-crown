@@ -141,6 +141,8 @@ function clockTimelineAnomalies(c){
 // a negative or zero advance is coerced up, never applied backward. Returns the minutes added.
 function clockAdvance(min){
   var c=clockEnsure();if(!c)return 0;
+  /* #368: an out-of-character turn ("GM: who can cast an ambush ward?") is answered in the fiction but never charged — sendAction arms the hold, the next action clears it */
+  if(typeof worldState!=="undefined"&&worldState&&worldState.clockHold){if(typeof console!=="undefined")console.info("[clock] held — out-of-character turn, +"+Math.round(Number(min)||0)+"m not applied (#368)");return 0;}
   var n=Math.round(Number(min));
   if(!isFinite(n)||n<1)n=1;               // fail-safe-small: the clock creeps, never freezes or reverses
   c.min+=n;
@@ -454,9 +456,13 @@ function clockReconcilePhase(label){
     if(typeof console!=="undefined")console.info("[clock] '"+label+"' ended "+(off-ph.b1)+"m ago — within the "+RECONCILE_GRACE_MIN+"m post-band grace; kept as narrative color, no roll, no demand (#270)");
     return 0;
   }
-  if(ph.tgt<off&&delta>RECONCILE_SKIP_MIN){
-    worldState.reconcileSkip={label:label,delta:delta,turn:worldState.turn||0};
-    if(typeof console!=="undefined")console.warn("[clock] reconcile SKIPPED — '"+label+"' is "+Math.round(delta/60)+"h ahead ACROSS dawn (phase already passed today); mislabel presumed. Real skips need [REST:long] or [TIME_ADVANCE:] (#142)");
+  /* #368 (the t2366 phantom night: dawn → [TIME:late night] on continuous bathhouse fiction, +1,140m, 46% of a
+     hundred turns' clock in two rolls): the cap applies in BOTH directions. A same-day top-up over
+     RECONCILE_SKIP_MIN is as much a mislabel as a dawn-crossing one — the honest day-long skip carries a
+     [TIME_ADVANCE:] (the demand note asks for it), and the small same-day roll still reconciles. */
+  if(delta>RECONCILE_SKIP_MIN){
+    var _x=ph.tgt<off;worldState.reconcileSkip={label:label,delta:delta,turn:worldState.turn||0,sameDay:!_x};
+    if(typeof console!=="undefined")console.warn("[clock] reconcile SKIPPED — '"+label+"' is "+Math.round(delta/60)+"h ahead "+(_x?"ACROSS dawn (phase already passed today)":"on the same day with no [TIME_ADVANCE:]")+"; mislabel presumed. Real skips need [REST:long] or [TIME_ADVANCE:] (#142/#368)");
     return 0;
   }
   return clockAdvance(delta);

@@ -16345,8 +16345,9 @@ t("genderLabel: F→Female, NB→Non-binary, else Male (incl. unset)",function()
     if(add!==0)return "t1524 rolled anyway: +"+add;
     if(!worldState.reconcileSkip||worldState.reconcileSkip.label!=="mid-morning")return "skip not armed for the demand note";
     worldState.clock.min=5*1440+180;worldState.reconcileSkip=null;  // 9am dawn-relative
-    var fish=clockReconcilePhase("dusk");                           // +600 same-day: the fishing day
-    if(fish!==600)return "honest same-day sunset skipped: +"+fish;
+    var fish=clockReconcilePhase("dusk");                           // +600 same-day: the fishing day — #368 re-baselined: over the cap in EITHER direction is a mislabel until a [TIME_ADVANCE:] says otherwise
+    if(fish!==0||!worldState.reconcileSkip||!worldState.reconcileSkip.sameDay)return "#368: a same-day +600 must skip-and-demand: +"+fish+" "+JSON.stringify(worldState.reconcileSkip);
+    worldState.reconcileSkip=null;
     worldState.clock.min=5*1440+1140;                               // ~1am
     var dawn=clockReconcilePhase("dawn");                           // +300 crosses dawn but small: night-owl
     if(dawn!==300)return "small dawn-approach skipped: +"+dawn;
@@ -16407,6 +16408,29 @@ t("genderLabel: F→Female, NB→Non-binary, else Male (incl. unset)",function()
   // clock to it — forward-only, at the applyMuts tail (after TIME_ADVANCE/REST), with phase
   // BANDS so a consistent same-response pair no-ops. Unmappable free text is flavor only.
   section("#131 — time-phase reconciliation");
+  section("#368 — the reconcile cap in both directions, and the out-of-character hold");
+  t("#368 a same-day reconcile over RECONCILE_SKIP_MIN skips-and-demands (the t2366 phantom night: dawn → late night on continuous fiction), a same-day roll under the cap still reconciles, the dawn-crossing cases are unchanged, the demand note names the direction, and [TIME_ADVANCE:] is the honest door",function(){
+    makeWorld();worldState.turn=2366;worldState.clock={min:28*1440,schedule:[]};worldState.reconcileSkip=null;
+    var add=clockReconcilePhase("late night");if(add!==0||clockNow()!==28*1440)return "same-day +1140 rolled: +"+add;
+    if(!worldState.reconcileSkip||worldState.reconcileSkip.sameDay!==true||worldState.reconcileSkip.label!=="late night")return "same-day skip not armed with its direction: "+JSON.stringify(worldState.reconcileSkip);
+    var note=buildReconcileSkipNudge();if(!note||note.indexOf("on the same day with no [TIME_ADVANCE:]")<0||/already passed this day/.test(note))return "demand note does not name the same-day direction: "+note;
+    worldState.reconcileSkip=null;worldState.clock.min=28*1440+180;var small=clockReconcilePhase("noon");if(small<=0||small>RECONCILE_SKIP_MIN||worldState.reconcileSkip)return "a small same-day roll must still reconcile: +"+small;
+    worldState.clock.min=28*1440+460;worldState.reconcileSkip=null;var x=clockReconcilePhase("mid-morning");if(x!==0||!worldState.reconcileSkip||worldState.reconcileSkip.sameDay!==false)return "the dawn-crossing case changed: +"+x+" "+JSON.stringify(worldState.reconcileSkip);
+    var xn=buildReconcileSkipNudge();if(!xn||xn.indexOf("already passed this day")<0)return "cross-dawn note lost its wording: "+xn;
+    worldState.reconcileSkip=null;worldState.clock.min=28*1440;applyMuts("The day passes on the water. [TIME_ADVANCE:10h][TIME:dusk]");if(clockNow()<28*1440+600)return "the honest door did not move the clock: "+clockNow();
+    return worldState.reconcileSkip?"the honest door armed a demand":true;
+  });
+  t("#368 the out-of-character hold: oocActionPrefix reads GM:/OOC: openers only; with worldState.clockHold set, clockAdvance and [TIME_ADVANCE:] move nothing; sendAction arms it for an OOC action, toasts, and clears any stale hold first",function(){
+    makeWorld();if(!oocActionPrefix("GM: Who can cast an ambush ward?")||!oocActionPrefix("  ooc : is Morwen here?")||oocActionPrefix("Gmail the sheriff")||oocActionPrefix("Tell the GM: nothing")||oocActionPrefix(""))return "prefix test";
+    var base=clockNow();if(clockAdvance(100)!==100||clockNow()!==base+100)return "a free clock moves";
+    worldState.clockHold={turn:worldState.turn};if(clockAdvance(600)!==0||clockNow()!==base+100)return "the hold did not hold clockAdvance";
+    applyMuts("You ask the room. [TIME_ADVANCE:3h][TIME:dusk]");if(clockNow()!==base+100)return "a tag moved a held clock: "+clockNow();
+    delete worldState.clockHold;if(clockAdvance(10)!==10)return "the clock stayed held after the hold was cleared";
+    var gs=__fsForTests.readFileSync(__rootForTests+"/game.js","utf8"),i=gs.indexOf("async function sendAction("),body=gs.slice(i,gs.indexOf("function retryLast("));
+    var d=body.indexOf("if(worldState.clockHold)delete worldState.clockHold;"),arm=body.indexOf("oocActionPrefix(txt)){worldState.clockHold={turn:worldState.turn};"),call=body.indexOf("var resp=await callGM(apiTxt");
+    if(d<0||arm<0||call<0||!(d<arm&&arm<call))return "sendAction does not clear-then-arm the hold before the GM call";
+    return /clockHold=\{turn:worldState\.turn\};if\(typeof showToast==="function"\)showToast\("Out-of-character question/.test(body)?true:"no toast on the hold";
+  });
   t("the #131 founding case, SUPERSEDED by #142: [TIME:dawn] at 3:15 pm now skips-and-demands instead of silently jumping 14.75h", function(){
     // Original expectation (v1.531 era): roll +885m to next dawn. #142 (user-ruled after the
     // t1524 19-hour jump): a dawn-crossing top-up >6h is presumed a MISLABEL — the same shape
@@ -16428,10 +16452,12 @@ t("genderLabel: F→Female, NB→Non-binary, else Male (incl. unset)",function()
     if(clockNow()!==7320)return "consistent pair double-advanced (2h should land IN the morning band): "+clockNow();
     return true;
   });
-  t("an inconsistent declaration tops the clock up forward: [TIME:evening] from 8 am jumps to 6 pm; never backward", function(){
-    makeWorld(); clockAdvance(120);                       // 8:00 am
+  t("an inconsistent declaration tops the clock up forward — within the cap; over it (#368) it skips-and-demands: [TIME:evening] from 8 am is +10h and waits for a [TIME_ADVANCE:]; never backward", function(){
+    makeWorld(); clockAdvance(120); worldState.reconcileSkip=null;   // 8:00 am
     applyMuts("Dusk gathers early today. [TIME:evening]");
-    if(clockNow()!==720)return "not topped up to evening: "+clockNow();
+    if(clockNow()!==120||!worldState.reconcileSkip||!worldState.reconcileSkip.sameDay)return "#368: a same-day +10h declaration must skip-and-demand, not top up: "+clockNow()+" "+JSON.stringify(worldState.reconcileSkip);
+    worldState.reconcileSkip=null; applyMuts("The day walks by. [TIME_ADVANCE:10h][TIME:evening]");
+    if(clockNow()!==720)return "the honest door did not land on evening: "+clockNow();
     applyMuts("[TIME:just after sunset]");                // dusk keyword inside free text
     return clockNow()===780?true:"sunset keyword not mapped to dusk: "+clockNow();
   });
@@ -18193,15 +18219,15 @@ t("genderLabel: F→Female, NB→Non-binary, else Male (incl. unset)",function()
     return true;
   });
   t("clockPhaseDetect arms the queue on a real mismatch and self-silences when the same response's [TIME:] healed the clock",function(){
-    makeClockWorld(310);
+    makeClockWorld(450)/* #368: inside the same-day reconcile cap (was 310: +470 to dusk, now over the cap) */;
     clockPhaseDetect("Dusk catches you on the descent toward the silent fortress.");
     if(!worldState.phaseMismatch)return "the t1605 shape did not arm";
     if(!/dusk/i.test(worldState.phaseMismatch.label))return "queue carries the wrong label: "+JSON.stringify(worldState.phaseMismatch);
-    makeClockWorld(310);
+    makeClockWorld(450);
     applyMuts("[TIME:dusk] Dusk catches you on the descent.");/* reconcile lands INSIDE applyMuts */
     clockPhaseDetect(cleanTxt("[TIME:dusk] Dusk catches you on the descent."));
     if(worldState.phaseMismatch)return "a healed clock must self-silence (band agreement) — no covering-tag logic, just math";
-    makeClockWorld(310);
+    makeClockWorld(450);
     applyMuts("[TIME:morning] Dusk catches you on the descent.");/* the CONTRADICTION class */
     clockPhaseDetect(cleanTxt("[TIME:morning] Dusk catches you on the descent."));
     return worldState.phaseMismatch?true:"a [TIME:morning] tag under dusk narration must STILL alert — tag presence is not agreement (the review's sharpest amendment)";

@@ -2033,6 +2033,8 @@ async function sendAction(override,opts){
   if(!(opts&&opts.silent)&&typeof endingChoiceFromText==="function"&&typeof endingOffered==="function"){var _eoTxt=override!==null?override:(inp?inp.value.trim():"");
     if(_eoTxt&&endingChoiceFromText(_eoTxt)&&endingOffered()){if(inp)inp.value="";if(typeof showEndingOfferModal==="function")showEndingOfferModal();else endingDecide("write");return;}}
   var txt=override!==null?override:inp.value.trim();if(!txt)return;
+  if(worldState.clockHold)delete worldState.clockHold;/* #368: a hold lives for exactly one turn */
+  if(!(opts&&opts.silent)&&typeof oocActionPrefix==="function"&&oocActionPrefix(txt)){worldState.clockHold={turn:worldState.turn};if(typeof showToast==="function")showToast("Out-of-character question \u2014 the clock will not move this turn.");}
   if(typeof recklessArmIfChosen==="function"&&!(opts&&opts.silent))recklessArmIfChosen(txt);/* #305: the wildcard's reward note */
   if(typeof montageArmIfChosen==="function"&&!(opts&&opts.silent))montageArmIfChosen(txt);/* #308: the montage contract */
   // B10/v1.421 — repair the audio context HERE, in the send gesture. iOS interrupts the context

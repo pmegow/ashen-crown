@@ -1005,7 +1005,7 @@ function buildPrincipalStageNudge(){
 // adversarial review: skip-and-warn would turn the forgotten-rest morning-after into a stuck
 // clock; this note bounds that failure to one turn). One shot, 2-turn shelf.
 var buildReconcileSkipNudge=shelfPing("reconcileSkip",2,{name:"buildReconcileSkipNudge",combatSilent:false,del:false,text:function(s){
-  return"[ENGINE NOTE — CLOCK LABEL MISMATCH (not a player action): you declared the time as '"+s.label+"', but that phase already passed this day — the clock was NOT advanced ("+Math.round(s.delta/60)+"h would have jumped to tomorrow). Resolve it now: if a night's sleep genuinely passed, emit [REST:long]; if days passed, emit [TIME_ADVANCE:Nd]; if it is actually still the same day, re-declare the correct time of day with [TIME:...]. Never restate elapsed totals yourself — the engine does all arithmetic.]";
+  return"[ENGINE NOTE — CLOCK LABEL MISMATCH (not a player action): you declared the time as '"+s.label+"', "+(s.sameDay?"which is "+Math.round(s.delta/60)+"h ahead on the same day with no [TIME_ADVANCE:] — the clock was NOT advanced":"but that phase already passed this day — the clock was NOT advanced ("+Math.round(s.delta/60)+"h would have jumped to tomorrow)")+". Resolve it now: if a night's sleep genuinely passed, emit [REST:long]; if days passed, emit [TIME_ADVANCE:Nd]; if it is actually still the same day, re-declare the correct time of day with [TIME:...]. Never restate elapsed totals yourself — the engine does all arithmetic.]";
 }});
 // #137 fast path: commitGmTurn arms worldState.presencePing when the RAW response narrated a
 // stay-behind (detectStayBehind, helpers.js) with no [PARTY_SPLIT:] in the same response. One

@@ -523,6 +523,8 @@ function detectItemMisattribution(text){
   }
   return null;
 }
+// #368: a story-box action that opens GM:/OOC: is an out-of-character ask — answered in the fiction, never charged on the clock.
+function oocActionPrefix(t){return /^\s*(?:GM|OOC)\s*:/i.test(String(t||""));}
 function detectPartyAbsenceCorrection(text,partyNames){
   var t=String(text||"");if(!/^\s*(?:GM|OOC)\s*:/i.test(t)||!partyNames||!partyNames.length)return null;
   var hits=_partyNameHits(t,partyNames),i,h,tail;
