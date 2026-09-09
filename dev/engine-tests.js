@@ -1101,6 +1101,15 @@ function runEngineTests(R){
     if(dr.indexOf("renderAllowanceExhausted()")<0||dr.indexOf("id='rd-byok'")<0||!/rd-byok"\);if\(_bk\)_bk\.addEventListener\("click",function\(\)\{if\(typeof showRenderOptionsModal==="function"\)showRenderOptionsModal\(\);/.test(dr))return "doRender lacks the pre-flight or the BYOK offer";
     var um=__fsForTests.readFileSync(__rootForTests+"/ui-modals.js","utf8");return /line\("Images",a\.renders\.exempt\?/.test(um)&&um.indexOf("of \"+a.renders.cap+\" this week")>=0?true:"the account modal lacks the images line";
   });
+  t("#382 defining items from the sheet returns to the sheet: showItemDefConfirmModal takes {returnToSheet}, reopens the sheet when the queue empties or the modal closes, defineItemFromStory passes it at both sites, and the Define control is the quill",function(){
+    var um=__fsForTests.readFileSync(__rootForTests+"/ui-modals.js","utf8"),gs=__fsForTests.readFileSync(__rootForTests+"/game.js","utf8"),us=__fsForTests.readFileSync(__rootForTests+"/ui-sheets.js","utf8");
+    var m=um.slice(um.indexOf("function showItemDefConfirmModal("),um.indexOf("// \u2500\u2500 Quest journal"));
+    if(m.indexOf("function showItemDefConfirmModal(opts)")<0||!/function done\(\)\{modal\.remove\(\);if\(_back&&typeof showCharSheet==="function"\)showCharSheet\(\);\}/.test(m))return "no return-to-sheet path";
+    if((m.match(/if\(!pend\.length\)\{done\(\);return;\}/g)||[]).length!==2||m.indexOf("onClose:done")<0)return "accept, decline and close do not all go through done()";
+    var d=gs.slice(gs.indexOf("async function defineItemFromStory("),gs.indexOf("async function defineItemFromStory(")+4000);if((d.match(/showItemDefConfirmModal\(\{returnToSheet:true\}\)/g)||[]).length!==2)return "defineItemFromStory does not ask for the sheet back at both sites";
+    if(/Consulting the story about/.test(d)&&/\uD83D\uDCD6 Consulting/.test(d))return "the toast still carries the book";if(us.indexOf("&#128214;")>=0||us.indexOf("&#9998;</button>")<0)return "the Define control is not the quill";
+    return true;
+  });
   t("the tier-unlock spell picker scrolls its bench (owner call 2026-09-03: twelve tier-3 cards pushed Confirm off the screen) — the list sits in a box about seven cards tall with its own scrollbar; the header and Confirm stay outside it",function(){
     var src=__fsForTests.readFileSync(__rootForTests+"/game.js","utf8"),i=src.indexOf("function showSpellUnlockModal("),body=src.slice(i,src.indexOf("function spuToggle("));
     var list=body.indexOf("id='spu-list'"),confirm=body.indexOf("id='spu-confirm'"),head=body.indexOf("Spells Unlocked");

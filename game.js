@@ -3415,12 +3415,12 @@ async function defineItemFromStory(rawItem,ev){
   var key=typeof itemBaseName==="function"?itemBaseName(rawItem):"";
   // Already awaiting confirmation? Skip the call — just reopen the confirm modal (free).
   var pend=worldState.pendingItemDefs||[],pi;
-  for(pi=0;pi<pend.length;pi++)if(pend[pi].key===key){var _cs0=document.getElementById("cs-modal");if(_cs0)_cs0.remove();if(typeof showItemDefConfirmModal==="function")showItemDefConfirmModal();return;}
+  for(pi=0;pi<pend.length;pi++)if(pend[pi].key===key){var _cs0=document.getElementById("cs-modal");if(_cs0)_cs0.remove();if(typeof showItemDefConfirmModal==="function")showItemDefConfirmModal({returnToSheet:true});return;}
   var queueWasFull=pend.length>=5;
   var auditMsg=buildItemDefinePrompt(rawItem);
   if(!auditMsg){if(typeof showToast==="function")showToast("Already canon (or not carried): "+rawItem);return;}
   busy=true;
-  if(typeof showToast==="function")showToast("📖 Consulting the story about: "+rawItem+"…");
+  if(typeof showToast==="function")showToast("\u270E Consulting the story about: "+rawItem+"…");
   try{
     var resp=await callGM(auditMsg,null,500,upgradeModelFor(),{kind:"sync"});
     applyMuts(resp,{allow:REVIEW_CALL_TAGS});/* #264: a Define hallucination must not move the party or touch canon outside the item class */
@@ -3429,7 +3429,7 @@ async function defineItemFromStory(rawItem,ev){
     for(pi=0;pi<pend.length;pi++)if(pend[pi].key===key)landed=true;
     if(landed){
       var _cs=document.getElementById("cs-modal");if(_cs)_cs.remove();/* the confirm modal must not fight the sheet for the screen */
-      if(typeof showItemDefConfirmModal==="function")showItemDefConfirmModal();
+      if(typeof showItemDefConfirmModal==="function")showItemDefConfirmModal({returnToSheet:true});/* #382: back to the sheet after the answer */
     }else if(queueWasFull&&_itemDefProposalFor(resp,key)){
       if(typeof showToast==="function")showToast("canon was proposed but the confirm queue is full — answer the pending item proposals first.",6000);
     }else{
