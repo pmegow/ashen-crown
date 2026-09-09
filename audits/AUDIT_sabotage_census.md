@@ -350,3 +350,26 @@ targets retain the in-place crash/interrupt restoration path.
 No existing assertion was loosened or re-baselined. The N14/N15 edits only added failure inputs
 or narrowed source predicates. N03/N04/N06/N08/N09/N16/N17 remain explicitly routed rather than
 silently crossed under Lane 2 authority.
+
+
+## TODO #351 — weekly proof adjudication (2026-09-09, Astra)
+
+The historical run [34013099710](https://github.com/pmegow/traffic-and-dragons/actions/runs/34013099710) reported nine failing batteries while GitHub marked the pipeline successful. The default shell let tee hide the runner's nonzero exit. Explicit bash enables pipefail; checkout now fetches all history because tests-todo-hygiene reads 93c182f^, not merely HEAD~1.
+
+The untouched local full run at a634a5f finished in 31 minutes: **7 of 78 batteries failed**. The inventory has grown from the historical 70 to 78; no case or battery was removed. The launcher and TODO-hygiene batteries pass locally and are CI-only cases. A depth-one local clone independently failed with 'invalid object name 93c182f^'; fetching full history recovered the expected fixture blob 809c9fa179365bf71a6cbfdb5576f1590169c2f2.
+
+| Battery | Case | Reproduction | Verdict and change |
+|---|---|---|---|
+| sabotage-229-quest-journal | quest-stale capture | Local + CI | The transitive census legitimately catches the lost questLog nested-latch exemption before the older direct pin. Relabeled to that exact census diagnostic. |
+| sabotage-250-sw-io | Piper superseded-revision deletion detached | Local + CI | Real verifier timing gap: a fixed number of microtask turns checked before the nested chain could settle. Drain one event-loop turn while deletion remains deliberately pending; the named lifetime assertion now fails. Same strengthened wait at all three I/O lifetime checks. |
+| sabotage-285-item-define | alias guard dies | Local + CI | Mutation removed only the redundant base!==hit limb, leaving !base to refuse every aliased lookup. Its only red was the incidental applicability scan. Remove the complete alias-refusal statement; the existing named alias eligibility assertion catches it. No guard assertion changed. |
+| sabotage-bible-editor-launcher | checkout-root ownership verification | CI only | Identifier-presence scan also matched the outer branch; Windows lifecycle tests caught the behavioral failure locally. Add the exact ownership-comparison assertion on all platforms, retaining the old assertion. |
+| sabotage-bible-editor-remaining | capability detected before parsing | Local + CI | The first identical detect call belongs to refreshCapabilityDependency, not updateShippedCapability. Target the writer's unique error context; the existing named writer assertion catches it. |
+| sabotage-contract-tier | phaseMismatch removed from latch registry | Local + CI | Bare first-occurrence mutation hit oneShotPing's argument and broke engine loading. Scope it to NOTE_LATCH_FIELDS. That revealed a real gap: the transitive census cannot infer factory parameter keys. Add a source assertion requiring each literal oneShotPing key in the parsed registry; the phaseMismatch mutation now fails there. |
+| sabotage-identity | provisionalNudged removed | Local + CI | Legitimate earlier transitive-census catch of the same missing latch; relabel to its exact diagnostic. |
+| sabotage-todo-hygiene | moved-row truncation, reorder, in-place edit, new/deleted row, dirty/ignored files, lane/advisory status, due/future/corrupt schedules, doc-size inspection and fixture environment scrub | CI only | These groups invoke tests-todo-hygiene, whose fixture setup requires historical 93c182f^. Full checkout history fixes setup; preserve every original expected assertion. The independent doc-size cases also remain unchanged and pass. |
+| sabotage-w2 | shelved dispute stops queueing reward claim | Local + CI | The earlier transitive census pins the exact buildIdentityConflictNudge -> rewardClaimQueue -> pendingRewardClaims edge. Relabel to that legitimate catch, keeping the mutation and behavioral test. |
+
+Full engine gate: ALL GREEN, 2,062 engine assertions and 28 standalone suites (including 41 launcher checks). Dry applicability: 900/900 clauses across 78 batteries. All nine affected batteries have passing local receipts after the factory-latch gap fix (the initial nine-battery rerun exposed that gap; its final full contract-tier rerun is retained separately). No engine file, frozen hash, baseline, or existing assertion was weakened. Mutations restored every target byte-identically in disposable clones.
+
+The [hand-triggered weekly CI run 34373931181](https://github.com/pmegow/traffic-and-dragons/actions/runs/34373931181) on c92c2b7 completed successfully: `SABOTAGE ALL: 78 batteries green (12 min)` (2026-09-09 16:12:39 UTC), zero misattributions. The inventory grew from the brief’s 70; all 78 were exercised. The separate engine CI v1258 replay drift is already reproducible on the unchanged base; it remains outside this tooling change.

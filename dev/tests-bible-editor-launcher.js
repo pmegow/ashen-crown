@@ -181,6 +181,9 @@ function listeningPid(port) {
         src.indexOf("function verifyLegacyCheckout") >= 0 &&
         src.indexOf("verifyLegacyCheckout(next)") >= 0,
       "launcher verifies port PID, checkout ownership, and Node executable before termination");
+    // Identifier presence also matches the outer branch; pin the actual refusal comparison on Linux too.
+    verdict(src.indexOf('found.pid !== pid || !found.root || path.resolve(found.root).toLowerCase() !== path.resolve(ROOT).toLowerCase()') >= 0,
+      "launcher verifies port PID, checkout ownership, and Node executable before termination — exact checkout comparison");
   }
 
   const child = cp.spawn(process.execPath, [path.join(__dirname, "bible-server.js")], {

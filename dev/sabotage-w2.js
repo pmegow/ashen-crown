@@ -493,7 +493,8 @@ rc|=sabotage.prove({
       find:"  if(ping!=null&&worldState.turn-ping<COMBAT_STALE_TURNS)return\"\";",
       replace:""},
     {label:"a shelved dispute stops queueing the reward claim (#215)",
-      mustFail:"#215 a shelved dispute that cost the player a reward queues a claim",
+      // Removing this call breaks the same reward-claim edge in the earlier transitive census.
+      mustFail:"buildIdentityConflictNudge -> rewardClaimQueue -> pendingRewardClaims is outside the transitive census",
       find:"if(_shLost&&typeof rewardClaimQueue===\"function\"&&rewardClaimQueue(c.subject,c.withheld,c.reason)){",/* #262 made the queue call the ledger-clearing conditional */
       replace:"if(false){"},
     {label:"inventoryCountOf stops summing the \"xN\" suffix — the count-aware read becomes a line count again (#273)",
