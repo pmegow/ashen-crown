@@ -499,7 +499,7 @@ function showRewardClaimModal(){
 // queue re-surfaces via init()/campLoad rather than vanishing with the session.
 function showItemDefConfirmModal(opts){/* #382: opts.returnToSheet — opened from the sheet's inventory, the sheet comes back when the queue empties or the modal closes */
   var pend=(worldState&&worldState.pendingItemDefs)||[],_back=!!(opts&&opts.returnToSheet);
-  function done(){modal.remove();if(_back&&typeof showCharSheet==="function")showCharSheet();}
+  function done(){modal.remove();if(_back){if(!(typeof refreshCharSheetInPlace==="function"&&refreshCharSheetInPlace())&&typeof showCharSheet==="function")showCharSheet();}}/* #382b: the sheet stayed open underneath — refresh it in place (sections and scroll kept); reopen only if it was closed meanwhile */
   if(!pend.length)return;
   function rowsHtml(){
     var h="",i,ci;
@@ -528,7 +528,7 @@ function showItemDefConfirmModal(opts){/* #382: opts.returnToSheet — opened fr
     "<div style='display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;'><span style='font-size:15px;color:var(--t0);font-weight:bold;'>⚗ Item canon proposed</span><button id='idf-x' style='background:none;border:none;color:var(--t2);font-size:20px;cursor:pointer;'>&#215;</button></div>"
     +"<p style='font-size:11px;color:var(--t2);margin:0 0 14px;'>The GM proposes fixed mechanics for these items. Accepted definitions become permanent campaign canon (re-injected every turn, shown in tooltips); declined ones are dropped. Closing keeps them pending.</p>"
     +"<div id='idf-rows'>"+rowsHtml()+"</div>",
-    {align:"flex-start",overlayExtra:"overflow-y:auto;",maxWidth:440,boxExtra:"margin-top:40px;",closeId:"idf-x",outside:true,onClose:done});
+    {align:"flex-start",overlayExtra:"overflow-y:auto;",maxWidth:440,boxExtra:"margin-top:40px;",closeId:"idf-x",outside:true,onClose:done,z:400});/* #382b: above the sheet (z 300) */
   function wire(){
     Array.prototype.forEach.call(modal.querySelectorAll(".idf-acc"),function(b){b.addEventListener("click",function(){
       var k=this.getAttribute("data-key");

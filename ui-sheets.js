@@ -231,6 +231,16 @@ function _confirmLastPcDemote(cb){
   document.getElementById("lp-cancel").addEventListener("click",function(){m.remove();});
 }
 
+// #382b: re-render the open sheet without losing the reader's place — which sections are open and how far
+// they scrolled. The item-canon modal stacks ABOVE the sheet (z 400), answers there change the inventory,
+// and the sheet underneath refreshes through this. False when no sheet is open.
+function refreshCharSheetInPlace(){
+  var ex=document.getElementById("cs-modal");if(!ex||typeof showCharSheet!=="function")return false;
+  var top=ex.scrollTop,open=[],secs=ex.querySelectorAll(".cs-sec"),i;for(i=0;i<secs.length;i++){var b=secs[i].querySelector(".cs-sec-body");open.push(!!(b&&b.style.display!=="none"));}
+  showCharSheet();var nx=document.getElementById("cs-modal");if(!nx)return false;
+  var ns=nx.querySelectorAll(".cs-sec");for(i=0;i<ns.length&&i<open.length;i++){if(!open[i])continue;var nb=ns[i].querySelector(".cs-sec-body"),na=ns[i].querySelector(".cs-tog-arr");if(nb)nb.style.display="block";if(na)na.style.transform="rotate(90deg)";}
+  nx.scrollTop=top;return true;
+}
 function showCharSheet(){
   if(!worldState)return;
   var c=worldState.character;

@@ -3415,7 +3415,7 @@ async function defineItemFromStory(rawItem,ev){
   var key=typeof itemBaseName==="function"?itemBaseName(rawItem):"";
   // Already awaiting confirmation? Skip the call — just reopen the confirm modal (free).
   var pend=worldState.pendingItemDefs||[],pi;
-  for(pi=0;pi<pend.length;pi++)if(pend[pi].key===key){var _cs0=document.getElementById("cs-modal");if(_cs0)_cs0.remove();if(typeof showItemDefConfirmModal==="function")showItemDefConfirmModal({returnToSheet:true});return;}
+  for(pi=0;pi<pend.length;pi++)if(pend[pi].key===key){if(typeof showItemDefConfirmModal==="function")showItemDefConfirmModal({returnToSheet:!!document.getElementById("cs-modal")});return;}/* #382b: the sheet stays open underneath */
   var queueWasFull=pend.length>=5;
   var auditMsg=buildItemDefinePrompt(rawItem);
   if(!auditMsg){if(typeof showToast==="function")showToast("Already canon (or not carried): "+rawItem);return;}
@@ -3428,8 +3428,7 @@ async function defineItemFromStory(rawItem,ev){
     var landed=false;pend=worldState.pendingItemDefs||[];
     for(pi=0;pi<pend.length;pi++)if(pend[pi].key===key)landed=true;
     if(landed){
-      var _cs=document.getElementById("cs-modal");if(_cs)_cs.remove();/* the confirm modal must not fight the sheet for the screen */
-      if(typeof showItemDefConfirmModal==="function")showItemDefConfirmModal({returnToSheet:true});/* #382: back to the sheet after the answer */
+      if(typeof showItemDefConfirmModal==="function")showItemDefConfirmModal({returnToSheet:!!document.getElementById("cs-modal")});/* #382b: the sheet stays open underneath; the modal stacks above it and refreshes it in place */
     }else if(queueWasFull&&_itemDefProposalFor(resp,key)){
       if(typeof showToast==="function")showToast("canon was proposed but the confirm queue is full — answer the pending item proposals first.",6000);
     }else{
