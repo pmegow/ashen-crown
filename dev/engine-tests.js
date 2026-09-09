@@ -8115,6 +8115,9 @@ function runEngineTests(R){
        view angles to guarantee them fights the very orientation the block demands. */
     if(rp.indexOf("FACES ARE OPTIONAL")<0||rp.indexOf("face completely hidden")<0)return "the faces-optional licence is missing (#209f — the strongest orientation read may hide the face entirely)";
     if(rp.indexOf("hair, silhouette, build, and gear")<0)return "the hidden-face identity carriers are missing (#209f — without them the reference legend biases the writer toward showing every face)";
+    /* #390: direction of travel is its own lever — the High Reach gate render squared every torso to the gate and still ran the companion into the wall. */
+    if(rp.indexOf("MOVEMENT: every MOVING character's direction of travel is stated RELATIVE TO THE FOCAL POINT")<0||rp.indexOf("ONE line of advance")<0||rp.indexOf("staggered in depth")<0)return "the movement clause is missing (#390)";
+    if(/\bnot (running|moving|heading)\b/i.test(rp))return "the movement clause negates (#209d never-negate rule)";
     /* #209b: the two A/B-validated levers — staging geometry + camera-relative view angles. */
     if(rp.indexOf("DEEPER IN FRAME")<0)return "the staging-geometry invariant is missing (#209b — the focal point deeper in frame than every figure)";
     if(rp.indexOf("CAMERA-RELATIVE VIEW ANGLE")<0||rp.indexOf("three-quarter rear view")<0)return "the view-angle vocabulary demand is missing (#209b — the lever that actually converged the A/B)";

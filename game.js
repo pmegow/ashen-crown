@@ -2867,6 +2867,12 @@ function buildSceneRenderRequest(c,party,w){
        previously-astray cleric converged completely once 'seen from behind at the flank'
        replaced 'her gaze fixed upward'. The formation-vector arm helped torsos but not gazes. */
     +"STAGE THE GEOMETRY IN ONE OPENING SENTENCE before any character: the focal point sits DEEPER IN FRAME than every figure, with the camera low behind or beside the group ('the X rises deep in the frame beyond every figure; the camera sits low behind the party'), so that orientation follows from staging. Then give each character a CAMERA-RELATIVE VIEW ANGLE inside their pose clause — 'seen in three-quarter rear view', 'seen from behind at the flank', 'in full profile facing the X' — view-angle words steer bodies far more reliably than gaze words. "
+    /* #390 (owner art direction 2026-09-09, the High Reach gate render): torsos squared to the gate while
+       the companion's LEGS carried her into the side wall — orientation (#209) never said where a MOVING
+       body is going. Direction of travel is its own lever: state it relative to the focal point, give a
+       moving party ONE line of advance staggered in depth, and keep the ground ahead of every runner
+       clear. Positive phrasing per #209d; the scene-split exception stays with the writer. */
+    +"MOVEMENT: every MOVING character's direction of travel is stated RELATIVE TO THE FOCAL POINT inside their pose clause ('running toward the gate', 'backing away from the X', 'circling the X to its left') and the ground ahead of them is open toward it. A moving party shares ONE line of advance — the same heading, staggered in depth (one ahead, one two strides behind and to a side), never fanned across the frame on separate headings. A character who moves on another heading needs a stated reason that serves the same scene, and even then their path leads somewhere the frame shows. "
     /* #209c (research synthesis, 2026-08-21): text encoders concentrate a concept in one or two
        tokens and propagate poorly across mentions — a pronoun binds to nothing and a synonym
        mints a SECOND concept (the five-way's own prompt said staircase/stairs/stairway/steps/

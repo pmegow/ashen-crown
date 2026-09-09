@@ -18,6 +18,8 @@ Split out of CLAUDE.md on 2026-09-03 (#310); the map there links here. Version s
 
 When `character.portrait` exists, img2img is used automatically. **#165:** portrait-seed selection is table-driven — a `multiSeed:true` entry (Nano, Grok) gets the whole party's portraits via `collectRenderSeeds` (pure, game.js); single-reference APIs get the player only, and the status line says so. The scene-render request is built by pure `buildSceneRenderRequest` (engine-tested): per-character description FLOOR instead of a party sentence cap (the STYLE-cap lesson again) + an explicit never-omit-gender demand. Falls back to text-to-image if no portrait.
 
+**Staging clauses in `buildSceneRenderRequest` (game.js):** #209 eye-lines → body-orientation floor → faces optional → staging geometry + camera-relative view angles → **#390 MOVEMENT (v1.870):** a moving character's direction of travel is stated relative to the focal point, a moving party shares ONE line of advance staggered in depth, the ground ahead of a runner is open toward it (the High Reach gate render: torsos on the gate, the companion's legs into the wall). Each clause is pinned by the #165/#209 render-request test; wording changes are deliberate commits.
+
 Parameters: `aspect_ratio:"4:3"`, `resolution:"1K"`. `genderWord` derived from `c.gender` (male/female/androgynous).
 
 ## 19. Portrait system
