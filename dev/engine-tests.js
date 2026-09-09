@@ -1074,6 +1074,15 @@ function runEngineTests(R){
     var ih=__fsForTests.readFileSync(__rootForTests+"/index.html","utf8");if(/late teens/.test(ih))return "the select still offers late teens";
     var i,ok=true;for(i=0;i<40;i++){var r=rollRandomHero();if(WIZARD_AGES.indexOf(r.age)<0||/teen/i.test(r.age))ok=false;}return ok?true:"a random roll produced an age outside the list";
   });
+  t("#380 the review page carries a quill on the portrait: buildReview emits the quill and a status line, the card delegates the click to ftRenderPortrait with that status line, ftRenderPortrait accepts the status element and re-renders the review card after the portrait lands",function(){
+    var cc=__fsForTests.readFileSync(__rootForTests+"/char-creation.js","utf8"),ub=__fsForTests.readFileSync(__rootForTests+"/ui-boot.js","utf8"),ih=__fsForTests.readFileSync(__rootForTests+"/index.html","utf8");
+    if(!/async function ftRenderPortrait\(statusEl\)\{[^\n]*\n\s*var status=statusEl\|\|document\.getElementById\("ft-portrait-status"\);/.test(cc))return "ftRenderPortrait does not take a status element";
+    if(cc.indexOf('if(cs.step===6&&typeof buildReview==="function"){buildReview();status=document.getElementById(status.id)||status;}')<0)return "the review card is not re-rendered after the portrait lands";
+    var br=cc.slice(cc.indexOf("function buildReview("),cc.indexOf("function ",cc.indexOf("function buildReview(")+10));
+    if(br.indexOf('class="rv-quill" id="rv-portrait-btn"')<0||br.indexOf('id="rv-portrait-status"')<0||br.indexOf('class="rv-avwrap"')<0)return "the review card lacks the quill or its status line";
+    if(!/getElementById\("rv-card"\)\.addEventListener\("click"[^\n]*closest\("#rv-portrait-btn"\)\)ftRenderPortrait\(document\.getElementById\("rv-portrait-status"\)\)/.test(ub))return "the quill is not wired";
+    return /\.rv-quill\{position:absolute/.test(ih)?true:"no quill styling";
+  });
   t("the tier-unlock spell picker scrolls its bench (owner call 2026-09-03: twelve tier-3 cards pushed Confirm off the screen) — the list sits in a box about seven cards tall with its own scrollbar; the header and Confirm stay outside it",function(){
     var src=__fsForTests.readFileSync(__rootForTests+"/game.js","utf8"),i=src.indexOf("function showSpellUnlockModal("),body=src.slice(i,src.indexOf("function spuToggle("));
     var list=body.indexOf("id='spu-list'"),confirm=body.indexOf("id='spu-confirm'"),head=body.indexOf("Spells Unlocked");

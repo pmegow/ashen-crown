@@ -142,6 +142,7 @@ function wireButtons(){
   document.getElementById("ft-render").addEventListener("click",function(){ftRenderPortrait();});
   document.getElementById("ft-derive").addEventListener("click",function(){ftDeriveAppearance();});
   document.getElementById("rv-back").addEventListener("click",function(){pendingImportChar=null;goStep(5);});
+  document.getElementById("rv-card").addEventListener("click",function(e){if(e.target&&e.target.closest&&e.target.closest("#rv-portrait-btn"))ftRenderPortrait(document.getElementById("rv-portrait-status"));});/* #380: delegated — the card is rebuilt on every change */
   document.getElementById("rv-go").addEventListener("click",confirmChar);
   injectSparkleButtons();
   document.getElementById("rv-start-loc").addEventListener("change",function(){document.getElementById("rv-start-loc-custom").style.display=this.value==="custom"?"block":"none";});

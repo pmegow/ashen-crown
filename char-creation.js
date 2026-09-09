@@ -115,8 +115,8 @@ function refreshFtPortrait(){
     if(derive)derive.style.display="none";
   }
 }
-async function ftRenderPortrait(){
-  var status=document.getElementById("ft-portrait-status");
+async function ftRenderPortrait(statusEl){/* #380: the review page's quill calls this with its own status line; step 5 passes nothing */
+  var status=statusEl||document.getElementById("ft-portrait-status");
   if(!falAvailable()){status.innerHTML="<span style='color:var(--red);'>Sign in, or add a fal.ai key via File &#9656; Render Options…</span>";return;}
   if(busy){status.innerHTML="<span style='color:var(--t2);'>Game is busy — try again in a moment.</span>";return;}
   // #160: prompt construction lives in the ONE shared builder beside generatePortraitImage
@@ -140,6 +140,7 @@ async function ftRenderPortrait(){
     reader.onload=function(e){
       compressPortrait(e.target.result,function(compressed){
         cs.portrait=compressed;refreshFtPortrait();
+        if(cs.step===6&&typeof buildReview==="function"){buildReview();status=document.getElementById(status.id)||status;}/* #380: the review card re-renders with the new portrait; its status line is re-found after the rebuild */
         status.innerHTML="<span style='color:var(--grn);'>Portrait generated in "+_pt.seconds()+"s.</span>";
       });
     };
@@ -198,8 +199,8 @@ function buildReview(){
   var subnm=getSubNm();
   var alignEl=document.getElementById("char-alignment"),statedAlign=alignEl?alignEl.value:"Chaotic Neutral";
   var genderLbl=genderLabel(cs.gender);/* #11③: shared mapping */
-  var avHtml=cs.portrait?'<div class="rv-av" style="overflow:hidden;"><img src="'+cs.portrait+'" style="width:100%;height:100%;object-fit:cover;display:block;"/></div>':'<div class="rv-av">'+init+'</div>';
-  el.innerHTML='<div class="rv-head">'+avHtml+'<div><div class="rv-nm">'+(dispNm?escHtml(dispNm):'<span style="color:var(--t2)">Enter a name below</span>')+'</div><div class="rv-sub">'+(subnm||(anc?anc.nm:"?"))+" "+(cs.cls||"?")+" &middot; "+cs.age+" &middot; "+genderLbl+'</div></div></div>'/* user-typed name (#22/UA18) */
+  var avHtml='<div class="rv-avwrap">'+(cs.portrait?'<div class="rv-av" style="overflow:hidden;"><img src="'+cs.portrait+'" style="width:100%;height:100%;object-fit:cover;display:block;"/></div>':'<div class="rv-av">'+init+'</div>')+'<button type="button" class="rv-quill" id="rv-portrait-btn" title="'+(cs.portrait?"Render a new portrait":"Render a portrait")+'">\u270E</button></div>';/* #380: the quill renders in place — no trip back to step 5 */
+  el.innerHTML='<div class="rv-head">'+avHtml+'<div><div class="rv-nm">'+(dispNm?escHtml(dispNm):'<span style="color:var(--t2)">Enter a name below</span>')+'</div><div class="rv-sub">'+(subnm||(anc?anc.nm:"?"))+" "+(cs.cls||"?")+" &middot; "+cs.age+" &middot; "+genderLbl+'</div><div class="rv-portrait-status" id="rv-portrait-status"></div></div></div>'/* user-typed name (#22/UA18) */
     +'<div class="rsgd">'+STATS.map(function(s){return'<div class="rsb"><div class="rn">'+s+'</div><div class="rv2">'+fs[s]+'</div><div class="rm">'+smod(fs[s])+'</div></div>';}).join("")+'</div>'
     +'<div class="rv-2c"><div class="rv-row"><span class="rk">Max HP</span><span class="rv">'+hp+'</span></div><div class="rv-row"><span class="rk">Gold</span><span class="rv">'+rvGold+' gp</span></div><div class="rv-row"><span class="rk">Prime</span><span class="rv">'+(cls?cls.prime:"?")+'</span></div><div class="rv-row"><span class="rk">Hit die</span><span class="rv">'+(cls?"d"+cls.hd:"?")+'</span></div></div>'
     +(cs.appear?'<div class="desc-pre">"'+escHtml(cs.appear)+'"</div>':"")
