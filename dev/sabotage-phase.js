@@ -55,7 +55,7 @@ rc |= sabotage.prove({
   command: ["node", ["dev/run-tests.js"]],
   cases: [
     { label: "stale-agreement discard removed — a healed clock still gets nagged", mustFail:"buildPhaseMismatchNudge: one-shot with the amended phrasing, combat-si",
-      find: "moot:function(q){return typeof clockPhaseBandDist===\"function\"&&clockPhaseBandDist(q.idx)<PHASE_MISMATCH_MIN;}",
+      find: "moot:function(q){return typeof clockPhaseBandDist===\"function\"&&clockPhaseBandDist(q.idx)<(q.src===\"check\"&&typeof PHASE_CHECK_GRACE_MIN===\"number\"?PHASE_CHECK_GRACE_MIN:PHASE_MISMATCH_MIN);}",
       replace: "moot:function(q){return false;}" }/* #309: the builder is a oneShotPing frame now — the moot check is the clause's target */
   ]
 });
@@ -72,11 +72,11 @@ rc |= sabotage.prove({
       replace: "  var d=clockPhaseBandDist(idx);clockAdvance(d);" },
     { label: "the off-band arm dies — sundown-at-midday sails through again (#216)",
       mustFail: "#216 the t2175 shape: [TIME_CHECK:sundown] against a midday clock arms",
-      find: "  if(d<PHASE_MISMATCH_MIN)return null;",
+      find: "  if(d<_tcGate)return null;",
       replace: "  return null;" },
     { label: "the band gate dies — every accurate declaration false-alarms (#216)",
       mustFail: "#216 an in-band declaration is silent: no mismatch armed, clock untouc",
-      find: "  if(d<PHASE_MISMATCH_MIN)return null;",
+      find: "  if(d<_tcGate)return null;",
       replace: "  if(false)return null;" }
   ]
 });

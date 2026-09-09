@@ -1144,6 +1144,17 @@ function runEngineTests(R){
       return true;
     }finally{showToast=_st;}
   });
+  t("#387 the GM reads the phase, never derives it: the clock block speaks the phase word (never the clock face) and names the [TIME_CHECK:] to open with; clockPhaseLabelAt picks the narrowest band; a structured declaration outside its band by more than PHASE_CHECK_GRACE_MIN arms the nudge (The Long Walk t99: dawn at 9:45 am), a 50m slop stays silent, the prose recogniser keeps its 4h tolerance, and the check-origin nudge names the clock's phase",function(){
+    makeWorld();worldState.turn=99;worldState.clock={min:4545,schedule:[]};delete worldState.phaseMismatch;/* Day 4, 03h45m elapsed = 9:45 am */
+    if(clockPhaseLabelAt(4545)!=="mid-morning"||clockPhaseLabelAt(3*1440)!=="dawn"||clockPhaseLabelAt(3*1440+360)!=="midday"||clockPhaseLabelAt(3*1440+780)!=="dusk"||clockPhaseLabelAt(3*1440+1100)!=="midnight"||clockPhaseLabelAt(3*1440+950)!=="night")return "phase words: "+[clockPhaseLabelAt(4545),clockPhaseLabelAt(3*1440+360),clockPhaseLabelAt(3*1440+780),clockPhaseLabelAt(3*1440+1100),clockPhaseLabelAt(3*1440+950)].join(",");
+    var blk=buildClockBlock();if(/\d:\d\d\s?[ap]m/.test(blk))return "a clock face leaked into the clock block (display-only contract)";if(blk.indexOf("03h 45m elapsed — mid-morning")<0||blk.indexOf("Open with [TIME_CHECK:mid-morning]")<0)return "clock block does not speak the phase word: "+blk.slice(0,220);
+    applyMuts("[TIME_CHECK:dawn]");var q=worldState.phaseMismatch;if(!q||q.src!=="check"||q.clockPhase!=="mid-morning")return "dawn at 9:45 did not arm the check gate: "+JSON.stringify(q);if(worldState.clock.min!==4545)return "the check moved the clock";
+    var n=buildPhaseMismatchNudge();if(!n||n.indexOf("[TIME_CHECK:dawn]")<0||n.indexOf("mid-morning")<0||n.indexOf("Never copy your previous declaration")<0)return "check-origin nudge: "+n;
+    delete worldState.phaseMismatch;worldState.clock.min=3*1440+120;applyMuts("[TIME_CHECK:dawn]");if(worldState.phaseMismatch)return "30m past the dawn band must stay silent";
+    delete worldState.phaseMismatch;worldState.clock.min=3*1440+700;applyMuts("[TIME_CHECK:dusk]");if(worldState.phaseMismatch)return "the #216 50m slop must stay silent";
+    delete worldState.phaseMismatch;worldState.clock.min=4545;clockPhaseDetect("Dawn light creeps over the marble avenue.");if(worldState.phaseMismatch)return "the PROSE recogniser must keep its 4h tolerance (135m)";
+    return typeof PHASE_CHECK_GRACE_MIN==="number"&&PHASE_CHECK_GRACE_MIN<PHASE_MISMATCH_MIN?true:"grace constant";
+  });
   t("the tier-unlock spell picker scrolls its bench (owner call 2026-09-03: twelve tier-3 cards pushed Confirm off the screen) — the list sits in a box about seven cards tall with its own scrollbar; the header and Confirm stay outside it",function(){
     var src=__fsForTests.readFileSync(__rootForTests+"/game.js","utf8"),i=src.indexOf("function showSpellUnlockModal("),body=src.slice(i,src.indexOf("function spuToggle("));
     var list=body.indexOf("id='spu-list'"),confirm=body.indexOf("id='spu-confirm'"),head=body.indexOf("Spells Unlocked");

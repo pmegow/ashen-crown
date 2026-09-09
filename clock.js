@@ -418,17 +418,24 @@ function scheduleSweepExpired(){
 // before "noon", "midmorning" before "morning"). tgt = elapsed-of-day minute (dawn=0 ≡ 6am);
 // [b0,b1) = the band within which the phase is ALREADY true (declaration no-ops).
 var TIME_PHASES=[
-  {re:/late\s*night|small\s+hours|wee\s+hours/i, tgt:1140, b0:1080, b1:1440},
-  {re:/midnight/i,                               tgt:1080, b0:1020, b1:1140},
-  {re:/mid-?morning/i,                           tgt:180,  b0:120,  b1:330},
-  {re:/afternoon/i,                              tgt:480,  b0:420,  b1:690},
-  {re:/noon|midday/i,                            tgt:360,  b0:330,  b1:420},
-  {re:/dawn|daybreak|sunrise|first\s+light/i,    tgt:0,    b0:0,    b1:90},
-  {re:/dusk|sunset|sundown|twilight/i,           tgt:780,  b0:750,  b1:840},
-  {re:/evening/i,                                tgt:720,  b0:690,  b1:840},
-  {re:/night(fall)?|after\s+dark/i,              tgt:900,  b0:840,  b1:1440},
-  {re:/morning/i,                                tgt:120,  b0:60,   b1:360}
+  {re:/late\s*night|small\s+hours|wee\s+hours/i, lbl:"late night", tgt:1140, b0:1080, b1:1440},
+  {re:/midnight/i, lbl:"midnight",                               tgt:1080, b0:1020, b1:1140},
+  {re:/mid-?morning/i, lbl:"mid-morning",                           tgt:180,  b0:120,  b1:330},
+  {re:/afternoon/i, lbl:"afternoon",                              tgt:480,  b0:420,  b1:690},
+  {re:/noon|midday/i, lbl:"midday",                            tgt:360,  b0:330,  b1:420},
+  {re:/dawn|daybreak|sunrise|first\s+light/i, lbl:"dawn",    tgt:0,    b0:0,    b1:90},
+  {re:/dusk|sunset|sundown|twilight/i, lbl:"dusk",           tgt:780,  b0:750,  b1:840},
+  {re:/evening/i, lbl:"evening",                                tgt:720,  b0:690,  b1:840},
+  {re:/night(fall)?|after\s+dark/i, lbl:"night",              tgt:900,  b0:840,  b1:1440},
+  {re:/morning/i, lbl:"morning",                                tgt:120,  b0:60,   b1:360}
 ];
+// #387: the phase word for a clock minute — the narrowest band containing the offset (9:45 am is "morning"
+// and "mid-morning"; the latter is the sharper truth). Spoken in the clock block so the GM reads the phase
+// instead of deriving it from elapsed minutes (The Long Walk t95–99: [TIME_CHECK:dawn] five turns running
+// against an 8:00–9:45 am clock, each copied from the previous response, none over the 4h prose gate).
+function clockPhaseLabelAt(min){var v=(min==null?clockNow():min),off=((v%MIN_PER_DAY)+MIN_PER_DAY)%MIN_PER_DAY,i,best=null;
+  for(i=0;i<TIME_PHASES.length;i++){var p=TIME_PHASES[i];if(off>=p.b0&&off<p.b1&&(!best||(p.b1-p.b0)<(best.b1-best.b0)))best=p;}
+  return best?best.lbl:"night";}
 // Advance the clock forward to the declared phase's next occurrence. Returns minutes added
 // (0 = in-band, exact, or unmapped). Routes through clockAdvance so monotonicity holds.
 function clockReconcilePhase(label){
@@ -526,8 +533,12 @@ function clockCheckDeclared(label){
     return null;
   }
   var d=clockPhaseBandDist(idx);
-  if(d<PHASE_MISMATCH_MIN)return null;
-  worldState.phaseMismatch={idx:idx,label:String(label).toLowerCase().replace(/\s+/g," "),turn:(worldState.turn||0),stamp:(typeof clockStamp==="function"?clockStamp():"")};
+  /* #387: a STRUCTURED declaration is a reading of the clock block, so it is held to its own band plus a short grace —
+     PHASE_CHECK_GRACE_MIN — not the 4h tolerance the fuzzy prose recogniser needs. "dawn" at 9:45 am (135m past the band)
+     sailed under the old gate five turns running. */
+  var _tcGate=(typeof PHASE_CHECK_GRACE_MIN==="number")?PHASE_CHECK_GRACE_MIN:60;
+  if(d<_tcGate)return null;
+  worldState.phaseMismatch={idx:idx,label:String(label).toLowerCase().replace(/\s+/g," "),turn:(worldState.turn||0),stamp:(typeof clockStamp==="function"?clockStamp():""),src:"check",clockPhase:clockPhaseLabelAt(clockNow())};
   if(typeof console!=="undefined")console.warn("[clock] #216: GM declared '"+label+"' but the clock reads "+worldState.phaseMismatch.stamp+" ("+Math.round(d/60)+"h off-band) — GM-decides reconcile nudge armed");
   return worldState.phaseMismatch;
 }
@@ -661,7 +672,8 @@ function buildClockBlock(){
   // days-stale deadline to narrate.
   var due=scheduleDue().filter(function(e){return e.elapsed<=SCHEDULE_EXPIRE_MIN;}), pending=schedulePending();
   if(c.min===0 && !due.length && !pending.length)return "";   // nothing has happened yet
-  var s="CAMPAIGN CLOCK: "+clockFmt(c.min)+" (days run dawn to dawn — 00h00m elapsed-of-day is dawn, ~6am).\n";
+  var _ph=clockPhaseLabelAt(c.min);
+  var s="CAMPAIGN CLOCK: "+clockFmt(c.min)+" — "+_ph+" (days run dawn to dawn — 00h00m elapsed-of-day is dawn, ~6am). Open with [TIME_CHECK:"+_ph+"] unless the story itself has moved the hour.\n";/* #387: the GM reads the phase WORD, never derives it; the clock face itself stays display-only (the standing contract) */
   if(pending.length){
     s+="UPCOMING (computed from the clock — never invent or restate these numbers):\n";
     var i;for(i=0;i<pending.length;i++)s+="  - "+pending[i].label+" ("+fmtGap(pending[i].dueMin-c.min)+")"+((pending[i].dueMin-c.min)<=SCHEDULE_NEAR_MIN?" — near: let the fiction feel it now (a glance at the sky, a counted hour, someone's nerves), never the number":"")+"\n";/* #369 */

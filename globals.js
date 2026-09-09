@@ -181,7 +181,8 @@ var LOC_DESC_NUDGE_COOLDOWN=10; // #134 (t1431 multiplying-beds): while the part
 var PROVISIONAL_CAP=4;          // #156 Phase A: max OUTSTANDING provisional npc records (the create-distinct collision outcome). Beyond it a suspect write degrades LOUDLY to today's direct-write behavior — the guard may never be worse than the status quo it replaces (runaway-model bound, the pendingItemDefs precedent)
 var PROVISIONAL_NUDGE_COOLDOWN=5; // #156 Phase A: buildProvisionalNudge re-fires per unresolved provisional this often — re-fire, not one-shot (an unresolved provisional is live fragmentation; the #29/#134 rot lesson), latch on worldState.provisionalNudged
 var NPC_INTRO_REL_RE=/(unknown|stranger|unfamiliar|just met|newly met|not yet met|new arrival)/i; // #156 Phase A: an [NPC:] relation slot that reads as an INTRODUCTION — into a history-rich record, that is the Savah collision signature (t1530: "unknown, not yet met" written into the armorer's file). Tested against the RAW rel operand only
-var PHASE_MISMATCH_MIN=240;  // #158: minutes of BAND distance between a narrated phase assertion and the clock before the GM-decides reconcile nudge arms (clockPhaseDetect, clock.js). 4h swallows honest estimation slop and adjacent-phase wording; the t1605 class (dusk narrated at 11:10 am = 7h+) clears it with room
+var PHASE_MISMATCH_MIN=240;
+var PHASE_CHECK_GRACE_MIN=60;   // #387: a [TIME_CHECK:] outside its own band by more than this arms the reconcile nudge (the 240 above is the fuzzy PROSE recogniser's tolerance)  // #158: minutes of BAND distance between a narrated phase assertion and the clock before the GM-decides reconcile nudge arms (clockPhaseDetect, clock.js). 4h swallows honest estimation slop and adjacent-phase wording; the t1605 class (dusk narrated at 11:10 am = 7h+) clears it with room
 var LOC_STATE_CAP=3;        // #105 (B17): max durable state-change notes per map node — the record COMPRESSES (newest state is the truest state); overflow evicts the oldest loudly. Small on purpose: every note rides the volatile prompt every turn via the geo block or the changed-locations roll-up
 var GB_TURN_CAP=8;          // #173: max EXACT visit turns kept per character per node in the location guestbook (the cap is per CHARACTER — pinned amendment ①); older turns fold into the {first,last,count} aggregate, never the void
 var GB_PROJ_MAX=14;         // #173: max visitor entries the GEO attendance line renders for one node (most-recent first); overflow renders a visible "+N more" note, never silent truncation
@@ -389,7 +390,7 @@ var PROVIDERS={
   }
 };
 var carMode=false;
-var APP_VERSION="v1.867";
+var APP_VERSION="v1.868";
 // #290: the home page's one-shot blueprint handoff — home.html writes {bp,at} here and navigates to
 // the game; initState (no save) / newGame consume it into _applyBlueprint. ONE name for both sides.
 // #307: the home page's QUICK START handoff — a pre-made hero + a curated blueprint, consumed at boot by
