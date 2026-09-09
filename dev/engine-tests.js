@@ -1111,6 +1111,14 @@ function runEngineTests(R){
     if(/Consulting the story about/.test(d)&&/\uD83D\uDCD6 Consulting/.test(d))return "the toast still carries the book";if(us.indexOf("&#128214;")>=0||us.indexOf("&#9998;</button>")<0)return "the Define control is not the quill";
     return true;
   });
+  t("#383 the bible editor opens the item bible: every BIBLE_TYPES entry declares its own progress line and progress() dispatches through the registry — no class-shaped walk over a bible that has no levels (the item bible threw inside render and never painted)",function(){
+    var src=__fsForTests.readFileSync(__rootForTests+"/bible_editor.html","utf8"),reg=src.slice(src.indexOf("var BIBLE_TYPES = {"),src.indexOf("function typeOf("));
+    if((reg.match(/\n\s+progress: function \(d\)/g)||[]).length!==3)return "each of the three bible types must declare progress";
+    var pr=src.slice(src.indexOf("  function progress() {"),src.indexOf("  function render() {"));
+    if(pr.indexOf('CUR.typeId === "capability"')>=0||pr.indexOf("e.archetypes.forEach")>=0||!/ty\.progress\(CUR\.data\)/.test(pr))return "progress() still special-cases a type or walks the class shape";
+    var itemProg=new Function("d",reg.slice(reg.indexOf("progress: function (d) { var keys"),reg.indexOf("/* #383 */")).replace(/^progress: function \(d\) \{/,"").replace(/\}\s*$/,""));
+    return itemProg({bible:{"a":{category:"weapons"},"b":{category:"armor"},"c":{category:"weapons"}}})==="3 entries · 2 categories"?true:"item progress text";
+  });
   t("the tier-unlock spell picker scrolls its bench (owner call 2026-09-03: twelve tier-3 cards pushed Confirm off the screen) — the list sits in a box about seven cards tall with its own scrollbar; the header and Confirm stay outside it",function(){
     var src=__fsForTests.readFileSync(__rootForTests+"/game.js","utf8"),i=src.indexOf("function showSpellUnlockModal("),body=src.slice(i,src.indexOf("function spuToggle("));
     var list=body.indexOf("id='spu-list'"),confirm=body.indexOf("id='spu-confirm'"),head=body.indexOf("Spells Unlocked");

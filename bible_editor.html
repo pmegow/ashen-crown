@@ -279,7 +279,8 @@ function serializeItemBible(bible) {
       },
       serialize: function (d) { return serializeClassBible(d.bible, d.xp); },
       fromGlobals: function () { return { bible: deep(CLASS_BIBLE), xp: CLASS_XP_LEVELS.slice() }; },
-      render: renderClass, tabs: classTabs
+      render: renderClass, tabs: classTabs,
+      progress: function (d) { var blanks = 0, slots = 0, k; for (k in d.bible) { var e = d.bible[k], l; for (l in e.levels) { slots++; if (!e.levels[l].features.length) blanks++; } e.archetypes.forEach(function (a) { for (var al in a.levels) { slots++; if (!a.levels[al].features.length) blanks++; } }); } return (slots - blanks) + " / " + slots + " level slots filled"; }
     },
     "item": {
       label: "Item bible",
@@ -290,7 +291,8 @@ function serializeItemBible(bible) {
       },
       serialize: function (d) { return serializeItemBible(d.bible); },
       fromGlobals: function () { return { bible: deep(ITEM_BIBLE) }; },
-      render: renderItems, tabs: function () { $("tabs").innerHTML = ""; }
+      render: renderItems, tabs: function () { $("tabs").innerHTML = ""; },
+      progress: function (d) { var keys = Object.keys(d.bible), cats = {}, i; for (i = 0; i < keys.length; i++) cats[(d.bible[keys[i]] && d.bible[keys[i]].category) || "?"] = 1; return keys.length + " entries · " + Object.keys(cats).length + " categories"; }/* #383 */
     },
     "capability": {
       label: "Capability bible",
@@ -312,7 +314,8 @@ function serializeItemBible(bible) {
       },
       serialize: function (d) { return serializeCapabilityBible(d); },
       fromGlobals: null,   // capability_bible must be OPENED — it is never rebuilt from globals
-      render: renderCap, tabs: function () { $("tabs").innerHTML = ""; }
+      render: renderCap, tabs: function () { $("tabs").innerHTML = ""; },
+      progress: function (d) { var n = d.entries.filter(function (e) { return e.dirty; }).length; return d.entries.length + " entries · " + n + " edited"; }
     }
   };
   function typeOf(src) {
@@ -734,20 +737,14 @@ function serializeItemBible(bible) {
     $("clrn").textContent = merged.length;
     $("clr-adds").title = merged.length ? "Already in capability_bible: " + merged.join(", ") : "";
   }
+  // #383: the progress line comes from the type's own registry entry. The old body special-cased
+  // capability and then walked EVERY other bible as a class bible — an item bible has no levels or
+  // archetypes, so render() threw inside progress() and the item view never painted (the class view
+  // stayed on screen while the file line said "Item bible"). One entry per type, no conditionals.
   function progress() {
     if (!CUR) { $("prog").textContent = ""; return; }
-    if (CUR.typeId === "capability") {
-      var d = CUR.data.entries.filter(function (e) { return e.dirty; }).length;
-      $("prog").textContent = CUR.data.entries.length + " entries · " + d + " edited";
-      return;
-    }
-    var blanks = 0, slots = 0, k;
-    for (k in CUR.data.bible) {
-      var e = CUR.data.bible[k], l;
-      for (l in e.levels) { slots++; if (!e.levels[l].features.length) blanks++; }
-      e.archetypes.forEach(function (a) { for (var al in a.levels) { slots++; if (!a.levels[al].features.length) blanks++; } });
-    }
-    $("prog").textContent = (slots - blanks) + " / " + slots + " level slots filled";
+    var ty = BIBLE_TYPES[CUR.typeId];
+    $("prog").textContent = (ty && typeof ty.progress === "function") ? ty.progress(CUR.data) : "";
   }
 
   function render() {

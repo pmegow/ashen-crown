@@ -44,7 +44,7 @@ const cases = [
     label: "shared version loses its visible semver shape",
     file: "dev/bible-editor-version.js",
     mustFail: "Bible Editor version has a visible semver shape",
-    find: 'var BIBLE_EDITOR_VERSION = "1.1.6";',
+    find: 'var BIBLE_EDITOR_VERSION = "1.1.7";',
     replace: 'var BIBLE_EDITOR_VERSION = "unknown";'
   },
   {
