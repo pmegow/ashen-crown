@@ -70,3 +70,11 @@ Server: eight retained mutation proofs and npm test pass. Test-only PR: https://
 Resource review: one iframe is retained at a time; old contexts are replaced, generation guards drop stale responses, and download URLs are revoked. List/preview lifetimes remain bounded by existing account caps.
 
 Pending: client PR merge and verification of the deployed reader fix; regular CI's protected replay drift needs its owning workstream. This record does not claim the unfinished closeout complete.
+
+### Deployed checks and CI receipt
+
+Server proof PR CI is [green](https://github.com/pmegow/traffic-and-dragons-server/actions/runs/34374088889). Client CI [34374619056](https://github.com/pmegow/traffic-and-dragons/actions/runs/34374619056) passes the ordinary gate and fails only the same pre-existing v1258 replay drift (byte 12676, 26599 versus 26605 bytes).
+
+Read-only Chrome verification of production `https://traffic-and-dragons.pages.dev/mementos.html` confirms the page loads and presents its sign-in gate in a fresh profile. The deployed [branch preview](https://1ff9e75c.traffic-and-dragons.pages.dev/mementos.html) was then exercised with synthetic shelf/story responses: story content paints, hostile script stays blocked, the frame remains opaque-origin, mobile layout and empty/error states render. Retained preview-reader and production signed-out screenshots supplement the local before/after evidence. No real account was read or written.
+
+Production verification of the merged reader fix and adjudication of protected replay CI remain pending; branch-preview QA is complete. Client [PR #3](https://github.com/pmegow/traffic-and-dragons/pull/3) is ready for review.
