@@ -3051,6 +3051,7 @@ async function doRender(){
           var _rBase0=_rTick.base();
           falData=await falQueueRender(falEndpoint,falBody,function(st){_rTick.set(_rBase0+" — "+st);});
         }else{
+          var _ex=(typeof renderAllowanceExhausted==="function")?renderAllowanceExhausted():null;if(_ex){_rTick.stop();throw new Error("Your "+_ex.cap+" included images this week are used up"+(_ex.resetsAt?" \u2014 the next frees up "+new Date(_ex.resetsAt).toLocaleDateString():"")+". Add your own fal.ai key to keep rendering at your own cost.");}/* #381 */
           var falRes=await falFetch(falEndpoint,falBody);/* §3.7: own key direct, or the server's key via /api/render */
           if(!falRes.ok){_rTick.stop();throw new Error(falErrorMsg(falRes.status,await falRes.text().catch(function(){return "";})));}/* #163b: surface fal's own complaint */
           falData=await falRes.json();
@@ -3063,7 +3064,11 @@ async function doRender(){
           img.style.cssText="width:100%;border-radius:4px;display:block;";
           img.alt="Scene illustration";div.appendChild(img);sceneImg=img;
         }else{imgStatus.textContent="No image returned.";}
-      }catch(fe){if(typeof _rTick!=="undefined")_rTick.stop();imgStatus.textContent="Image error: "+fe.message;}
+      }catch(fe){if(typeof _rTick!=="undefined")_rTick.stop();
+        if(/included images this week/.test(fe.message)){/* #381: the graceful way on — say it plainly and open the door to their own key */
+          imgStatus.innerHTML=escHtml(fe.message)+" <button type='button' class='ib' id='rd-byok' style='margin-left:6px;'>Add your fal.ai key\u2026</button>";
+          var _bk=document.getElementById("rd-byok");if(_bk)_bk.addEventListener("click",function(){if(typeof showRenderOptionsModal==="function")showRenderOptionsModal();});
+        }else imgStatus.textContent="Image error: "+fe.message;}
     }else{
       // No fal key — show the prompt text and a hint
       promptShown=true;promptDiv.style.display="block";

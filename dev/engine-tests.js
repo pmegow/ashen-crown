@@ -1083,6 +1083,24 @@ function runEngineTests(R){
     if(!/getElementById\("rv-card"\)\.addEventListener\("click"[^\n]*closest\("#rv-portrait-btn"\)\)ftRenderPortrait\(document\.getElementById\("rv-portrait-status"\)\)/.test(ub))return "the quill is not wired";
     return /\.rv-quill\{position:absolute/.test(ih)?true:"no quill styling";
   });
+  t("#381 the weekly image allowance on the client: falAllowanceInfo reads the server's 429 render-allowance payload and nothing else; falErrorMsg returns its message (never 'fal.ai HTTP 429') for that case and stays byte-identical otherwise; renderAllowanceExhausted answers from the account readout only when the server key would pay; doRender offers the fal.ai key; the account modal shows images used of cap",function(){
+    var body=JSON.stringify({error:"render-allowance",used:20,cap:20,resetsAt:"2026-09-15T10:00:00.000Z",message:"Your 20 included images this week are used up — the next frees up Tue, 15 Sep 2026 10:00 UTC. Add your own fal.ai key (File ▸ Render Options…) to keep rendering at your own cost."});
+    var al=falAllowanceInfo(429,body);if(!al||al.used!==20||al.cap!==20||al.resetsAt!=="2026-09-15T10:00:00.000Z")return "allowance payload not read: "+JSON.stringify(al);
+    if(falAllowanceInfo(429,JSON.stringify({error:"Daily image limit reached (40) — more tomorrow"}))!==null)return "the daily cap is not the allowance";if(falAllowanceInfo(500,body)!==null)return "a 500 is never the allowance";if(falAllowanceInfo(429,"not json")!==null)return "junk parsed";
+    var m=falErrorMsg(429,body);if(/HTTP 429/.test(m)||!/20 included images this week/.test(m)||!/fal\.ai key/.test(m))return "friendly message lost: "+m;
+    if(falErrorMsg(429,JSON.stringify({detail:"rate limited"}))!=="fal.ai HTTP 429 — rate limited"||falErrorMsg(503,"")!=="fal.ai HTTP 503")return "other errors changed";
+    var wasAcct=(typeof serverAccount!=="undefined")?serverAccount:undefined,wasKey=falKey;try{
+      serverAccount={renders:{used:20,cap:20,remaining:0,resetsAt:"2026-09-15T10:00:00.000Z",exempt:false}};falKey="";
+      var viaServer=(typeof falViaServer==="function")?falViaServer():false;var ex=renderAllowanceExhausted();
+      if(viaServer&&(!ex||ex.cap!==20))return "at the cap, routed to the server: the pre-flight must say so";if(!viaServer&&ex!==null)return "not routed to the server: the pre-flight must stay silent";
+      falKey="fal_key_x";if(renderAllowanceExhausted()!==null)return "own key: the allowance is not the player's concern";falKey="";
+      serverAccount={renders:{used:20,cap:20,remaining:0,exempt:true}};if(renderAllowanceExhausted()!==null)return "an exempt account is never told it is out";
+      serverAccount={renders:{used:3,cap:20,remaining:17,exempt:false}};if(renderAllowanceExhausted()!==null)return "images left: the pre-flight must stay silent";
+    }finally{serverAccount=wasAcct;falKey=wasKey;}
+    var gs=__fsForTests.readFileSync(__rootForTests+"/game.js","utf8"),dr=gs.slice(gs.indexOf("async function doRender("),gs.indexOf("async function doRender(")+12000);
+    if(dr.indexOf("renderAllowanceExhausted()")<0||dr.indexOf("id='rd-byok'")<0||!/rd-byok"\);if\(_bk\)_bk\.addEventListener\("click",function\(\)\{if\(typeof showRenderOptionsModal==="function"\)showRenderOptionsModal\(\);/.test(dr))return "doRender lacks the pre-flight or the BYOK offer";
+    var um=__fsForTests.readFileSync(__rootForTests+"/ui-modals.js","utf8");return /line\("Images",a\.renders\.exempt\?/.test(um)&&um.indexOf("of \"+a.renders.cap+\" this week")>=0?true:"the account modal lacks the images line";
+  });
   t("the tier-unlock spell picker scrolls its bench (owner call 2026-09-03: twelve tier-3 cards pushed Confirm off the screen) — the list sits in a box about seven cards tall with its own scrollbar; the header and Confirm stay outside it",function(){
     var src=__fsForTests.readFileSync(__rootForTests+"/game.js","utf8"),i=src.indexOf("function showSpellUnlockModal("),body=src.slice(i,src.indexOf("function spuToggle("));
     var list=body.indexOf("id='spu-list'"),confirm=body.indexOf("id='spu-confirm'"),head=body.indexOf("Spells Unlocked");

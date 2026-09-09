@@ -275,7 +275,15 @@ var ENHANCE_STRENGTH=0.45;
 // trip to learn WHICH field failed (the bare loras[].path id). Pure string builder so it's
 // engine-testable; the three fal fetch sites await res.text() and route through here.
 // Clamped + whitespace-collapsed: this lands in one-line status displays, not logs.
+// #381: the server's weekly image allowance refusal — {error:"render-allowance", used, cap, resetsAt, message}.
+// Pure: null unless the body is that payload. The friendly text is the server's own message.
+function falAllowanceInfo(status,bodyText){
+  if(status!==429||!bodyText)return null;try{var j=JSON.parse(String(bodyText));if(j&&j.error==="render-allowance")return {used:j.used,cap:j.cap,resetsAt:j.resetsAt||null,message:String(j.message||"Your included images this week are used up.")};}catch(e){}return null;
+}
+// #381: before the call — the account readout already knows; a player at the cap is told without a round trip.
+function renderAllowanceExhausted(){var a=(typeof serverAccount!=="undefined"&&serverAccount&&serverAccount.renders)||null;if(!a||a.exempt)return null;if(typeof falKey!=="undefined"&&falKey)return null;if(!(typeof falViaServer==="function"&&falViaServer()))return null;return a.remaining<=0?a:null;}
 function falErrorMsg(status,bodyText){
+  var al=falAllowanceInfo(status,bodyText);if(al)return al.message;/* #381: never "fal.ai HTTP 429" for a player who simply used their week */
   var msg="fal.ai HTTP "+status;
   if(bodyText){
     var d=String(bodyText);
