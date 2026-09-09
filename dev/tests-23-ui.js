@@ -1,0 +1,6 @@
+var fs=require('fs'),path=require('path'),assert=require('assert'),loader=require('./load-engine.js');
+loader.loadEngine();var ws=loader.makeTestWorld();ws.character.inventory=[];(0,eval)(fs.readFileSync(path.join(__dirname,'../ui-sheets.js'),'utf8'));
+var failed=0;function test(name,fn){try{fn();console.log('PASS #23 '+name);}catch(e){failed++;console.error('FAIL #23 '+name+' — '+e.message);}}
+test('earned skills remain separate readable rows with canonical rank and bonus',function(){ws.character.skills[SKILLS[0].id]=1;ws.character.skills[SKILLS[1].id]=100;var h=csSheetSections(ws.character);assert.equal((h.match(/class="cs-skill-row"/g)||[]).length,2);assert(h.includes(SKILL_LEVELS[skillLevel(100)]));assert(h.includes('+'+skillLevelBonus(skillLevel(100))));});
+test('canonical ability details are native buttons and hostile prose remains inert',function(){ws.character.abilities=[{nm:'Darkvision',ds:'<img src=x onerror=alert(1)>'},{nm:'Uncatalogued <ability>',ds:'Custom rule'}];var before=JSON.stringify(ws),h=csSheetSections(ws.character);assert(/<button[^>]*data-cap="Darkvision"/.test(h));assert(h.includes('type="button"'));assert(h.includes('&lt;img'));assert(h.includes('Uncatalogued &lt;ability&gt;'));assert(!/<button[^>]*data-cap="Uncatalogued/.test(h));assert.equal(JSON.stringify(ws),before);});
+process.exitCode=failed?1:0;

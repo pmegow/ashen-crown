@@ -113,8 +113,8 @@ function csSheetSections(c,invOwner,portable){
   for(i=0;i<STATS.length;i++){var s=STATS[i],v=(c.stats&&c.stats[s])||"—";statHtml+="<div class='cs-stat'><div class='cs-sn'>"+s+"</div><div class='cs-sv'>"+v+"</div><div class='cs-sm'>"+(c.stats&&c.stats[s]?smod(c.stats[s]):"")+"</div></div>";}
   statHtml+="</div>";
   var earnedSkills=[],si2;
-  if(c.skills){for(si2=0;si2<SKILLS.length;si2++){var skl=SKILLS[si2],succ=(typeof c.skills[skl.id]==="number")?c.skills[skl.id]:0;if(succ>0){var sklv=skillLevel(succ);earnedSkills.push(skl.label+" ("+SKILL_LEVELS[sklv]+(typeof skillLevelBonus==="function"?", +"+skillLevelBonus(sklv):"")+")");}}  }
-  var skillHtml=earnedSkills.length?'<div class="cs-v">'+earnedSkills.join(", ")+"</div>":'<span class="cs-none">None yet</span>';
+  if(c.skills){for(si2=0;si2<SKILLS.length;si2++){var skl=SKILLS[si2],succ=(typeof c.skills[skl.id]==="number")?c.skills[skl.id]:0;if(succ>0){var sklv=skillLevel(succ);earnedSkills.push('<div class="cs-skill-row" style="display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;padding:6px 0;border-bottom:1px solid var(--brd);"><span>'+escHtml(skl.label)+'</span><span style="color:var(--t1);">'+escHtml(SKILL_LEVELS[sklv])+(typeof skillLevelBonus==="function"?' · +'+skillLevelBonus(sklv):'')+'</span></div>');}}  }
+  var skillHtml=earnedSkills.length?'<div class="cs-v">'+earnedSkills.join("")+"</div>":'<span class="cs-none">Skills appear here as you earn successes in play.</span>';
   var condHtml;
   // #46: conditions carry effect · turn it landed · why (turn engine-stamped since v1.247;
   // cause arrives with the Phase-B tag extension). Older conditions lack both — render plain.
@@ -146,7 +146,7 @@ function csSheetSections(c,invOwner,portable){
   var cmHtml="",_cmList=c.coreMemories||[];
   if(_cmList.length){for(i=_cmList.length-1;i>=0;i--){var _cmLbl=(_cmList[i].camp&&worldState&&_cmList[i].camp!==worldState.campName)?escHtml(_cmList[i].camp):"Turn "+_cmList[i].turn;cmHtml+='<div class="cs-beat"><span class="cs-beat-turn">'+_cmLbl+'</span>'+escHtml(_cmList[i].text)+'</div>';}}
   var abilHtml="";
-  if(c.abilities&&c.abilities.length){for(i=0;i<c.abilities.length;i++){var _abN=c.abilities[i].nm,_abCanon=(typeof capabilityLookup==="function")&&capabilityLookup(_abN);var _abNm=_abCanon?'<span class="cs-abil-nm cs-cap" data-cap="'+escHtml(_abN)+'" onclick="showCapabilityCard(this.dataset.cap)" style="cursor:pointer;border-bottom:1px dotted var(--acc);">'+escHtml(_abN)+'</span>':'<span class="cs-abil-nm">'+escHtml(_abN)+'</span>';abilHtml+='<div class="cs-abil">'+_abNm+'<span class="cs-abil-ds">'+escHtml(c.abilities[i].ds||"")+'</span></div>';}}else abilHtml='<span class="cs-none">None yet</span>';
+  if(c.abilities&&c.abilities.length){for(i=0;i<c.abilities.length;i++){var _abN=c.abilities[i].nm,_abCanon=(typeof capabilityLookup==="function")&&capabilityLookup(_abN);var _abNm=_abCanon?'<button type="button" class="cs-abil-nm cs-cap" data-cap="'+escHtml(_abN)+'" onclick="showCapabilityCard(this.dataset.cap)" title="Read ability details" style="font-family:inherit;text-align:left;background:none;border:0;border-bottom:1px dotted var(--acc);padding:6px 0;min-height:36px;max-width:100%;overflow-wrap:anywhere;cursor:pointer;">'+escHtml(_abN)+'</button>':'<span class="cs-abil-nm" style="overflow-wrap:anywhere;">'+escHtml(_abN)+'</span>';abilHtml+='<div class="cs-abil">'+_abNm+'<span class="cs-abil-ds" style="font-size:12px;color:var(--t1);overflow-wrap:anywhere;">'+escHtml(c.abilities[i].ds||"")+'</span></div>';}}else abilHtml='<span class="cs-none">None yet</span>';
   var spellHtml="";
   /* #110: the strikethrough now marks only the RACIAL 1/day hard gate; pooled spells stay plain
      (their availability is the mana line above the list, not a per-spell state). */
