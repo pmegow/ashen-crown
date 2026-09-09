@@ -815,13 +815,20 @@ function showFirstTurnOverlay(){
   if(typeof carMode!=="undefined"&&carMode)return;
   var old=document.getElementById("firstturn-modal");if(old)old.remove();
   var m=document.createElement("div");m.id="firstturn-modal";
-  m.style.cssText="position:fixed;inset:0;background:rgba(0,0,0,.72);z-index:290;display:flex;align-items:flex-end;justify-content:center;padding:16px;";
-  m.innerHTML="<div style='background:#181818;border:1px solid var(--acc);border-radius:12px;max-width:520px;width:100%;padding:18px 20px;font-family:var(--font);color:var(--t0);'>"
-    +"<div style='font-size:15px;margin-bottom:8px;'>How to play</div>"
-    +"<div style='font-size:13px;color:var(--t1);line-height:1.55;'>Type what you do in the box, in plain words, or tap a suggestion to edit it. Hold a suggestion (or Ctrl-click) to send it as it is. The dashed button is the game's own idea — rest, use a thing, take the offer. Table Talk, the other tab, is where you ask the Game Master questions without your character saying a word.</div>"
-    +"<div style='margin-top:14px;text-align:right;'><button id='firstturn-ok' style='padding:8px 16px;font-family:var(--font);background:var(--acc);color:#111;border:0;border-radius:6px;cursor:pointer;'>Got it</button></div></div>";
+  m.setAttribute("role","dialog");m.setAttribute("aria-modal","true");m.setAttribute("aria-labelledby","firstturn-title");
+  m.style.cssText="position:fixed;inset:0;background:rgba(0,0,0,.72);z-index:290;display:flex;align-items:flex-end;justify-content:center;padding:16px;box-sizing:border-box;";
+  m.innerHTML="<div style='background:var(--bg1);border:1px solid var(--acc);border-radius:12px;max-width:520px;width:100%;max-height:calc(100vh - 32px);overflow-y:auto;box-sizing:border-box;padding:20px;font-family:var(--font);color:var(--t0);'>"
+    +"<div id='firstturn-title' style='font-size:20px;color:var(--acc);margin-bottom:16px;'>How to play</div>"
+    +"<p style='font-size:14px;color:var(--t1);line-height:1.6;margin:0 0 14px;'><b style='color:var(--t0);'>Your next move</b><br>Type what you do in the box, in plain words, or tap a suggestion to edit it.</p>"
+    +"<p style='font-size:14px;color:var(--t1);line-height:1.6;margin:0 0 14px;'><b style='color:var(--t0);'>Suggestions</b><br>Hold a suggestion (or Ctrl-click) to send it as it is. The dashed button is the game's own idea — rest, use a thing, take the offer.</p>"
+    +"<p style='font-size:14px;color:var(--t1);line-height:1.6;margin:0;'><b style='color:var(--t0);'>Ask the Game Master</b><br>Table Talk, the other tab, is where you ask the Game Master questions without your character saying a word.</p>"
+    +"<div style='margin-top:18px;text-align:right;'><button id='firstturn-ok' type='button' style='min-height:44px;padding:10px 18px;font-family:var(--font);font-size:14px;background:var(--acc);color:var(--on-acc);border:0;border-radius:6px;cursor:pointer;'>Start playing</button></div></div>";
   document.body.appendChild(m);
-  document.getElementById("firstturn-ok").onclick=function(){m.remove();try{localStorage.setItem("tnd_firstturn_seen_v1","1");}catch(e){}};
+  var ok=document.getElementById("firstturn-ok");
+  ok.onclick=function(){m.remove();try{localStorage.setItem("tnd_firstturn_seen_v1","1");}catch(e){}var input=document.getElementById("action-input");if(input)input.focus();};
+  // This dialog has one control; keep Tab inside it without a document-level listener.
+  m.onkeydown=function(e){if(e.key==="Escape"){e.preventDefault();ok.click();}else if(e.key==="Tab"){e.preventDefault();ok.focus();}};
+  ok.focus();
 }
 function showRespawnModal(r,cause){
   closeAllMenus();var old=document.getElementById("respawn-modal");if(old)old.remove();

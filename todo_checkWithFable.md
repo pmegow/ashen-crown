@@ -15,6 +15,8 @@ should probe first. Self-contained enough that a Fable session needs no other co
 
 ## Off-Fable log
 
+- 2026-09-09 · #23④ · Astra: first-turn instructions grouped, dialog keyboard/focus support and short-screen scrolling; three DOM groups/three proofs, rendered desktop/mobile/short-height QA. Cadence/Car Mode preserved; no engine/prompt/parser/state changes.
+
 - 2026-09-09 · #23③ · Astra: skill ranks/bonuses become readable rows; canonical ability detail buttons support keyboards; descriptions wrap. Two DOM groups/two proofs and desktop/mobile screenshots. Shared sheet DOM only; no skill mechanics, canon, prompts, parser or state changes.
 - 2026-09-04 (#292, Sol; owner-approved adapter methods/SW allowlist): operator satellite + admin-only server roster/statistics and confirmed entitlement controls; Extend preserves unused time, unpriced models remain explicit. No drift-file edits. 11 client fixtures, 134 server checks, 18 sabotage clauses; desktop/390px/error renders inspected. Server deployment awaits owner approval because the tree also carries Fable's pending checkpoint migration. Record: DOC/todos_completed/todo_292_operator_console.md.
 - 2026-08-29 (dev-only fixture): TODO #226 now has a frozen t2097 mature-campaign sweep fixture under testRuns/ (latest available because the requested t2231 export was absent): 4,190 transcript entries, 63-NPC roster, active final act/arc, ten memory chapters, and the source quest state are hash-preserved; portraits/provider credentials are stripped and the campaign id is fixture-only (8 assertions; sabotage 5/5). Sanitized test data + additive dev verification only.
