@@ -1054,6 +1054,20 @@ function runEngineTests(R){
     if((hs.match(/"Act "\+/g)||[]).length!==1)return "helpers.js formats the act label outside actLabel";if(/"Act "\+\(i\+1\)\+": "\+act\.title/.test(as))return "api.js still formats the act label itself";
     return true;
   });
+  t("#378 rolling another character: a FULL re-roll builds its context without the current name/trait/flaw/motivation (three rolls used to return one name), the per-field sparkle keeps them, and the progress dots for finished steps are back-links wired to goStep",function(){
+    var cc=__fsForTests.readFileSync(__rootForTests+"/char-creation.js","utf8"),ub=__fsForTests.readFileSync(__rootForTests+"/ui-boot.js","utf8"),ih=__fsForTests.readFileSync(__rootForTests+"/index.html","utf8");
+    var ctx=cc.slice(cc.indexOf("function _csContext("),cc.indexOf("async function aiSuggestField("));
+    if(!/var fresh=!!\(opts&&opts\.fresh\)/.test(ctx)||!/if\(!fresh&&cs\.name\)ctx\+="Name: "/.test(ctx)||!/if\(!fresh\)\["trait","flaw","motivation"\]/.test(ctx))return "_csContext does not honour fresh";
+    var ra=cc.slice(cc.indexOf("async function aiRandomiseAll("),cc.indexOf("// Inject sparkle buttons"));if(ra.indexOf("_csContext({fresh:true})")<0)return "the full roll does not ask for a fresh context";
+    var sf=cc.slice(cc.indexOf("async function aiSuggestField("),cc.indexOf("async function aiRandomHero("));if(sf.indexOf("_csContext()")<0)return "the per-field sparkle lost its context";
+    /* the dots: lift buildDots and render for step 6 */
+    var bd=cc.slice(cc.indexOf("function buildDots("),cc.indexOf("}",cc.indexOf("el.innerHTML=h;"))+1);var made={};
+    var f=new Function("cs","document",bd+" return buildDots();");var el={innerHTML:""};f({step:6},{getElementById:function(id){return id==="stepdots"?el:null;}});
+    var dots=el.innerHTML.match(/<div class="dot[^>]*>/g)||[];if(dots.length!==6)return "six dots expected: "+el.innerHTML;
+    if((el.innerHTML.match(/data-step="/g)||[]).length!==5||!/class="dot done" data-step="1" title="Back to step 1"/.test(el.innerHTML)||/class="dot active"[^>]*data-step/.test(el.innerHTML))return "finished steps are not back-links, or the active one is: "+el.innerHTML;
+    if(!/getElementById\("stepdots"\)\.addEventListener\("click"/.test(ub)||!/closest\(".dot.done"\)/.test(ub)||!/goStep\(parseInt\(d\.getAttribute\("data-step"\),10\)\)/.test(ub))return "stepdots click is not wired to goStep";
+    return /\.dot\.done\{background:var\(--blue\);cursor:pointer\}/.test(ih)?true:"a finished dot does not read as clickable";
+  });
   t("the tier-unlock spell picker scrolls its bench (owner call 2026-09-03: twelve tier-3 cards pushed Confirm off the screen) — the list sits in a box about seven cards tall with its own scrollbar; the header and Confirm stay outside it",function(){
     var src=__fsForTests.readFileSync(__rootForTests+"/game.js","utf8"),i=src.indexOf("function showSpellUnlockModal("),body=src.slice(i,src.indexOf("function spuToggle("));
     var list=body.indexOf("id='spu-list'"),confirm=body.indexOf("id='spu-confirm'"),head=body.indexOf("Spells Unlocked");

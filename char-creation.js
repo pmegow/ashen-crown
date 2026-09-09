@@ -3,7 +3,7 @@ function buildDots(){
   var lvlEl=document.getElementById("rv-start-level");
   var needPerks=lvlEl&&parseInt(lvlEl.value)>=3;
   var total=needPerks?7:6;
-  var h="",i;for(i=1;i<=total;i++){h+='<div class="dot '+(i<cs.step?"done":i===cs.step?"active":"")+'"></div>';}
+  var h="",i;for(i=1;i<=total;i++){h+='<div class="dot '+(i<cs.step?"done":i===cs.step?"active":"")+'"'+(i<cs.step?' data-step="'+i+'" title="Back to step '+i+'"':"")+'></div>';}/* #378: a finished step is a link back to it (roll another character from step 1) */
   el.innerHTML=h;
 }
 function buildDnaStep(){
@@ -494,16 +494,16 @@ function cbPick(s,v,btn){
   picks.push({s:s,v:v});window._cbPicks=picks;document.getElementById("cb-warn").textContent="";btn.style.borderColor="var(--acc)";btn.style.color="var(--acc)";document.getElementById("cb-cur-"+s).textContent=c.stats[s]+v;document.getElementById("cb-cur-"+s).style.color="var(--acc)";
 }
 // ── AI character assist ───────────────────────────────────────────────────
-function _csContext(){
-  var ctx="";
+function _csContext(opts){/* #378: opts.fresh — a FULL re-roll omits the current name/trait/flaw/motivation, or the model echoes them (three rolls, one name) */
+  var fresh=!!(opts&&opts.fresh),ctx="";
   var tone=cs.tone?TONES.filter(function(t){return t.id===cs.tone;})[0]:null;
   if(tone)ctx+="World tone: "+tone.nm+(tone.vc?" — "+tone.vc:"")+"\n";
   var anc=cs.ancestry?ANCS.filter(function(a){return a.id===cs.ancestry;})[0]:null;
   if(anc)ctx+="Ancestry: "+(getSubNm()||anc.nm)+"\n";/* cs.subraceNm is never set — use getSubNm() so subrace/lineage reaches the AI-assist context (audit E58) */
   var cls=classDef(cs.cls);/* #72 C6 ①: null input → null, same as the old guard */
   if(cls)ctx+="Class: "+cls.id+"\n";
-  if(cs.name)ctx+="Name: "+cs.name+"\n";
-  ["trait","flaw","motivation"].forEach(function(k){var el=document.getElementById("char-"+k),v=(el&&el.value.trim())||cs[k];if(v)ctx+=k.charAt(0).toUpperCase()+k.slice(1)+": "+v+"\n";});/* #353 */
+  if(!fresh&&cs.name)ctx+="Name: "+cs.name+"\n";
+  if(!fresh)["trait","flaw","motivation"].forEach(function(k){var el=document.getElementById("char-"+k),v=(el&&el.value.trim())||cs[k];if(v)ctx+=k.charAt(0).toUpperCase()+k.slice(1)+": "+v+"\n";});/* #353; #378 skipped on a fresh roll */
   if(cs.gender)ctx+="Gender: "+genderLabel(cs.gender)+"\n";
   if(cs.age)ctx+="Age: "+cs.age+"\n";
   return ctx;
@@ -541,7 +541,7 @@ async function aiRandomHero(btn){
 }
 async function aiRandomiseAll(btn){
   if(btn){btn.classList.add("spinning");btn.disabled=true;btn.textContent="✦ …";}
-  var ctx=_csContext();
+  var ctx=_csContext({fresh:true});/* #378 */
   var prompt="Generate a complete dark fantasy RPG character identity. Return ONLY valid JSON, no markdown:\n"
     +'{"name":"string","appear":"1-2 sentence physical description","backstory":"1-2 sentences of history","trait":"one line","flaw":"one line","motivation":"one line"}'
     +"\n\nContext:\n"+ctx;

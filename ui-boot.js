@@ -236,6 +236,7 @@ function wireButtons(){
   /* #23① sweep: the tone-step "↩ Import existing save" input was removed — redundant with File ▸ Import Character / Load Game (its importSave wiring went with it) */
   document.getElementById("open-blueprint-browser").addEventListener("click",showBlueprintBrowser);
   document.getElementById("random-hero").addEventListener("click",function(){aiRandomHero(this);});/* #354 */
+  document.getElementById("stepdots").addEventListener("click",function(e){var d=e.target&&e.target.closest?e.target.closest(".dot.done"):null;if(d&&typeof goStep==="function")goStep(parseInt(d.getAttribute("data-step"),10));});/* #378 */
   document.getElementById("blueprint-clear").addEventListener("click",clearBlueprint);
   document.getElementById("fm-sync-mob").addEventListener("click",function(){document.getElementById("file-menu").style.display="none";showSyncModal();});
   document.getElementById("fm-state-mob").addEventListener("click",function(){document.getElementById("file-menu").style.display="none";document.getElementById("sidebar").classList.toggle("open");});
