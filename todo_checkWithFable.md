@@ -15,6 +15,7 @@ should probe first. Self-contained enough that a Fable session needs no other co
 
 ## Off-Fable log
 
+- 2026-09-09 · #377 · Astra: server turn-only endpoint built; six HTTP groups, five proofs and server CI green. Client unchanged: JP0-11 pins POST first, contradicting pre-push probe; existing assertions preserved pending adjudication. No state/CAS/schema or production deployment changes.
 - 2026-09-09 · #291 · Astra: rendered memento closeout found zero-size reused sandbox; fresh iframe restores story. Client 10 groups + 8 proofs, server full gate + 8 proofs; screenshots retained. No transcript/compiler, sync, server route/schema or drift edits; deployed preview QA passes; production fix and pre-existing replay CI remain pending.
 - 2026-09-09 · #23④ · Astra: first-turn instructions grouped, dialog keyboard/focus support and short-screen scrolling; three DOM groups/three proofs, rendered desktop/mobile/short-height QA. Cadence/Car Mode preserved; no engine/prompt/parser/state changes.
 
