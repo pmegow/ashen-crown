@@ -16634,6 +16634,50 @@ t("genderLabel: F→Female, NB→Non-binary, else Male (incl. unset)",function()
     var gs=__fsForTests.readFileSync(__rootForTests+"/game.js","utf8");return /resolveNpcName\(name\):name;\n\s*var _spc=\(typeof findCompanionChar==="function"\)\?findCompanionChar\(nm\):null;if\(_spc&&_spc\.name\)nm=_spc\.name;/.test(gs)?true:"the speaker tally does not resolve the short form to the party member";
     }finally{showToast=_st;}
   });
+  section("#374 — stakes readout");
+  function stakesWorld(turn,count){makeWorld();worldState.turn=turn;worldState.tagLog=[];worldState.diceLog=[];for(var i=turn-count+1;i<=turn;i++)worldState.tagLog.push({t:i,tags:["TIME_ADVANCE"],m:[]});return worldState;}
+  function stakesRow(){return healthIndicators(worldState).items.filter(function(x){return x.id==="stakes";})[0];}
+  t("#374 counter finds the most recent risk across both records, using turn stamps",function(){
+    var ws=stakesWorld(100,40);ws.tagLog[20]={t:81,tags:["HP"],m:["Took 7 damage"]};ws.diceLog=[{t:87,outcome:"failed"},{t:99,outcome:"success"}];
+    var r=turnsSinceRisk(ws);if(r.turns!==13||r.kind!=="failed roll"||r.capped)return JSON.stringify(r);
+    ws.tagLog[35]={t:96,tags:["GOLD"],m:["-5 gp"]};r=turnsSinceRisk(ws);return r.turns===4&&r.kind==="gold spent"&&!r.capped?true:JSON.stringify(r);
+  });
+  t("#374 risk kinds require loss receipts; healing, zero, gains, cures and refused tags do not reset the counter",function(){
+    var cases=[['HP','Took 9 damage','HP loss'],['GOLD','-12 gp','gold spent'],['COMPANION_HP','Thessa Saltborn took 3 HP','companion HP loss'],['CONDITION','Condition: Restrained','condition'],['COMPANION_CONDITION','Thessa Saltborn: Poisoned','companion condition']];
+    for(var i=0;i<cases.length;i++){var ws=stakesWorld(100,40),c=cases[i];ws.tagLog[30]={t:91,tags:[c[0]],m:[c[1]]};var r=turnsSinceRisk(ws);if(r.turns!==9||r.kind!==c[2]||r.capped)return JSON.stringify(c)+': '+JSON.stringify(r);}
+    var ws=stakesWorld(100,40);ws.tagLog[39]={t:100,tags:['HP','GOLD','COMPANION_HP','CONDITION_REMOVED','COMPANION_CONDITION_REMOVED'],m:['Took 0 damage','Healed 3 HP','+140 gp','0 gp','Thessa healed 3 HP','Thessa took 0 HP','Cured: Restrained']};
+    ws.tagLog[38]={t:99,tags:['CONDITION','COMPANION_CONDITION'],m:['NPC: Stranger'],refused:['[CONDITION:Poisoned|1h]','[COMPANION_CONDITION:Thessa|Poisoned|1h]']};
+    var r=turnsSinceRisk(ws);return r.turns===40&&r.capped?true:JSON.stringify(r);
+  });
+  t("#374 failure outcomes include misses and fumbles without treating a success or critical hit as failure",function(){
+    var outcomes=['failed','failure','miss','missed','fumble','critical failure'];for(var i=0;i<outcomes.length;i++){var ws=stakesWorld(100,40);ws.diceLog=[{t:98,outcome:outcomes[i]},{t:99,outcome:'critical hit'}];var r=turnsSinceRisk(ws);if(r.turns!==2||r.kind!=='failed roll')return outcomes[i]+': '+JSON.stringify(r);}return true;
+  });
+  t("#374 cap reports only the retained quiet window, never an older dice record or duplicate/gapped turns",function(){
+    var ws=stakesWorld(1000,40);ws.diceLog=[{t:500,outcome:'failed'}];var r=turnsSinceRisk(ws);if(r.turns!==40||!r.capped||r.kind!==null)return JSON.stringify(r);
+    ws.tagLog=ws.tagLog.slice(-2);ws.tagLog.push(ws.tagLog[1]);r=turnsSinceRisk(ws);if(r.turns!==2||!r.capped)return 'duplicates: '+JSON.stringify(r);
+    ws.tagLog=[{t:1,tags:[],m:[]},{t:1000,tags:[],m:[]}];r=turnsSinceRisk(ws);if(r.turns!==1||!r.capped)return 'gap: '+JSON.stringify(r);
+    r=turnsSinceRisk(null);return r.turns===0&&r.capped&&r.kind===null?true:'empty: '+JSON.stringify(r);
+  });
+  t("#374 due schedule is current pressure and matches scheduleDue without mutating the clock or logs",function(){
+    var ws=stakesWorld(100,40);ws.clock={min:120,schedule:[{label:'Gate shuts',dueMin:121}]};var before=JSON.stringify(ws);var r=turnsSinceRisk(ws);if(!r.capped||JSON.stringify(ws)!==before)return 'future schedule or mutation';
+    ws.clock.min=121;before=JSON.stringify(ws);r=turnsSinceRisk(ws);if(!scheduleDue().length||r.turns!==0||r.kind!=='schedule due'||r.capped||JSON.stringify(ws)!==before)return JSON.stringify(r);
+    delete ws.clock;before=JSON.stringify(ws);stakesRow();return JSON.stringify(ws)===before?true:'readout minted or repaired a clock';
+  });
+  t("#374 coda flag sits beside the counter; only a mature quiet stretch outside a coda warns, with an under-25-word hint",function(){
+    var ws=stakesWorld(100,40);ws.tagLog[19]={t:80,tags:['HP'],m:['Took 1 damage']};var row=stakesRow();
+    if(!row||row.level!=='warn'||row.detail.indexOf('20 turns')<0||row.detail.indexOf('coda: no')<0||!row.hint||row.hint.trim().split(/\s+/).length>=25)return 'missing/wrong stakes row: '+JSON.stringify(row);
+    ws.spineComplete={turn:70};row=stakesRow();if(row.level!=='ok'||row.detail.indexOf('coda: yes')<0||row.hint)return 'coda: '+JSON.stringify(row);
+    ws.skeleton={acts:[{status:'active'}]};row=stakesRow();if(row.level!=='warn'||row.detail.indexOf('coda: no')<0)return 'active act: '+JSON.stringify(row);
+    delete ws.spineComplete;ws.skeleton.acts[0].status='completed';row=stakesRow();if(row.level!=='ok'||row.detail.indexOf('coda: yes')<0)return 'derived coda: '+JSON.stringify(row);
+    ws.ended=true;row=stakesRow();if(row.level!=='warn')return 'ended campaign counted as coda';
+    delete ws.ended;ws.skeleton=null;ws.tagLog[20]={t:81,tags:['HP'],m:['Took 1 damage']};row=stakesRow();if(row.level!=='ok'||row.detail.indexOf('19 turns')<0)return '19-turn boundary: '+JSON.stringify(row);
+    stakesWorld(100,2);row=stakesRow();return row.level==='na'&&!row.hint?true:'young: '+JSON.stringify(row);
+  });
+  t("#374 stakes follows rolled outcomes and the full quiet ring reads 40+ turns",function(){
+    stakesWorld(500,40);var items=healthIndicators(worldState).items,at=-1;for(var i=0;i<items.length;i++)if(items[i].id==='dice')at=i;
+    return at>=0&&items[at+1].id==='stakes'&&items[at+1].detail.indexOf('40+ turns')>=0?true:JSON.stringify(items);
+  });
+
   section("#371 — the stake clause behind a switch, and the rolled-outcome ratio");
   t("#371 the stake clause rides both MECHANICS contracts while diceStakeClause is on and vanishes byte-identically when it is off; the File menu carries the checkbox wired to toggleDiceStake and loaded at boot",function(){
     makeWorld();var was=diceStakeClause,wasP=playerRollsDice;try{
