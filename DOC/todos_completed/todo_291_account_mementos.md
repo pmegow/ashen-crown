@@ -56,3 +56,17 @@ unrelated untracked research/test fixtures were untouched.
 The approved deployment found checkpoint schema v3 already live and applied migrations v4/v5.
 All eight checked existing data tables retained identical row fingerprints. No production
 memento was created or deleted, and no real subscription was changed as a verification step.
+
+## Closeout review — 2026-09-09 (Astra)
+
+Current base is game a634a5f / server 002624e (v1.5.0). The replay blocker persists on untouched game base: v1258 `ENDSTATE DRIFT` at byte 12676, expected 26599 bytes, replayed 26605. No baseline was changed.
+
+Rendered QA found that reusing a sandbox iframe after clearing/hiding it could keep its document body at 0×0 although the iframe viewport and source were populated. Merely unhiding before assigning srcdoc did not fix the actual render. The reader now attaches a fresh shallow-cloned iframe per story, preserving its empty sandbox, no-referrer policy and CSP. The old browsing context is removed. A failing regression assertion preceded the change, and a retained mutation proves reuse goes red.
+
+Client: ten fixture groups and eight named mutation proofs pass; the full engine gate passes. Screenshots under `audits/screenshots/291-*.png` cover before/after reader, desktop/mobile shelf, empty/error/signed-out states. Synthetic hostile title stays text; story scripts cannot execute or access the opaque-origin parent. Story images are blocked by CSP. Final review covered stale callback rejection, account clearing, confirmation, single pending save and URL revocation. No transcript/compiler/sync edits.
+
+Server: eight retained mutation proofs and npm test pass. Test-only PR: https://github.com/pmegow/traffic-and-dragons-server/pull/1. No server deployment required. Fixtures use temporary databases and never write a real account.
+
+Resource review: one iframe is retained at a time; old contexts are replaced, generation guards drop stale responses, and download URLs are revoked. List/preview lifetimes remain bounded by existing account caps.
+
+Pending: client PR merge and verification of the deployed reader fix; regular CI's protected replay drift needs its owning workstream. This record does not claim the unfinished closeout complete.

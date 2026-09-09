@@ -7,6 +7,8 @@ function fixture(){
   function Node(tag){this.tagName=tag;this.children=[];this.style={};this.handlers={};this.hidden=false;this.value="";}
   Object.defineProperty(Node.prototype,"textContent",{get:function(){return(this.text||"")+this.children.map(function(n){return n.textContent;}).join(" ");},set:function(s){this.text=String(s);this.children=[];}});
   Object.defineProperty(Node.prototype,"innerHTML",{set:function(){throw new Error("HTML reached parent DOM");}});
+  Node.prototype.cloneNode=function(){return new Node(this.tagName);};
+  Node.prototype.parentNode={replaceChild:function(next,old){Object.keys(nodes).forEach(function(id){if(nodes[id]===old)nodes[id]=next;});}};
   Node.prototype.appendChild=function(n){this.children.push(n);return n;};Node.prototype.setAttribute=function(k,v){this[k]=v;};Node.prototype.addEventListener=function(k,f){this.handlers[k]=f;};Node.prototype.click=function(){if(this.tagName==="a")downloads.push(this);};
   var adapter={connected:false,list:{mementos:[],limits:{maxBytes:4194304,maxCount:100}},reads:[],hasToken:function(){return adapter.connected;},
     fetchAccount:function(cb){cb(null,{username:"Reader"});},listMementos:function(cb){if(adapter.holdList)adapter.listCb=cb;else cb(adapter.error,adapter.list);},
@@ -56,6 +58,13 @@ async function main(){
   });
   await test("roster titles are inert and HTML is fetched only on demand",function(){
     var c=fixture();c.adapter.connected=true;c.adapter.list.mementos=[{id:"one",title:"<img onerror=alert(1)>",bytes:44,sourceTurn:8}];c.seam.refresh();assert(c.nodes.stories.textContent.includes("<img onerror=alert(1)>"));assert.equal(c.adapter.reads.length,0);
+  });
+  await test("reader is visible before navigating the sandbox document",function(){
+    var c=fixture(),loadedHidden=null,doc="",oldReader=c.nodes.reader;c.adapter.connected=true;c.seam.refresh();
+    c.nodes.reader.cloneNode=function(){var fresh={};Object.defineProperty(fresh,"srcdoc",{get:function(){return doc;},set:function(v){doc=v;if(v)loadedHidden=c.nodes.reading.hidden;}});return fresh;};
+    c.seam.open("one");c.adapter.reads[0].cb(null,{id:"one",title:"Story",html:"<h1>Visible story</h1>"});
+    assert.notEqual(c.nodes.reader,oldReader,"a reused hidden sandbox retained zero-size layout");
+    assert.equal(loadedHidden,false,"srcdoc loaded while its reader section was hidden");
   });
   await test("older story or list responses cannot replace the current selection",function(){
     var c=fixture();c.adapter.connected=true;c.seam.refresh();c.seam.open("one");c.seam.open("two");
