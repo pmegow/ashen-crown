@@ -296,5 +296,5 @@ var START_LOCATIONS=[
 ];
 /* #354: the wizard's apparent-age and alignment vocabularies — the Identity/Stats selects in index.html
    list exactly these (pinned), and the random-hero roller draws from them. */
-var WIZARD_AGES=["young (late teens)","early twenties","thirties","middle-aged","weathered and old"];
+var WIZARD_AGES=["early twenties","late twenties","thirties","middle-aged","weathered and old"];/* #379 (owner 2026-09-08): no "late teens" — too close to the no-kids line; the youngest hero is in their twenties */
 var WIZARD_ALIGNMENTS=["Lawful Good","Neutral Good","Chaotic Good","Lawful Neutral","True Neutral","Chaotic Neutral","Lawful Evil","Neutral Evil","Chaotic Evil"];

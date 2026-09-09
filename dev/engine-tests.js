@@ -1068,6 +1068,12 @@ function runEngineTests(R){
     if(!/getElementById\("stepdots"\)\.addEventListener\("click"/.test(ub)||!/closest\(".dot.done"\)/.test(ub)||!/goStep\(parseInt\(d\.getAttribute\("data-step"\),10\)\)/.test(ub))return "stepdots click is not wired to goStep";
     return /\.dot\.done\{background:var\(--blue\);cursor:pointer\}/.test(ih)?true:"a finished dot does not read as clickable";
   });
+  t("#379 no hero is a teenager: WIZARD_AGES carries no teen option, the youngest is in their twenties, the select mirrors the list, and rollRandomHero can only pick from it",function(){
+    if(WIZARD_AGES.some(function(a){return /teen|child|kid|youth|adolesc/i.test(a);}))return "a teen age survives: "+JSON.stringify(WIZARD_AGES);
+    if(WIZARD_AGES[0]!=="early twenties")return "the floor is not the early twenties: "+WIZARD_AGES[0];
+    var ih=__fsForTests.readFileSync(__rootForTests+"/index.html","utf8");if(/late teens/.test(ih))return "the select still offers late teens";
+    var i,ok=true;for(i=0;i<40;i++){var r=rollRandomHero();if(WIZARD_AGES.indexOf(r.age)<0||/teen/i.test(r.age))ok=false;}return ok?true:"a random roll produced an age outside the list";
+  });
   t("the tier-unlock spell picker scrolls its bench (owner call 2026-09-03: twelve tier-3 cards pushed Confirm off the screen) — the list sits in a box about seven cards tall with its own scrollbar; the header and Confirm stay outside it",function(){
     var src=__fsForTests.readFileSync(__rootForTests+"/game.js","utf8"),i=src.indexOf("function showSpellUnlockModal("),body=src.slice(i,src.indexOf("function spuToggle("));
     var list=body.indexOf("id='spu-list'"),confirm=body.indexOf("id='spu-confirm'"),head=body.indexOf("Spells Unlocked");
