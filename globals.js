@@ -120,6 +120,10 @@ var IMPORT_CAPS={premise:2500,backstory:2500,field:800,rule:400};
 // GM from the recent decisions and finished quests — filed by [WHISPER:] on a ring and served back as
 // hearsay, never as truth.
 var WHISPERS_EVERY=15;
+// #386 (owner 2026-09-08): a companion may act on a compulsion-shaped flaw UNBIDDEN — pocketing what glitters,
+// freezing before authority — resolved in the open with a filed roll and a consequence on their own sheet. This
+// many turns after one such act the prompt says "not again this soon"; the record is worldState.companionInitiatives.
+var COMPANION_INITIATIVE_EVERY=12;
 var WHISPERS_CAP=12;
 // #319 plot armor (owner ruling 2026-09-03): a load-bearing NPC gets this many refused deaths (staged
 // escapes) before the armor is spent and the author's fallback carries the story.
@@ -385,7 +389,7 @@ var PROVIDERS={
   }
 };
 var carMode=false;
-var APP_VERSION="v1.866";
+var APP_VERSION="v1.867";
 // #290: the home page's one-shot blueprint handoff — home.html writes {bp,at} here and navigates to
 // the game; initState (no save) / newGame consume it into _applyBlueprint. ONE name for both sides.
 // #307: the home page's QUICK START handoff — a pre-made hero + a curated blueprint, consumed at boot by

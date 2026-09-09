@@ -167,6 +167,14 @@ function companionGrow(cs,oldFlaw,newFlaw,turn){
   if(!ok)return null;var now=String(newFlaw).trim().slice(0,160);if(!now||now.toLowerCase()===w)return null;
   if(!cs.growth)cs.growth=[];cs.growth.push({was:was,now:now,turn:turn});cs.flaw=now;return {old:was,now:now};
 }
+// #386: a companion acted on their flaw unbidden — file it (ring of 20, the sheet's stamp). Null when refused.
+function companionInitiativeFile(cs,what,turn){
+  if(!cs||!cs.name||!what)return null;var w=String(what).trim().slice(0,200);if(!w)return null;
+  if(!worldState.companionInitiatives)worldState.companionInitiatives=[];var rec={name:cs.name,what:w,turn:turn};
+  worldState.companionInitiatives.push(rec);while(worldState.companionInitiatives.length>20)worldState.companionInitiatives.shift();cs.initiativeTurn=turn;return rec;
+}
+// The freshest act inside the window, or null.
+function companionInitiativeRecent(){var ws=(typeof worldState!=="undefined")?worldState:null;if(!ws||!ws.companionInitiatives||!ws.companionInitiatives.length)return null;var r=ws.companionInitiatives[ws.companionInitiatives.length-1],every=(typeof COMPANION_INITIATIVE_EVERY==="number")?COMPANION_INITIATIVE_EVERY:12;return (ws.turn-(r.turn||0)<every)?r:null;}
 function agendaFile(cs,want,kind,source,turn){
   if(!cs||!want)return null;var rec={want:String(want).trim().slice(0,160),kind:agendaKindOf(kind),source:source||"gm",born:turn};
   if(!cs.agenda){rec.since=turn;rec.lastBeat=(typeof clockNow==="function")?clockNow():0;cs.agenda=rec;return "active";}

@@ -598,7 +598,7 @@ function buildPartyHistoriesBlock(){
     var pers="";if(cs.trait)pers+=" trait — "+cs.trait+";";if(cs.flaw)pers+=" flaw — "+cs.flaw+";";if(cs.motivation)pers+=" motivation — "+cs.motivation+";";
     L.push("- "+party[i].name+": "+(cs.backstory||"(no recorded history)")+(pers?"\n  Personality:"+pers:""));}
   if(!L.length)return"";
-  return "PARTY HISTORIES — who each of the party was before this story and what drives them (authored canon — the player first, then each companion; a character's own wants, remarks and refusals grow from THIS, never from invention). A companion's FLAW must cost the party something visible now and then — a refusal, a withheld truth, a concession not given — and a companion may be right where the player is wrong, and refuse; trait and flaw govern how they speak in quiet and intimate scenes too. A flaw is not forever: when a companion acts AGAINST it at a defining moment, on screen and unasked, file [COMPANION_GROWTH:Name|the flaw|what replaced it] — rare, earned, never requested:\n"+L.join("\n")+"\n\n";
+  return "PARTY HISTORIES — who each of the party was before this story and what drives them (authored canon — the player first, then each companion; a character's own wants, remarks and refusals grow from THIS, never from invention). A companion's FLAW must cost the party something visible now and then — a refusal, a withheld truth, a concession not given — and a companion may be right where the player is wrong, and refuse; trait and flaw govern how they speak in quiet and intimate scenes too. A flaw is not forever: when a companion acts AGAINST it at a defining moment, on screen and unasked, file [COMPANION_GROWTH:Name|the flaw|what replaced it] — rare, earned, never requested. And a compulsion-shaped flaw may act ON ITS OWN: now and then a companion does the thing it drives them to, unbidden — pockets what glitters, freezes before the priest, blurts the truth — resolved in the open with a filed roll and its consequence on THEIR sheet (their item, their condition, the shopkeeper's regard, a price paid), and recorded with [COMPANION_INITIATIVE:Name|what they did]. Rarely (the flaw is a person, not a tic), never on a turn the player has already stepped in to stop it, and never as the player's decision to make:\n"+L.join("\n")+"\n\n";
 }
 // ── #330 companions with agendas — the four asks ───────────────────────────────────────────
 // ① the recruitment ask is RETIRED (owner ruling 2026-09-05, #347): it fired once for every companion who
@@ -665,6 +665,8 @@ function buildDenouementPrompt(){
   lines.push("Write the denouement now.");
   return lines.join("\n");
 }
+// #386: the cadence line — one recent unbidden act keeps the next one off the table for a while.
+function buildCompanionInitiativeLine(){var r=(typeof companionInitiativeRecent==="function")?companionInitiativeRecent():null;if(!r)return"";return "COMPANION INITIATIVE (recent): "+r.name+" acted on their own at t"+r.turn+" — "+r.what+". No companion acts unbidden again this soon; let that one play out.\n";}
 // #367: living party members — relationship to the hero (both W7 axes), authored motivation, open want.
 // #371: the stake clause, "" while the switch is off so the prompt stays byte-identical to the pre-#371 line.
 function diceStakeText(){return (typeof diceStakeClause!=="undefined"&&diceStakeClause)?" Before any roll, say in one clause what failure would cost. If nothing is genuinely at risk, do not roll: narrate the competence and file no dice.":"";}
@@ -2209,7 +2211,7 @@ function buildSysPrompt(){
     +buildNamingClause()/* #156: the identity-discipline clause — campaign-constant by construction (assembled from IDENTITY_DOMAINS namingRules + fixed literals), so it is cache-safe in the stable half; engine-tested for call-stability */
     +buildDeepTimeBlock()/* #227: the world age ladder — written once at campaign start and never mutated in play, so it is cache-safe in the stable half; ""-clean for every campaign without a ladder, which keeps legacy saves byte-identical */
     +buildPartyHistoriesBlock();/* #341: companions' authored past — constant between recruit/death/import, ""-clean without one */
-  var volatile_=identity+switchBlock+mpEndBlock+abandonBlock+wallSweepBlock+leftBlock
+  var volatile_=identity+switchBlock+mpEndBlock+abandonBlock+wallSweepBlock+leftBlock+buildCompanionInitiativeLine()/* #386: "" outside the window — byte-identical */
     +"CHARACTER: "+c.name+" ("+genderDisplay+"), "+(c.subraceNm?c.subraceNm+" ":"")+c.ancestry+" "+c.cls+(c.archetypeNm?" ["+c.archetypeNm+"]":"")+", Level "+c.level+" ("+c.xp+" XP, next: "+nextXP+")\n"
     +"HP: "+c.hp+"/"+c.maxHp+" | Gold: "+c.gold+" gp | Alignment: "+(c.actualAlignment||c.statedAlignment||"Neutral")+"\n"
     +"Stats: STR "+c.stats.STR+" DEX "+c.stats.DEX+" CON "+c.stats.CON+" INT "+c.stats.INT+" WIS "+c.stats.WIS+" CHA "+c.stats.CHA+"\n"
