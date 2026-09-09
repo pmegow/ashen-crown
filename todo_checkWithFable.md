@@ -15,6 +15,7 @@ should probe first. Self-contained enough that a Fable session needs no other co
 
 ## Off-Fable log
 
+- 2026-09-09 · #291 · Astra: rendered memento closeout found zero-size reused sandbox; fresh iframe restores story. Client 10 groups + 8 proofs, server full gate + 8 proofs; screenshots retained. No transcript/compiler, sync, server route/schema or drift edits; deployed preview QA passes; production fix and pre-existing replay CI remain pending.
 - 2026-09-09 · #23④ · Astra: first-turn instructions grouped, dialog keyboard/focus support and short-screen scrolling; three DOM groups/three proofs, rendered desktop/mobile/short-height QA. Cadence/Car Mode preserved; no engine/prompt/parser/state changes.
 
 - 2026-09-09 · #23③ · Astra: skill ranks/bonuses become readable rows; canonical ability detail buttons support keyboards; descriptions wrap. Two DOM groups/two proofs and desktop/mobile screenshots. Shared sheet DOM only; no skill mechanics, canon, prompts, parser or state changes.

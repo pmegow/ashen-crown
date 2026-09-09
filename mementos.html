@@ -79,7 +79,9 @@ body{margin:0;padding:0 24px 40px}header,main{max-width:1080px;margin:auto}p{lin
     storageAdapter.getMemento(id,function(err,data){
       if(run!==generation)return;
       if(err||!data||typeof data.html!=="string"||!data.html.trim()){status("Could not open story: "+(err||"empty or invalid document"),true);return;}
-      current=data;$("reading-title").textContent=data.title;$("reader").srcdoc=readerDocument(data.html);$("reading").hidden=false;$("download").disabled=false;status("Reading “"+data.title+"”.",false);
+      current=data;$("reading-title").textContent=data.title;$("reading").hidden=false;
+      // Reusing a hidden sandbox can retain zero-size layout; attach one fresh browsing context per story.
+      var oldReader=$("reader"),freshReader=oldReader.cloneNode(false);freshReader.srcdoc=readerDocument(data.html);oldReader.parentNode.replaceChild(freshReader,oldReader);$("download").disabled=false;status("Reading “"+data.title+"”.",false);
       if(typeof $("reading").scrollIntoView==="function")$("reading").scrollIntoView({block:"start",behavior:"auto"});
     });
   }
