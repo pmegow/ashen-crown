@@ -2813,12 +2813,12 @@ var _rendering=false;
 // after), and the spell-out line demands gender explicitly so compression can never shed it.
 function buildSceneRenderRequest(c,party,w){
   var gw=genderWord(c.gender);/* #11③: shared mapping (local renamed — the old `var genderWord` would shadow the helper) */
-  var charDesc=c.name+", a "+gw+" "+c.age+" "+c.ancestry+" "+c.cls+", "+c.appear+(c.mark?", "+c.mark:"");
+  var charDesc=c.name+", a "+gw+" "+c.age+" "+c.ancestry+" "+c.cls+", "+c.appear+(c.mark?", "+c.mark:"")+(typeof attireRenderText==="function"&&attireRenderText(c)?", "+attireRenderText(c):"");/* #388: the sheet's attire reaches the painter (a robe, bare, in full scale) */
   var compDescs=[],pi;
   for(pi=0;pi<party.length;pi++){
     var pcs=party[pi].charSheet;
     var pg=genderWord(pcs.gender);/* #11③: shared mapping */
-    var pd=party[pi].name+", a "+pg+(pcs.age?" "+pcs.age:"")+" "+(pcs.ancestry||"")+" "+(pcs.cls||"")+(pcs.appear?", "+pcs.appear:"")+(pcs.mark?", "+pcs.mark:"");
+    var pd=party[pi].name+", a "+pg+(pcs.age?" "+pcs.age:"")+" "+(pcs.ancestry||"")+" "+(pcs.cls||"")+(pcs.appear?", "+pcs.appear:"")+(pcs.mark?", "+pcs.mark:"")+(typeof attireRenderText==="function"&&attireRenderText(pcs)?", "+attireRenderText(pcs):"");/* #388 */
     compDescs.push(pd.replace(/\s+/g," ").trim());
   }
   var hasParty=compDescs.length>0;
