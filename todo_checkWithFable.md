@@ -14,6 +14,10 @@ commits), what it touches, why it's risky or not, supporting docs/tests, and wha
 should probe first. Self-contained enough that a Fable session needs no other context.
 
 ## Off-Fable log
+
+- 2026-09-09 · #23④ · Astra: first-turn instructions grouped, dialog keyboard/focus support and short-screen scrolling; three DOM groups/three proofs, rendered desktop/mobile/short-height QA. Cadence/Car Mode preserved; no engine/prompt/parser/state changes.
+
+- 2026-09-09 · #23③ · Astra: skill ranks/bonuses become readable rows; canonical ability detail buttons support keyboards; descriptions wrap. Two DOM groups/two proofs and desktop/mobile screenshots. Shared sheet DOM only; no skill mechanics, canon, prompts, parser or state changes.
 - 2026-09-09 (#374, Astra, v1.873): pure stakes measurement and one drift-health row beside rolled outcomes; retained-window cap and coda label. Seven failing-first checks, 5/5 sabotage, 2,069 engine assertions + 28 standalone suites, desktop/mobile coda and active-act renders verified. No prompt, parser, clock, serialization, or modal edits.
 - 2026-09-09 (#351, Astra; dev-only): adjudicated all nine weekly sabotage failures; corrected mutation targets and legitimate earlier receipts, added factory-latch/portable ownership guards, drained pending I/O deterministically, and fixed CI history/pipefail. Local full gate 2,062 + 28 standalone suites; 900/900 targets applicable. [Weekly CI 34373931181](https://github.com/pmegow/traffic-and-dragons/actions/runs/34373931181): 78/78 green, zero misattributions. No engine file, assertion baseline, frozen hash or prompt changed.
 - 2026-09-04 (#292, Sol; owner-approved adapter methods/SW allowlist): operator satellite + admin-only server roster/statistics and confirmed entitlement controls; Extend preserves unused time, unpriced models remain explicit. No drift-file edits. 11 client fixtures, 134 server checks, 18 sabotage clauses; desktop/390px/error renders inspected. Server deployment awaits owner approval because the tree also carries Fable's pending checkpoint migration. Record: DOC/todos_completed/todo_292_operator_console.md.
