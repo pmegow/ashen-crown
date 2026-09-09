@@ -1119,6 +1119,14 @@ function runEngineTests(R){
     var itemProg=new Function("d",reg.slice(reg.indexOf("progress: function (d) { var keys"),reg.indexOf("/* #383 */")).replace(/^progress: function \(d\) \{/,"").replace(/\}\s*$/,""));
     return itemProg({bible:{"a":{category:"weapons"},"b":{category:"armor"},"c":{category:"weapons"}}})==="3 entries · 2 categories"?true:"item progress text";
   });
+  t("#384 the whispers note carries the last three rumours already served so the GM cannot re-serve one; an empty ring leaves the note byte-identical",function(){
+    makeWorld();worldState.turn=40;worldState.world.location="High Reach";memory.map.nodes["High Reach"]={size:"medium",visits:3};memory.keyDecisions=[{turn:12,desc:"Smashed the Mortuary angel"}];delete worldState.whisperAsk;worldState.whispers=[];
+    var bare=buildWhispersNote();if(!bare||/Already said/.test(bare))return "empty ring must not add the clause: "+bare;
+    delete worldState.whisperAsk;worldState.whispers=[{text:"one",turn:1},{text:"Word is that a pale ghost-child with a fluted mace has been smashing up bone-binders.",turn:19},{text:"a bog-witch stripped a tax clerk",turn:34},{text:"the Morne nursery ghost rose",turn:49}];
+    var n=buildWhispersNote();if(!n||n.indexOf("Already said, in words or substance")<0)return "clause missing: "+n;
+    if(n.indexOf("fluted mace")<0||n.indexOf("tax clerk")<0||n.indexOf("Morne nursery")<0||/"one"/.test(n))return "the last three, not the first: "+n;
+    return n.replace(/ Already said[^\]]*/,"")===bare?true:"the clause changed something other than itself";
+  });
   t("the tier-unlock spell picker scrolls its bench (owner call 2026-09-03: twelve tier-3 cards pushed Confirm off the screen) — the list sits in a box about seven cards tall with its own scrollbar; the header and Confirm stay outside it",function(){
     var src=__fsForTests.readFileSync(__rootForTests+"/game.js","utf8"),i=src.indexOf("function showSpellUnlockModal("),body=src.slice(i,src.indexOf("function spuToggle("));
     var list=body.indexOf("id='spu-list'"),confirm=body.indexOf("id='spu-confirm'"),head=body.indexOf("Spells Unlocked");
