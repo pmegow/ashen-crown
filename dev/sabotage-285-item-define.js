@@ -26,7 +26,8 @@ rc|=sabotage.prove({
     { label:"#285: the alias guard dies — a def could land under the alias's own key and split resolution from the curated canon key",
       mustFail:"#285 (f18): effect-bearing base and effect-bearing overlay entries stay Define-ineligible",
       find:"  if(!base||base!==hit)return false;/* alias-resolved */",
-      replace:"  if(!base)return false;" },
+      // Both limbs enforce alias refusal; leaving !base intact never admitted an alias.
+      replace:"  /* alias eligibility guard removed */" },
 
     { label:"#285: the shadow note goes silent — replacing a curated entry becomes invisible to the player (no-silent-failures)",
       mustFail:"#285 (f18): itemDefShadowNote",

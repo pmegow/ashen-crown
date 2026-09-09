@@ -254,9 +254,10 @@ rc |= sabotage.prove({
     /* ── #151 LATCH REGISTRY CONTRACT — the registry half ── */
     {
       label: "#151 a latch field is dropped from NOTE_LATCH_FIELDS while its write stays",
-      mustFail: "builder region writes UNDECLARED worldState key(s)",
-      find: "\"phaseMismatch\",",
-      replace: ""
+      // Scope to the registry: the first phaseMismatch occurrence is a oneShotPing argument.
+      mustFail: "oneShotPing key phaseMismatch is missing from NOTE_LATCH_FIELDS",
+      find: /(var NOTE_LATCH_FIELDS=\[[^\r\n]*?)"phaseMismatch",/,
+      replace: "$1"
     },
     /* ── #76 TABLE TALK ISOLATION CONTRACT — the prompt-builder half ── */
     {

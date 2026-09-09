@@ -166,7 +166,8 @@ var chain = tAsync("restored render revokes its object URL when image decode fai
       if (ev.waits.length !== 1) return "runtime write registered " + ev.waits.length + " lifetime promise(s)";
       var settled = false;
       ev.waits[0].then(function() { settled = true; });
-      return Promise.resolve().then(function() { return Promise.resolve(); }).then(function() {
+      // A whole event-loop turn drains nested promise jobs before settling the deliberately pending I/O.
+      return new Promise(function(resolve){setImmediate(resolve);}).then(function() {
         if (settled) return "held lifetime settled before the pending cache.put";
         put.resolve(true);
         return ev.waits[0].then(function() { return ""; });
@@ -182,7 +183,8 @@ var chain = tAsync("restored render revokes its object URL when image decode fai
       if (ev.waits.length !== 1) return "runtime write registered " + ev.waits.length + " lifetime promise(s)";
       var settled = false;
       ev.waits[0].then(function() { settled = true; });
-      return Promise.resolve().then(function() { return Promise.resolve(); }).then(function() {
+      // A whole event-loop turn drains nested promise jobs before settling the deliberately pending I/O.
+      return new Promise(function(resolve){setImmediate(resolve);}).then(function() {
         if (settled) return "held lifetime settled before the pending cache.put";
         put.resolve(true);
         return ev.waits[0].then(function() { return ""; });
@@ -215,7 +217,8 @@ var chain = tAsync("restored render revokes its object URL when image decode fai
       if (ev.waits.length !== 1) return "Piper write/GC registered " + ev.waits.length + " lifetime promise(s)";
       var settled = false;
       ev.waits[0].then(function() { settled = true; });
-      return Promise.resolve().then(function() { return Promise.resolve(); }).then(function() {
+      // A whole event-loop turn drains nested promise jobs before settling the deliberately pending I/O.
+      return new Promise(function(resolve){setImmediate(resolve);}).then(function() {
         if (settled) return "held lifetime settled before superseded-revision deletion";
         deletion.resolve(true);
         return ev.waits[0].then(function() { return ""; });

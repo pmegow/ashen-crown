@@ -57,7 +57,8 @@ const cases = [
     find: "function () { closeModal(); delete ADD[ak]; render(); }",
     replace: "function () { delete ADD[ak]; render(); }" },
   { file: page, label: "capability file is detected before it is parsed", mustFail: "verifies the local project file",
-    find: "if (!BIBLE_TYPES[\"capability\"].detect(g.text))", replace: "if (false)" },
+    // The refresh path has the same detect call; this unique error belongs to the guarded writer.
+    find: 'if (!BIBLE_TYPES["capability"].detect(g.text)) throw new Error("the server\'s', replace: 'if (false) throw new Error("the server\'s' },
   { file: page, label: "capability update reads the checkout's fresh bible", mustFail: "reads capability_bible.js fresh",
     find: 'fetch(BSRV + "/bible")', replace: 'fetch(BSRV + "/missing")' },
   { file: page, label: "validated local install refreshes the in-page capability", mustFail: "refreshes the in-page CAPABILITY_BIBLE",

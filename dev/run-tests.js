@@ -437,6 +437,10 @@ try {
   for (var _iLR = 0; _iLR < _filesLR.length; _iLR++)
     _sourcesLR[_filesLR[_iLR]] = _fsLR.readFileSync(_pathLR.join(__dirname, "..", _filesLR[_iLR]), "utf8");
   var _resultLR = _lcLR.censusSources(_sourcesLR);
+  // Factory-created note builders write through a parameter; the source census cannot infer that key.
+  var _pingCallsLR=/\boneShotPing\("([^"]+)",/g,_pingLR;
+  while((_pingLR=_pingCallsLR.exec(_apiLR)))if(_resultLR.declared.indexOf(_pingLR[1])<0)
+    _failLR("oneShotPing key "+_pingLR[1]+" is missing from NOTE_LATCH_FIELDS");
   if (!_resultLR.builders.length) _failLR("NOTE_BUILDERS parsed as empty — the transitive census is not running");
   if (_resultLR.missing.length) _failLR("transitive NOTE_BUILDERS writes UNDECLARED worldState key(s): " + _resultLR.missing.join(", ") + " — declare, narrowly restore, or seek a reviewed owner-scoped exemption");
   if (_resultLR.rationaleFailures.length) _failLR("ruled exemption rationale/owner failed: " + _resultLR.rationaleFailures.join("; "));

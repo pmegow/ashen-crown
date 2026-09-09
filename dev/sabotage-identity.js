@@ -1,3 +1,4 @@
+// The transitive census catches the missing provisional latch before the older engine clause.
 // sabotage-identity.js — prove the #156 Phase A identity guards actually guard.
 // Each case breaks one clause (pipe refusal, provisional predicate/mint/cap channel, nudge
 // gates, #128 scan exclusion, suggestion filter, merge pre-image + alias suppression, the
@@ -59,7 +60,7 @@ rc |= sabotage.prove({
   file: "api.js",
   command: ["node", ["dev/run-tests.js"]],
   cases: [
-    { label: "provisionalNudged dropped from NOTE_LATCH_FIELDS (the suggestion call eats the nudge)", mustFail:"NOTE_LATCH_FIELDS carries provisionalNudged",
+    { label: "provisionalNudged dropped from NOTE_LATCH_FIELDS (the suggestion call eats the nudge)", mustFail:"transitive NOTE_BUILDERS writes UNDECLARED worldState key(s): provisionalNudged",
       find: "\"presencePing\",\"principalNudged\",\"provisionalNudged\"",/* #218 stale-target repair: principalNudged grew between the old anchors */
       replace: "\"presencePing\",\"principalNudged\"" }
   ]
