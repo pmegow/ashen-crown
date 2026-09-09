@@ -79,3 +79,16 @@ Two self-contained tasks from `TODO.md`, both inside the off-Fable safe-changes 
 ## If both land early — TODO #206 (per-scene Render button, S, tier Any)
 
 Only if the owner confirms nobody else is in `ui-shell.js` or `game.js` that day. The row in `TODO.md` already carries the scouted design and its one correctness trap (`doRender` must get `{noHistory:true}` with the scene's own prose, location and clock, or every button paints the CURRENT scene). Ask before starting.
+
+---
+
+## Also assigned 2026-09-09 — the rest of the non-Fable open rows
+
+Each row in `TODO.md` carries its own spec; the same house rules above apply. Order of preference after tasks A and B:
+
+- **#291 — per-account memento page, CLOSEOUT only.** Built by Sol as client v1.810 / server v1.4.0, already deployed. What remains is listed in the row: rendered QA, the retained sabotage proof, a final review, CI and deployed-page verification, the closeout record in `DOC/todos_completed/todo_291_account_mementos.md`. No new server deploy is expected; if one turns out to be needed, stop and ask.
+- **#377 — the server half.** A light server probe (turn number only) before the boot push, so a cache clear no longer draws Chrome's red `POST /api/state 409` line. Lives in the server repo (`traffic-and-dragons-server`, Fly.dev), a v1.4.x change. Any deploy needs the owner's explicit approval; the client side (`storage-adapter.js`) is a sync-contract file, so keep the client edit to the minimum the probe needs and say exactly what you changed.
+- **#23 ③ and ④ — UX passes: skills & abilities display, then onboarding.** Thin DOM and CSS over already-tested pure functions; never a function a prompt or parser reads. Each pass: screenshot before and after, one commit per surface. ① and ② are not yours (owner audit; ② already started by others).
+- **#206 — per-scene Render button.** Gated: confirm with the owner that nobody is in `ui-shell.js` or `game.js` that day. The row holds the design and the one correctness trap.
+
+Not for Astra, even though their tier is not Fable: #19, #78, #104, #379, #380, #383 (built, waiting on the owner's field test), #44 (owner read-through + business model), #65 phase 2 (storage boundary → Fable), the Known-issues #19 and #22 rows (owner-prompted cadences).
