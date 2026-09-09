@@ -1927,6 +1927,41 @@ function healthGrowthTelemetry(ws,mem){
 function diceOutcomeRatio(ws,window){var log=(ws&&ws.diceLog)||[],n=(typeof window==="number")?window:40,i,filed=0,s=0,f=0;
   for(i=Math.max(0,log.length-n);i<log.length;i++){var o=String(log[i].outcome||"").toLowerCase();if(!o)continue;if(/succ|pass|hit|crit/.test(o)){filed++;s++;}else if(/fail|miss/.test(o)){filed++;f++;}}
   return {filed:filed,successes:s,failures:f};}
+// The tag ring bounds what the display can know; an older dice failure cannot certify
+// that no intervening HP loss or expense was evicted. No state is written by this measurement.
+function turnsSinceRisk(ws){
+  ws=ws||{};var now=ws.turn||0,cap=typeof TAG_LOG_CAP==="number"?TAG_LOG_CAP:40;
+  var tl=ws.tagLog||[],dl=ws.diceLog||[],seen={},last=-1,kind=null,i,j,e,age;
+  var rules=[
+    {tag:"HP",pattern:/^Took [1-9][0-9]* damage$/,kind:"HP loss"},
+    {tag:"GOLD",pattern:/^-[1-9][0-9]* gp$/,kind:"gold spent"},
+    {tag:"COMPANION_HP",pattern:/^.+ took [1-9][0-9]* HP$/,kind:"companion HP loss"},
+    {tag:"CONDITION",pattern:null,kind:"condition"},
+    {tag:"COMPANION_CONDITION",pattern:null,kind:"companion condition"}
+  ];
+  function risk(t,k){if(typeof t==="number"&&t<=now&&t>last&&now-t<cap){last=t;kind=k;}}
+  for(i=tl.length-1;i>=Math.max(0,tl.length-cap);i--){
+    e=tl[i];if(!e||typeof e.t!=="number"||e.t>now)continue;seen[e.t]=true;
+    for(j=0;j<rules.length;j++){var rule=rules[j];if((e.tags||[]).indexOf(rule.tag)<0)continue;
+      if(!rule.pattern){var rejected=(e.refused||[]).concat(e.stripped||[]).some(function(x){return String(x).indexOf("["+rule.tag+":")>=0;});if(!rejected)risk(e.t,rule.kind);continue;}
+      var muts=e.m||[];for(var k=0;k<muts.length;k++)if(rule.pattern.test(String(muts[k]))){risk(e.t,rule.kind);break;}
+    }
+  }
+  for(i=dl.length-1;i>=0;i--){e=dl[i];if(e&&/\b(fail|failed|failure|miss|missed|fumble)\b/i.test(String(e.outcome||"")))risk(e.t,"failed roll");}
+  // scheduleDue's dueMin <= min projection, without its clockEnsure migration/repair side effects.
+  var c=ws.clock,schedule=c&&c.schedule||[];
+  if(c&&typeof c.min==="number"&&isFinite(c.min))for(i=0;i<schedule.length;i++){
+    e=schedule[i];if(e&&typeof e.dueMin==="number"&&isFinite(e.dueMin)&&c.min>=e.dueMin)return {turns:0,kind:"schedule due",capped:false};
+  }
+  if(last>=0)return {turns:now-last,kind:kind,capped:false};
+  age=0;while(age<cap&&seen[now-age])age++;
+  return {turns:age,kind:null,capped:true};
+}
+function stakesFiledTurns(ws){
+  var logs=[ws.tagLog||[],ws.diceLog||[]],seen={},n=0,i,j,e;
+  for(i=0;i<logs.length;i++)for(j=logs[i].length-1;j>=0;j--){e=logs[i][j];if(e&&typeof e.t==="number"&&e.t<=ws.turn&&!seen[e.t]){seen[e.t]=true;n++;if(n>=3)return n;}}
+  return n;
+}
 function healthIndicators(ws,mem,withGrowth){
   var items=[],i,j;
   function push(id,label,level,detail){items.push({id:id,label:label,level:level,detail:detail});}
@@ -2047,6 +2082,9 @@ function healthIndicators(ws,mem,withGrowth){
   var dr=diceOutcomeRatio(ws);
   if(dr.filed<3)push("dice","Rolled outcomes","na","too few filed rolls to judge ("+dr.filed+")");
   else push("dice","Rolled outcomes",(dr.failures===0&&dr.filed>=8)?"warn":"ok",dr.successes+" of the last "+dr.filed+" filed rolls succeeded"+(dr.failures===0?" — not one failure on record":""));
+  var riskRead=turnsSinceRisk(ws),inCoda=codaState();
+  push("stakes","At risk",stakesFiledTurns(ws)<3?"na":(inCoda||riskRead.turns<20?"ok":"warn"),
+    riskRead.turns+(riskRead.capped?"+":"")+" turns since recorded risk"+(riskRead.kind?" ("+riskRead.kind+")":" — retained record only")+"; coda: "+(inCoda?"yes":"no"));
   var HINTS={
     rag:{bad:"Past scenes aren't reaching the GM — memory questions get invented answers. Submit a report if this stays red.",
          warn:"Past scenes aren't reaching the GM lately. Watch it — submit a report if it goes red."},
@@ -2057,6 +2095,7 @@ function healthIndicators(ws,mem,withGrowth){
     quest:{warn:"The engine is nudging the GM to review or close it — if it lingers a few turns, ask about it in-story."},
     anomaly:{bad:"A canon claim (often a death or its rewards) was refused and withheld. If the story owes you something, submit a report.",
              warn:"Self-correcting state (memory retries or a clock check) — no action needed unless it persists; then submit a report."},
+    stakes:{warn:"No recent recorded risk outside a coda. Judge the quiet stretch by the scenes; this measurement does not change play."},
     dice:{warn:"Every filed roll succeeded. Either a high-level skills ladder is doing its job or the GM is not rolling when something is at risk — judge by the scenes, and check File ▸ Settings ▸ Name the stake before a roll."},
     transport:{bad:"Heavy provider load-shedding — most turns need retries. Consider switching model for this session; report if it continues.",
                warn:"The AI provider is shedding load — turns retry and feel slower. Usually clears on its own; report if it lasts all session."}
