@@ -198,12 +198,18 @@ function clockSleepMode(){
      refused to jump to, and the heal note demanded a [REST:long]), the rest exists to REACH that dawn — so it
      rolls to dawn whatever the hour. Without this a 3:15 pm heal would wake at 11:15 pm still mislabelled. */
   if(typeof worldState!=="undefined"&&worldState&&worldState.reconcileSkip)return "dawn";
+  /* #389: the GM NAMED the wake — a same-response [TIME:phase] out of band (The Long Walk t122: "long-rest" at
+     1 pm, the prose slept to dawn, the fixed eight hours landed at 9 pm, the cap refused the nine-hour jump and
+     the GM was nudged into a second night). restWake is transient: set by the REST handler, deleted after the roll. */
+  if(typeof worldState!=="undefined"&&worldState&&worldState.restWake&&typeof worldState.restWake.tgt==="number")return "named";
   var h=(((c.min%MIN_PER_DAY)/MIN_PER_HOUR)+DAWN_HOUR)%24;/* clock hour of day, fractional — DAWN_HOUR (helpers.js) is the #89 zero */
   return (h>=SLEEP_EVENING_FROM||h<SLEEP_EVENING_TO)?"dawn":"fixed";
 }
 function clockSleepRoll(){
   var c=clockEnsure();if(!c)return 0;
-  var r=(clockSleepMode()==="dawn")?MIN_PER_DAY-(c.min%MIN_PER_DAY):SLEEP_FIXED_MIN;
+  var mode=clockSleepMode(),r;
+  if(mode==="named"){r=(worldState.restWake.tgt-(c.min%MIN_PER_DAY)+MIN_PER_DAY)%MIN_PER_DAY;if(r<=0)r=SLEEP_FIXED_MIN;/* #389: forward to the named phase's next occurrence (never 0 — an in-band phase never names a wake) */}
+  else r=(mode==="dawn")?MIN_PER_DAY-(c.min%MIN_PER_DAY):SLEEP_FIXED_MIN;
   c.min+=r;
   return r;
 }
@@ -436,6 +442,16 @@ var TIME_PHASES=[
 function clockPhaseLabelAt(min){var v=(min==null?clockNow():min),off=((v%MIN_PER_DAY)+MIN_PER_DAY)%MIN_PER_DAY,i,best=null;
   for(i=0;i<TIME_PHASES.length;i++){var p=TIME_PHASES[i];if(off>=p.b0&&off<p.b1&&(!best||(p.b1-p.b0)<(best.b1-best.b0)))best=p;}
   return best?best.lbl:"night";}
+// #389: the named wake — the LAST [TIME:] in a response (never [TIME_CHECK:], the opening declaration) mapped
+// through TIME_PHASES, returned ONLY when the phase is out of band at the current (pre-rest) clock. In band it
+// is a declaration of the phase the scene is already in (the t37 dawn nap that #346 fixed), not a wake.
+// Unmapped free text ("the storm-dark hour") is flavor. Pure over the clock; null when nothing qualifies.
+function clockNamedWake(text){
+  var c=clockEnsure();if(!c||!text)return null;var all=String(text).match(/\[TIME:([^\]]+)\]/g)||[];if(!all.length)return null;
+  var lbl=all[all.length-1].match(/\[TIME:([^\]]+)\]/)[1].trim(),i,ph=null;
+  for(i=0;i<TIME_PHASES.length;i++){if(TIME_PHASES[i].re.test(lbl)){ph=TIME_PHASES[i];break;}}
+  if(!ph)return null;var off=c.min%MIN_PER_DAY;if(off>=ph.b0&&off<ph.b1)return null;
+  return {label:ph.lbl,tgt:ph.tgt};}
 // Advance the clock forward to the declared phase's next occurrence. Returns minutes added
 // (0 = in-band, exact, or unmapped). Routes through clockAdvance so monotonicity holds.
 function clockReconcilePhase(label){

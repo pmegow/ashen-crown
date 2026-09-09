@@ -535,7 +535,8 @@ function buildWhispersNote(){
   var key=worldState.world.location;if(typeof locResolve==="function")key=locResolve(key);
   var node=memory.map.nodes[key];if(!node||!node.size)return"";
   var every=(typeof WHISPERS_EVERY==="number")?WHISPERS_EVERY:15,wa=worldState.whisperAsk;
-  if(wa&&typeof wa.turn==="number"&&worldState.turn-wa.turn<every)return"";
+  if(wa&&typeof wa.turn==="number"&&worldState.turn-wa.turn<every)return "";
+  if(worldState.reconcileSkip)return "";/* #389: a pending clock repair outranks the ask — this note is ~2k chars and sits at builder 9; the heal nudge at 23 was evicted by it at The Long Walk t123 */
   var dec=(memory.keyDecisions||[]).slice(-5).map(function(d){return "t"+d.turn+": "+d.desc;});
   var qs=[],qk=Object.keys(memory.quests||{}),i;for(i=qk.length-1;i>=0&&qs.length<3;i--){var q=memory.quests[qk[i]];if(q&&(q.status==="completed"||q.status==="failed"))qs.push(qk[i]+" ("+q.status+")");}
   var cm=(worldState.character&&worldState.character.coreMemories)||[],last=cm.length?cm[cm.length-1].text:"";

@@ -7,7 +7,7 @@ var rc = sabotage.prove({
   command: ["node", ["dev/run-tests.js", "#73 campaign clock"]],
   cases: [
     { label: "the daylight branch is dropped — every rest rolls to dawn again (the t37 whole-day nap returns)",
-      find: 'var r=(clockSleepMode()==="dawn")?MIN_PER_DAY-(c.min%MIN_PER_DAY):SLEEP_FIXED_MIN;', replace: 'var r=MIN_PER_DAY-(c.min%MIN_PER_DAY);' },
+      find: 'else r=(mode==="dawn")?MIN_PER_DAY-(c.min%MIN_PER_DAY):SLEEP_FIXED_MIN;', replace: 'else r=MIN_PER_DAY-(c.min%MIN_PER_DAY);'/* #389 moved the roll behind the named branch */ },
     { label: "the evening window opens an hour early (5 pm rolls to dawn)",
       find: 'SLEEP_EVENING_FROM=18', replace: 'SLEEP_EVENING_FROM=17' },
     { label: "the evening window closes an hour late (4 am still rolls to dawn)",

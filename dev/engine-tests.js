@@ -15331,6 +15331,36 @@ t("genderLabel: F→Female, NB→Non-binary, else Male (incl. unset)",function()
     if(clockSleepMode()!=="dawn")return "an armed reconcile skip must make the rest roll to dawn";
     return true;
   });
+  t("#389 the named wake: a same-response [TIME:phase] that is OUT of band names the wake and a long rest rolls to that phase's next occurrence (the Long Walk double night); an in-band [TIME:] is a current-phase declaration and keeps the #346 fixed rule (the t37 guard); TIME_CHECK never names a wake; restWake never persists; whispers yields while a clock repair is pending",function(){
+    var D4=3*MIN_PER_DAY+7*60+2;/* Day 4, 13:02 — the t122 long rest */
+    makeWorld();clockEnsure();worldState.clock.min=D4;delete worldState.reconcileSkip;
+    var R=applyMuts("You sleep without the dead whispering, waking only when thin dawn bleeds through the glass. [TIME:dawn][REST:long]");var m=(R&&R.muts?R.muts:[]).join(" | ");
+    if(clockNow()!==4*MIN_PER_DAY)return "named dawn from 13:02 must wake at Day 5 dawn: "+clockNow()+" / "+m;
+    if(m.indexOf("slept until dawn (named)")<0)return "the mut must name the mode: "+m;
+    if(m.indexOf("SKIPPED")>=0||worldState.reconcileSkip)return "the named wake must leave nothing to reconcile: "+m+" / "+JSON.stringify(worldState.reconcileSkip);
+    if(worldState.restWake!==undefined)return "restWake leaked onto the save";
+    makeWorld();clockEnsure();worldState.clock.min=MIN_PER_DAY+37;/* Day 2, 6:37 am — the t37 case: dawn is IN band, a declaration not a wake */
+    R=applyMuts("Dawn. You doze. [TIME:dawn][REST:long]");m=(R&&R.muts?R.muts:[]).join(" | ");
+    if(clockNow()!==MIN_PER_DAY+37+480||m.indexOf("slept eight hours")<0)return "an in-band [TIME:dawn] must keep the fixed eight hours (t37): "+clockNow()+" / "+m;
+    makeWorld();clockEnsure();worldState.clock.min=D4;
+    R=applyMuts("You sleep the afternoon away and wake as the lamps are lit. [TIME:evening][REST:long]");m=(R&&R.muts?R.muts:[]).join(" | ");
+    if(clockNow()!==3*MIN_PER_DAY+720||m.indexOf("slept until evening (named)")<0)return "a named evening from 13:02 must wake at 6:00 pm: "+clockNow()+" / "+m;
+    makeWorld();clockEnsure();worldState.clock.min=D4;
+    R=applyMuts("[TIME_CHECK:dawn] You nap. [REST:long]");m=(R&&R.muts?R.muts:[]).join(" | ");
+    if(clockNow()!==D4+480||m.indexOf("slept eight hours")<0)return "TIME_CHECK must never name a wake: "+clockNow()+" / "+m;
+    makeWorld();clockEnsure();worldState.clock.min=D4;worldState.reconcileSkip={label:"dawn",turn:1,delta:540};
+    R=applyMuts("[TIME:evening][REST:long]");m=(R&&R.muts?R.muts:[]).join(" | ");
+    if(clockNow()!==4*MIN_PER_DAY||m.indexOf("slept until dawn")<0)return "the #142 demanded heal keeps precedence over a named wake: "+clockNow()+" / "+m;
+    if(clockNamedWake("x [TIME:the storm-dark hour] y")!==null)return "unmapped free text must not name a wake";
+    /* the note order half: a pending clock repair outranks the whispers ask */
+    makeWorld();worldState.turn=40;worldState.world.location="Sandpoint";delete worldState.whisperAsk;
+    memory.map.nodes["Sandpoint"]={firstVisit:1,visits:3,description:null,parent:null,npcs:[],items:[],size:"medium"};
+    memory.keyDecisions=[{turn:30,desc:"Spared the raider captain"}];memory.quests={};
+    worldState.reconcileSkip={label:"dawn",turn:39,delta:540};
+    if(buildWhispersNote()!==""||worldState.whisperAsk)return "whispers must yield while reconcileSkip is armed";
+    delete worldState.reconcileSkip;if(!/WHISPERS/.test(buildWhispersNote()))return "whispers must fire again once the repair lands";
+    return true;
+  });
   t("#89: [REST:long] via applyMuts rolls to dawn, restores spells, and says so in muts", function(){
     makeWorld(); clockAdvance(800);                        // #346: an evening rest — the dawn-roll contract
     worldState.character.spells[0].used=true;              // Tess's Faerie Fire, expended
