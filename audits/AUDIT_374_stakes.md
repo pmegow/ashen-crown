@@ -16,3 +16,5 @@ Chrome screenshots, 1200px desktop and 390px mobile, captured with an isolated p
 - [Mobile](screenshots/374-mobile.png)
 
 Built for owner testing (◉); no master push or deployment.
+
+Final integration carries upstream #388 unchanged. Its concurrent v1.869 landing collided with the initial stakes marker; stakes now uses v1.873 / tnd-v3-20260909e, after the versions reserved by the other assigned UI PRs. TODO #374 explicitly remains built/owner-test (◉). No upstream functionality was removed.

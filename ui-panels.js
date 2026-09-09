@@ -271,9 +271,10 @@ function updateInvPanel(){
       var row=grp.rows[j],eq=(grp.id==="weapon"||grp.id==="armor");
       /* #295: every item row opens the item-bible click-card (showItemCard, ui-sheets) — same
          canon as the hover tooltip, readable on touch where title-tooltips need a long-press. */
-      h+='<div class="ii has-tip'+(eq?' eq':'')+'" data-item="'+escHtml(row.raw)+'" onclick="showItemCard(this.dataset.item)" style="cursor:pointer;" title="'+escHtml(itemTip(row.raw)+_invTipCats(row,grp.id))+'">'+invItemHtml(row.raw)+'</div>';
+      h+='<div class="ii has-tip'+(eq?' eq':'')+'" data-item="'+escHtml(row.raw)+'" onclick="showItemCard(this.dataset.item)" style="cursor:pointer;" title="'+escHtml(itemTip(row.raw)+_invTipCats(row,grp.id))+'">'+invItemHtml(row.raw)+(typeof isWorn==="function"&&isWorn(_ap,row.raw)?' <span style="color:var(--t2);font-size:10px;">· worn</span>':'')+'</div>';/* #388: plain-text marker, no pill (the no-borders rule) */
     }
   }
+  if(_ap.outfit&&_ap.outfit.text)h='<div style="font-size:11px;color:var(--t2);font-style:italic;padding:2px 0 4px;">Outfit: '+escHtml(_ap.outfit.text)+'</div>'+h;/* #388 */
   document.getElementById("inv-list").innerHTML=h||'<div style="font-size:11px;color:var(--t2);font-style:italic;padding:4px 0;">Empty</div>';
 }
 function updateAbPanel(hl){
