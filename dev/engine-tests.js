@@ -8118,6 +8118,9 @@ function runEngineTests(R){
     /* #390: direction of travel is its own lever — the High Reach gate render squared every torso to the gate and still ran the companion into the wall. */
     if(rp.indexOf("MOVEMENT: every MOVING character's direction of travel is stated RELATIVE TO THE FOCAL POINT")<0||rp.indexOf("ONE line of advance")<0||rp.indexOf("staggered in depth")<0)return "the movement clause is missing (#390)";
     if(/\bnot (running|moving|heading)\b/i.test(rp))return "the movement clause negates (#209d never-negate rule)";
+    /* #390b: the six-render A/B — a described face is a shown face; rear-view characters carry identity without face words. */
+    if(rp.indexOf("A DESCRIBED FACE IS A SHOWN FACE")<0||rp.indexOf("hair, build, silhouette, clothing and gear ONLY")<0)return "the described-face clause is missing (#390b)";
+    if(/gender, hair colour, eye colour/.test(rp))return "eye colour is still demanded for every character (#390b — that is what turned every rear view into a face view)";
     /* #209b: the two A/B-validated levers — staging geometry + camera-relative view angles. */
     if(rp.indexOf("DEEPER IN FRAME")<0)return "the staging-geometry invariant is missing (#209b — the focal point deeper in frame than every figure)";
     if(rp.indexOf("CAMERA-RELATIVE VIEW ANGLE")<0||rp.indexOf("three-quarter rear view")<0)return "the view-angle vocabulary demand is missing (#209b — the lever that actually converged the A/B)";
