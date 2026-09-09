@@ -13,3 +13,5 @@ Baseline put four instructions in a single small-text paragraph. The same senten
 Three focused fixture groups (two failed on baseline) and three retained named mutation proofs pass. Actual Chrome QA: desktop 1200×1100, mobile 390×844, short landscape 568×320; screenshots under `audits/screenshots/23-onboarding-*.png`. Native focus return verified. No document-level listeners, timers or persistent data beyond the existing seen flag. The modal's handler dies with the removed modal. Separate commit and version/cache bump from ③.
 
 Both assigned passes are ready for owner review. The unrelated protected v1258 replay drift remains present on origin/master; no baseline was changed. #23's other owner/quest-history obligations remain open.
+
+Upstream integration build v1.874 / tnd-v3-20260909f preserves the concurrently landed #388 attire rendering. Only version-marker conflicts required resolution; the assigned UI edits merged separately. Full gate rerun on the combined tree.

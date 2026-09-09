@@ -175,10 +175,10 @@ function csSheetSections(c,invOwner,portable){
         var _defBtn=(_canDrop&&typeof itemDefEligible==="function"&&itemDefEligible(_row.raw))?'<button class="inv-def" data-raw="'+escHtml(_row.raw)+'" onclick="defineItemFromStory(this.dataset.raw,event)" title="Define this item: the GM reviews the story for what is already established about it and proposes canon — you confirm before it binds. Canonized items are re-injected every turn, so their nature can no longer drift." style="background:none;border:none;color:var(--t2);cursor:pointer;font-size:12px;padding:0 2px;line-height:1;flex-shrink:0;" onmouseover="this.style.color=\'var(--acc)\'" onmouseout="this.style.color=\'var(--t2)\'">&#9998;</button>':"";/* #382: the quill, like every other edit control */
         /* #295: the item text opens the click-card; the Define/Drop buttons sit in their own
            flex span, so their clicks never bubble into the card. */
-        invRows+='<div class="cs-list-row" style="display:flex;justify-content:space-between;align-items:baseline;gap:8px;"><span data-item="'+escHtml(_row.raw)+'" onclick="showItemCard(this.dataset.item)" style="cursor:pointer;">'+invItemHtml(_row.raw)+'</span><span style="display:flex;gap:2px;flex-shrink:0;">'+_defBtn+_dropBtn+'</span></div>';
+        invRows+='<div class="cs-list-row" style="display:flex;justify-content:space-between;align-items:baseline;gap:8px;"><span data-item="'+escHtml(_row.raw)+'" onclick="showItemCard(this.dataset.item)" style="cursor:pointer;">'+invItemHtml(_row.raw)+(typeof isWorn==="function"&&isWorn(c,_row.raw)?' <span style="color:var(--t2);font-size:10px;">· worn</span>':'')+'</span><span style="display:flex;gap:2px;flex-shrink:0;">'+_defBtn+_dropBtn+'</span></div>';/* #388 */
       }
     }
-    invHtml='<div class="cs-list">'+invRows+"</div>";}
+    invHtml=(c.outfit&&c.outfit.text?'<div class="cs-list-row" style="font-style:italic;color:var(--t2);">Outfit (t'+escHtml(String(c.outfit.turn||0))+'): '+escHtml(c.outfit.text)+'</div>':"")+'<div class="cs-list">'+invRows+"</div>";/* #388 */}
   else invHtml='<span class="cs-none">Empty</span>';
   // #47: earned epithets/titles ride the character schema (c.aliases) so they survive PC↔NPC
   // swaps — "Player today is NPC tomorrow is Player again; the sheets stay sympatico" (user).

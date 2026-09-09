@@ -2016,6 +2016,7 @@ function buildSysPrompt(){
       var line=pmN.name+" — "+(pcs.subraceNm?pcs.subraceNm+" ":"")+(pcs.ancestry?pcs.ancestry+" ":"")+(pcs.cls||"adventurer")+(pcs.archetypeNm?" ["+pcs.archetypeNm+"]":"")+", Level "+(pcs.level||1)+" | HP "+pcs.hp+"/"+pcs.maxHp+(pmAl?" | "+pmAl+pmAlTension:"")+"\n";
       if(pSt)line+="  Stats: "+pSt+"\n";
       line+="  Abilities: "+pAb+"\n  Spells: "+pSp+(pMx>0?"\n  Mana: "+manaCur(pcs)+"/"+pMx+(pcs.cls==="Necromancer"?" (Necromancer — may overdraw in blood; the engine deducts it)":""):"")+"\n  Inventory: "+pInv;
+      var _pmAt=attireLine(pcs);if(_pmAt)line+="\n  "+_pmAt;/* #388: a companion's attire reaches the GM too (sheet parity — the t125 shirt was on the PLAYER, the next one will not be) */
       // #46: companion conditions were WRITTEN by [COMPANION_CONDITION:] but never injected —
       // a write-path with no read-path, so they silently rotted (Daeris, Unconscious for ~200
       // turns while narrated awake). Inject with age so stale state is visible and self-corrects.
@@ -2218,6 +2219,7 @@ function buildSysPrompt(){
     +"Stats: STR "+c.stats.STR+" DEX "+c.stats.DEX+" CON "+c.stats.CON+" INT "+c.stats.INT+" WIS "+c.stats.WIS+" CHA "+c.stats.CHA+"\n"
     +(c.trait||c.flaw||c.motivation?(c.trait?"Trait: "+c.trait:"")+(c.flaw?" | Flaw: "+c.flaw:"")+(c.motivation?" | Motivation: "+c.motivation:"")+"\n":"")+(c.deity?"Deity: "+c.deity+"\n":"")/* trailing \n so "Motivation:" doesn't glue to the next line (audit E54) */
     +"Abilities: "+abilstr+"\nSpells: "+spstr+"\n"+manaStr+"Inventory: "+c.inventory.join(", ")+"\n"
+    +(attireLine(c)?attireLine(c)+"\n":"")/* #388: what is ON — "" when never set (byte-identical) */
     +condStr+relStr+saveStr+langStr+skillStr
     +buildSpellBibleBlock()
     +buildAbilityBibleBlock()
@@ -2647,6 +2649,30 @@ function _invStr(s){return typeof s==="string"?s:"";}
 function _invNorm(s){return _invStr(s).replace(/\s*x\d+\s*$/i,"").toLowerCase().replace(/[—–−‑]/g,"-").replace(/\s*-\s*/g,"-").replace(/\s+/g," ").trim().replace(/s$/,"");}
 function _invCount(s){var m=_invStr(s).match(/\sx(\d+)\s*$/i);return m?parseInt(m[1],10):1;}
 function _invBase(s){return _invStr(s).replace(/\s*x\d+\s*$/i,"").trim();}
+// ── #388: ATTIRE — what a party member has ON, as two fields on every sheet (player and companion alike):
+//   worn:[]        the STORED inventory strings currently worn/held-ready (armor buckled, shield slung, ring on).
+//                  Nothing can be worn that is not carried: [WORN:|on] for an uncarried item is REFUSED loudly,
+//                  ITEM_LOST/COMPANION_ITEM_LOST prune it, ITEM_RENAMED follows it.
+//   outfit:{text,turn}  the mundane layer beneath or instead of gear, one dated line, REPLACED never appended
+//                  ("nothing — armor and road clothes out for laundry"). Dated so the GM reads it as last-known,
+//                  not as a rule. Field origin: The Long Walk t125 — Nyla clutched a shirt Silas took off at t113,
+//                  twelve turns past the verbatim window; no tail length covers a fact set before the scene break.
+// Narrative-only for the first cut (no AC, no stealth). Name-addressed: attireSheet resolves the player by name.
+var OUTFIT_MAX_CHARS=140;
+function attireSheet(name){var n=String(name||"").trim();if(!n||!worldState)return null;if(typeof memoryNpcIsPlayer==="function"&&memoryNpcIsPlayer(n))return worldState.character;var _c=worldState.character;if(_c&&_c.name&&_c.name.toLowerCase()===n.toLowerCase())return _c;return findCompanionChar(typeof resolveNpcName==="function"?resolveNpcName(n):n);}
+function _wornIdx(list,item){var t=_invNorm(item),i;for(i=0;i<(list||[]).length;i++)if(_invNorm(list[i])===t)return i;return -1;}
+function wornSet(cs,item,on,who){if(!cs)return {ok:false,reason:"no sheet"};if(!cs.worn)cs.worn=[];var inv=cs.inventory||[],ii=_wornIdx(inv,item),wi=_wornIdx(cs.worn,item);
+  if(!on){if(wi<0)return {ok:false,reason:"not worn"};var _rm=cs.worn.splice(wi,1)[0];return {ok:true,item:_invBase(_rm)};}
+  if(ii<0){if(typeof console!=="undefined")console.warn("[attire] WORN: '"+item+"' is not in "+(who||cs.name||"?")+"'s inventory — nothing is worn that is not carried; emit [ITEM_GAINED:] first (#388)");return {ok:false,reason:"not carried"};}
+  var stored=_invBase(inv[ii]);if(wi>=0)return {ok:false,reason:"already worn",item:stored};cs.worn.push(stored);return {ok:true,item:stored};}
+function wornPrune(cs){if(!cs||!cs.worn||!cs.worn.length)return 0;var inv=cs.inventory||[],keep=[],i,dropped=0;for(i=0;i<cs.worn.length;i++){if(_wornIdx(inv,cs.worn[i])>=0)keep.push(cs.worn[i]);else dropped++;}cs.worn=keep;return dropped;}
+function wornRename(cs,oldName,newName){if(!cs||!cs.worn)return false;var wi=_wornIdx(cs.worn,oldName);if(wi<0)return false;cs.worn[wi]=_invBase(newName);return true;}
+function outfitSet(cs,text,turn){if(!cs)return null;var t=String(text||"").replace(/\s+/g," ").trim();if(!t)return null;if(t.length>OUTFIT_MAX_CHARS)t=t.slice(0,OUTFIT_MAX_CHARS-1)+"…";cs.outfit={text:t,turn:(typeof turn==="number"?turn:((worldState&&worldState.turn)||0))};return cs.outfit;}
+function isWorn(cs,item){return !!(cs&&cs.worn&&_wornIdx(cs.worn,item)>=0);}
+// The ONE prompt/sheet/render line. "" when nothing was ever set — the prompt stays byte-identical for every
+// campaign that never touches attire (engine-tested). Worn empty but an outfit on file reads "Wearing: nothing".
+function attireLine(cs){if(!cs)return "";var w=(cs.worn||[]).filter(function(x){return !!x;}),o=cs.outfit&&cs.outfit.text?cs.outfit:null;if(!w.length&&!o)return "";return "Wearing: "+(w.length?w.join(", "):"nothing")+(o?" | Outfit (t"+(o.turn||0)+"): "+o.text:"");}
+function attireRenderText(cs){if(!cs)return "";var w=(cs.worn||[]).filter(function(x){return !!x;}),o=cs.outfit&&cs.outfit.text?cs.outfit.text:"";if(!w.length&&!o)return "";return "currently wearing: "+(w.length?w.join(", "):"no gear")+(o?"; "+o:"");}
 // P14: a quantity baked into an item TAG ("Rope x3") means N of the base item, not one item
 // literally named "Rope x3" — without this, gaining "Rope x3" onto an existing "Rope" stack
 // stepped the count to x2 instead of x4, and losing "Rope x2" removed only one. The x must be
