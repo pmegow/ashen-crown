@@ -2219,6 +2219,20 @@ function rollPendingCheck(){
   if(typeof saveAll==="function")saveAll();
   sendAction(r.note,{silent:true,rollTag:r.diceTag});
 }
+// #391: back out of a pending roll. The check lapses (the #329 rule already lets a typed action do this
+// silently); here it is VISIBLE — a "withdrawn" dice record (no face, so #371's ratio and #374's risk
+// counter ignore it), a one-shot note so the GM narrates the hold-back instead of rolling anyway, a toast,
+// and the input focused for what the player does instead. Nothing is sent: the next action is theirs.
+function reconsiderPendingCheck(){
+  var chk=worldState&&worldState.pendingCheck;if(!chk||busy)return;
+  delete worldState.pendingCheck;
+  worldState.checkWithdrawnPing={turn:worldState.turn,label:chk.label,mod:chk.mod||0,dc:(chk.dc!=null?chk.dc:null)};
+  if(typeof diceLogFile==="function")diceLogFile({by:"player",label:chk.label,face:null,mod:chk.mod||0,dc:(chk.dc!=null?chk.dc:null),total:null,outcome:"withdrawn"});
+  if(typeof document!=="undefined"){var el=document.querySelector(".dice-pending");if(el){var wrap=document.createElement("div");wrap.innerHTML='<div class="dice-block" style="opacity:.6;"><span style="font-size:10px;text-transform:uppercase;letter-spacing:.08em;color:var(--t2);margin-right:8px;">'+escHtml(chk.label)+'</span>d20 &middot; withdrawn</div>';if(wrap.firstChild)el.parentNode.replaceChild(wrap.firstChild,el);}
+    var inp=document.getElementById("action-input");if(inp){inp.placeholder="You hold back \u2014 what do you do instead?";inp.focus();}}
+  if(typeof showToast==="function")showToast("Roll withdrawn \u2014 say what you do instead.");
+  if(typeof saveAll==="function")saveAll();
+}
 function retryLast(){if(lastAction)sendAction(lastAction,lastActionOpts?{mpBypass:true,silent:true,rollTag:lastActionOpts.rollTag}:{mpBypass:true});}/* P3: a retried multi-PC round is already an assembled block — re-queueing it as one PC's action would corrupt the round */
 // Re-roll the last GM narration in the CURRENT prose voice WITHOUT advancing the turn
 // or re-applying state tags — a clean A/B tool for trying Prose Inspiration voices on the

@@ -222,6 +222,7 @@ body.font-large #topbar button, body.font-large .rpanel button { font-size: 14px
 @media (prefers-reduced-motion:reduce){ *,*::before,*::after{ animation:none!important; transition:none!important; scroll-behavior:auto!important; } }
 /* #329/#352: a pending player roll breathes with the same phase and dimness as critical HP — the buttons are withheld until it lands, so the chip has to carry the "act now" (owner call 2026-09-06) */
 .roll-due{animation:hp-breath 1.6s ease-in-out infinite;}
+.roll-alt{color:var(--t2);font-size:12px;cursor:pointer;margin-left:6px}.roll-alt:hover{color:var(--t0);text-decoration:underline}/* #391: the way out of a pending roll, plain text (no pill) */
 @media (prefers-reduced-motion:reduce){ .hp-crit{ font-weight:bold; } }/* #352: the state stays marked without motion */
 @media (prefers-reduced-motion:reduce){ .roll-due{ text-decoration:underline; } }
 @media (pointer:coarse){ .qa{ min-height:44px; padding:10px 14px; font-size:13px; } }

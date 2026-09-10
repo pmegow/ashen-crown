@@ -1672,6 +1672,29 @@ function runEngineTests(R){
     if(fn.indexOf("if(typeof suggestInband!==\"undefined\"&&suggestInband)worldState.suggestMissPing={turn:worldState.turn}")<0)return "generateActions must arm the miss latch on the fallback path";
     var armIdx=fn.indexOf("worldState.suggestMissPing="),useIdx=fn.indexOf("in-band buttons used");if(armIdx<useIdx)return "the latch must be armed only on the miss branch (after the in-band branch)";
   });
+  t("#391 reconsider: the pending-roll card carries a visible way out; reconsiderPendingCheck withdraws the check (no die, a 'withdrawn' dice record, a toast, the input focused) and arms a one-shot CHECK WITHDRAWN note that tells the GM the attempt was NOT made; the #371 ratio ignores the withdrawal; registry wired",function(){
+    makeWorld();worldState.turn=131;playerRollsDice=true;var tl=[],_st=showToast;showToast=function(m){tl.push(String(m));};
+    try{
+      worldState.pendingCheck={label:"Strength check",mod:3,dc:15,turn:131};
+      var card=diceTxt("[CHECK:Strength check|+3|DC 15]");if(card.indexOf("reconsiderPendingCheck()")<0||!/reconsider/i.test(card))return "the live card has no reconsider control: "+card;
+      if(card.indexOf("stopPropagation")<0)return "the reconsider click must not bubble into the roll";
+      var before=(worldState.diceLog||[]).length,rb=diceOutcomeRatio(worldState).filed;
+      reconsiderPendingCheck();
+      if(worldState.pendingCheck)return "the check is still pending";
+      if(!worldState.checkWithdrawnPing||worldState.checkWithdrawnPing.label!=="Strength check"||worldState.checkWithdrawnPing.dc!==15||worldState.checkWithdrawnPing.turn!==131)return "ping: "+JSON.stringify(worldState.checkWithdrawnPing);
+      var dl=worldState.diceLog||[];if(dl.length!==before+1||dl[dl.length-1].outcome!=="withdrawn"||dl[dl.length-1].by!=="player"||dl[dl.length-1].label!=="Strength check"||dl[dl.length-1].face!=null)return "dice record: "+JSON.stringify(dl[dl.length-1]);
+      if(diceOutcomeRatio(worldState).filed!==rb)return "a withdrawal counted as a filed roll (#371)";
+      if(!tl.some(function(x){return /withdrawn/i.test(x);}))return "no toast: "+JSON.stringify(tl);
+      var n=buildEngineNotes();if(n.indexOf("CHECK WITHDRAWN")<0||n.indexOf("Strength check")<0||n.indexOf("DC 15")<0||n.indexOf("never roll")<0||n.indexOf("NOT made")<0)return "note: "+n.slice(0,400);
+      if(worldState.checkWithdrawnPing)return "the ping survived its delivery";
+      if(/CHECK WITHDRAWN/.test(buildEngineNotes()))return "the note fired twice";
+      var inert=diceTxt("[CHECK:Strength check|+3|DC 15]");if(inert.indexOf("reconsiderPendingCheck")>=0)return "the inert card still offers reconsider";
+      reconsiderPendingCheck();if(worldState.checkWithdrawnPing)return "reconsider with nothing pending armed a ping";
+      if(NOTE_BUILDERS.indexOf(buildCheckWithdrawnNote)<0||!NOTE_SHAPES.buildCheckWithdrawnNote||NOTE_LATCH_FIELDS.indexOf("checkWithdrawnPing")<0||NOTE_SHAPES.buildCheckWithdrawnNote.latch.indexOf("checkWithdrawnPing")<0)return "registry not wired";
+      worldState.combat={round:1};worldState.checkWithdrawnPing={turn:131,label:"Strength check",mod:3,dc:15};if(buildCheckWithdrawnNote().indexOf("CHECK WITHDRAWN")<0)return "a withdrawal inside combat must still reach the GM";worldState.combat=null;
+      return true;
+    }finally{showToast=_st;playerRollsDice=false;}
+  });
   t("#348 curve change keeps every character at their level: a Lv17 with 131,190 XP (Ammut at t2419) loads as Lv17 with XP floored to the new gate, companions likewise; nobody de-levels and nobody levels up on load",function(){
     makeWorld();var c=worldState.character;c.level=17;c.xp=131190;
     worldState.npcs.push({name:"Daeris",partyMember:true,status:"steady",charSheet:{name:"Daeris",cls:"Cleric",level:16,xp:114240,hp:60,maxHp:60,stats:{},abilities:[],spells:[],inventory:[]}});
