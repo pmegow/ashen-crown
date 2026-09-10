@@ -14998,6 +14998,29 @@ t("genderLabel: F→Female, NB→Non-binary, else Male (incl. unset)",function()
     if(!flushed)return "server flush was skipped — a quota throw still kills the beforeunload flush";
     return toasts.length?true:"no toast — silent failure";
   });
+  t("#395 one mature campaign fills the phone: snapshotActiveCamp at quota proceeds WITHOUT a local slot copy when the cloud provably holds the current turn (server mode, acked turn ≥ local, no conflict), clears any partial slot writes, toasts the cloud-library outcome and still flushes; a cloud that is behind, in conflict, or absent keeps the refusal",function(){
+    if(typeof global==="undefined")return true;
+    function run(status,serverMode){
+      makeWorld();worldState.turn=9;setActiveCampId("QF2");store.set(WSK,'{"turn":9}');store.set(SLK,"[]");store.set(MEM_KEY,"{}");
+      var had=("localStorage" in global),real=had?global.localStorage:undefined,backing={},writes=0;
+      global.localStorage={getItem:function(k){return (k in backing)?backing[k]:null;},setItem:function(k,v){if(k.indexOf("tnd_camp_")===0){writes++;if(writes>1){var e=new Error("quota");e.name="QuotaExceededError";throw e;}}backing[k]=v;},removeItem:function(k){delete backing[k];}};
+      var flushed=false,rs=storageAdapter.syncNow,rm=storageAdapter.isServerMode,rst=storageAdapter.syncStatus;storageAdapter.syncNow=function(){flushed=true;};storageAdapter.isServerMode=function(){return serverMode;};storageAdapter.syncStatus=function(){return status;};
+      var toasts=[],hadToast=("showToast" in global),realToast=hadToast?global.showToast:undefined;global.showToast=function(m){toasts.push(String(m));};
+      var ok,slotLeft;try{ok=snapshotActiveCamp();slotLeft=Object.keys(backing).filter(function(k){return k.indexOf("tnd_camp_QF2_")===0;}).length;}finally{storageAdapter.syncNow=rs;storageAdapter.isServerMode=rm;storageAdapter.syncStatus=rst;if(hadToast)global.showToast=realToast;else delete global.showToast;if(had)global.localStorage=real;else delete global.localStorage;}
+      Object.keys(_mKeys).forEach(function(k){if(k.indexOf("tnd_camp_QF2_")===0){delete _m[k];delete _mKeys[k];}});store.del(WSK);store.del(SLK);store.del(MEM_KEY);setActiveCampId(null);store.del(CAMP_META_K);
+      return {ok:ok,slotLeft:slotLeft,flushed:flushed,toasts:toasts};
+    }
+    var r=run({lastAckTurn:9,conflict:null,serverMode:true},true);
+    if(r.ok!==true)return "cloud holds turn 9: expected true, got "+r.ok;
+    if(r.slotLeft!==0)return "the partial slot write must be cleared (a half copy is worse than none): "+r.slotLeft;
+    if(!r.flushed)return "the server flush was skipped";
+    if(!r.toasts.some(function(t){return /cloud library/i.test(t)&&/turn 9/.test(t);}))return "the toast must say the campaign stays in the cloud library at turn 9: "+JSON.stringify(r.toasts);
+    r=run({lastAckTurn:8,conflict:null,serverMode:true},true);if(r.ok!==false)return "cloud behind by a turn must refuse";
+    r=run({lastAckTurn:9,conflict:{serverTurn:12},serverMode:true},true);if(r.ok!==false)return "a conflict must refuse";
+    r=run({lastAckTurn:9,conflict:null,serverMode:false},false);if(r.ok!==false)return "no server must refuse";
+    if(!r.toasts.some(function(t){return /sync/i.test(t)||/cloud/i.test(t);}))return "the refusal toast for a single-campaign device must point at syncing, not at removing other campaigns: "+JSON.stringify(r.toasts);
+    return true;
+  });
   t("switchToCampaign ABORTS untouched when the outgoing snapshot hits quota",function(){
     if(typeof global==="undefined")return true; /* browser: host storage not stubbable — node enforces */
     makeWorld();worldState.campId="QA";setActiveCampId("QA");

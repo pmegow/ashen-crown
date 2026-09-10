@@ -911,7 +911,19 @@ function snapshotActiveCamp(quiet){/* #337: quiet=true — the caller shows ONE 
   }catch(e){
     ok=false;
     console.error("[camps] snapshot failed — storage full:",e);
-    if(!quiet&&typeof showToast==="function")showToast("⚠ Storage full — couldn't back up the current campaign. Free space: Campaigns → \"Remove local\" on old campaigns.");
+    /* #395 (owner, the phone, 2026-09-10): ONE mature campaign fills the device — the live keys plus a full slot copy is
+       twice the campaign, and "Remove local" refuses the campaign being played, so the toast's advice was useless. The
+       same rule "Remove local" applies to OTHER campaigns applies here: when the cloud provably holds the current turn
+       (server mode, acked turn at or above the local turn, no conflict), the cloud copy IS the backup and the local slot
+       copy is optional — proceed without it, clear any partial slot write (a half copy is worse than none), and say so.
+       Anything less than proof keeps the refusal, now pointing at the sync instead of at campaigns that do not exist. */
+    var _cloud=null;try{if(typeof storageAdapter!=="undefined"&&storageAdapter.isServerMode&&storageAdapter.isServerMode()&&storageAdapter.syncStatus){var _ss=storageAdapter.syncStatus();var _lt=(typeof worldState!=="undefined"&&worldState)?(worldState.turn||0):0;if(_ss&&!_ss.conflict&&typeof _ss.lastAckTurn==="number"&&_ss.lastAckTurn>=0&&_ss.lastAckTurn>=_lt)_cloud={turn:_ss.lastAckTurn};}}catch(_ce){_cloud=null;}
+    if(_cloud){
+      try{store.del(campSlotKey(id,"ws"));store.del(campSlotKey(id,"sl"));store.del(campSlotKey(id,"mem"));}catch(_cd){}
+      ok=true;console.warn("[camps] no room for a local copy of "+campDisplayName(id)+" — the cloud holds turn "+_cloud.turn+", proceeding without the slot copy (#395)");
+      if(!quiet&&typeof showToast==="function")showToast("☁ No room for a local copy of "+campDisplayName(id)+" — it stays in your cloud library (turn "+_cloud.turn+" synced). Load re-downloads it anytime.");
+    }
+    else if(!quiet&&typeof showToast==="function")showToast("⚠ Storage full — couldn't back up the current campaign. Free space: Campaigns → \"Remove local\" on old campaigns, or sync this campaign to the cloud first (a synced campaign needs no local copy).");
   }
   updateCampMeta();
   // Flush the debounced server sync before leaving this campaign (audit E74): snapshotActiveCamp is
