@@ -3277,6 +3277,10 @@ function fileDenouement(text){
   delete worldState.denouementOwed;
   if(!worldState.ended)worldState.ended={turn:worldState.turn,cause:"the story closed",at:Date.now()};
   if(typeof saveAll==="function")saveAll();
+  /* #394: the keepsake makes itself. The Mementos card promises "a keepsake stays with you even after its campaign is
+     gone", but the story save was a menu item nobody reaches at the end (The Long Walk: finished, nothing on the home
+     page). Signed in → save the story now; signed out → nothing, the menu item remains. */
+  if(typeof saveNarrativeMemento==="function"&&typeof storageAdapter!=="undefined"&&storageAdapter&&typeof storageAdapter.hasToken==="function"&&storageAdapter.hasToken())saveNarrativeMemento();
 }
 // #300 multiplayer — death is personal. A fallen PC companion is parked with its sheet; the party
 // continues; at the next camp they rejoin whole.

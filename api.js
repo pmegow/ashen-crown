@@ -644,13 +644,18 @@ function buildHoursNote(){
 }
 // #301: the DENOUEMENT — the campaign's closing chapter, asked of the GM when the fourth death lands or the
 // player walks onward. Drawn from what the campaign actually recorded; written in the campaign's voice.
-var DENOUEMENT_SYS="You are the Game Master closing a FINISHED campaign. Write its denouement: prose only, no tags, no headings, no meta commentary, 300-500 words. Honour every recorded fact below; invent nothing that contradicts them; leave the unfinished threads unfinished, named. End on the world going on without the hero. Close with one short paragraph naming what the tale changed in the hero, or refused to change.";
+var DENOUEMENT_SYS="You are the Game Master closing a FINISHED campaign. Write its denouement: prose only, no tags, no headings, no meta commentary, 300-500 words. Honour every recorded fact below; invent nothing that contradicts them; leave the unfinished threads unfinished, named. End on the world going on without the hero. Close with one short paragraph naming what the tale changed in the hero, or refused to change — drawn ONLY from the DEFINING MOMENTS and the hero's recorded trait, flaw and motivation below; where the sheet records none, name what the moments show, and invent no failing the record never played.";
 // #325: the spine's own ending — the hero LIVES. Same denouement, a different last line.
-var DENOUEMENT_SYS_TOLD="You are the Game Master closing a FINISHED campaign whose authored tale has been told to its last act. Write its denouement: prose only, no tags, no headings, no meta commentary, 300-500 words. Honour every recorded fact below; invent nothing that contradicts them; leave the unfinished threads unfinished, named. The hero lives: end on the hero and the world they made, the story's threads at rest. Close with one short paragraph naming what the tale changed in the hero, or refused to change.";
+var DENOUEMENT_SYS_TOLD="You are the Game Master closing a FINISHED campaign whose authored tale has been told to its last act. Write its denouement: prose only, no tags, no headings, no meta commentary, 300-500 words. Honour every recorded fact below; invent nothing that contradicts them; leave the unfinished threads unfinished, named. The hero lives: end on the hero and the world they made, the story's threads at rest. Close with one short paragraph naming what the tale changed in the hero, or refused to change — drawn ONLY from the DEFINING MOMENTS and the hero's recorded trait, flaw and motivation below; where the sheet records none, name what the moments show, and invent no failing the record never played.";
 function denouementSys(){return (worldState&&worldState.ended&&worldState.ended.spine)?DENOUEMENT_SYS_TOLD:DENOUEMENT_SYS;}
 function buildDenouementPrompt(){
   var c=worldState.character,lines=[],i;
   lines.push("CAMPAIGN: "+(worldState.campName||"")+" — hero "+c.name+", "+c.cls+" level "+c.level+".");
+  /* #394: the hero's own sheet reaches the ending (companions already had theirs, #367). The Long Walk t146: no
+     trait, flaw or motivation on file and the closing verdict was told to name what the tale "refused to change" —
+     the model invented "catastrophic vanity", and #367 then filed it as a defining moment. The record, or nothing. */
+  var _hb=[];if(c.trait)_hb.push("trait: "+c.trait);if(c.flaw)_hb.push("flaw: "+c.flaw);if(c.motivation)_hb.push("motivation: "+c.motivation);
+  lines.push("HERO: "+c.name+" — "+(_hb.length?_hb.join("; "):"the sheet records no trait, flaw or motivation; judge the hero only by the DEFINING MOMENTS below"));
   var eras=memory.eras||[];if(eras.length){lines.push("ERAS (oldest first):");for(i=0;i<eras.length;i++)lines.push("- "+(eras[i].summary||""));}
   var ch=memory.chapters||[];if(ch.length){lines.push("CHAPTERS (oldest first):");for(i=0;i<ch.length;i++)lines.push("- t"+ch[i].turn+": "+ch[i].summary);}
   var qk=Object.keys(memory.quests||{});if(qk.length){lines.push("QUESTS:");for(i=0;i<qk.length;i++){var q=memory.quests[qk[i]];lines.push("- "+qk[i]+" — "+(q.status||"")+(q.desc?": "+q.desc:""));}}

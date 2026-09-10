@@ -1065,6 +1065,26 @@ function runEngineTests(R){
     var um=__fsForTests.readFileSync(__rootForTests+"/ui-modals.js","utf8"),em=um.slice(um.indexOf("function showEndingOfferModal("),um.indexOf("function showCampaignEndedModal("));
     return em.indexOf("id='ending-closing'")>=0&&/endingDecide\("play",_cl\)/.test(em)?true:"the modal does not capture the closing condition";
   });
+  t("#394 the ending judges the hero from the record: buildDenouementPrompt carries the hero's trait, flaw and motivation (or says plainly the sheet records none), both closing instructions source the verdict in the DEFINING MOMENTS and the recorded sheet and forbid an invented failing; the ending saves the memento itself when signed in (once, never when signed out)",function(){
+    makeWorld();worldState.turn=146;worldState.campName="The Long Walk";var c=worldState.character;c.name="Silas Morne";c.trait=null;c.flaw=null;c.motivation=null;c.coreMemories=[{text:"Silas granted a gentle passing to Uncle Aldus.",turn:139,kind:"gm"}];
+    var p=buildDenouementPrompt();
+    if(p.indexOf("HERO: Silas Morne")<0||!/records no trait, flaw or motivation/.test(p))return "no-sheet case not stated: "+p.slice(0,400);
+    c.trait="Watchful";c.flaw="Vanity — cannot pass a mirror";c.motivation="To bury the family name";p=buildDenouementPrompt();
+    if(p.indexOf("trait: Watchful")<0||p.indexOf("flaw: Vanity — cannot pass a mirror")<0||p.indexOf("motivation: To bury the family name")<0)return "sheet fields missing: "+p.slice(0,500);
+    if(/records no trait/.test(p))return "the no-sheet line survived a filled sheet";
+    [DENOUEMENT_SYS,DENOUEMENT_SYS_TOLD].forEach(function(s){});
+    if(DENOUEMENT_SYS.indexOf("drawn ONLY from the DEFINING MOMENTS and the hero's recorded trait, flaw and motivation")<0||DENOUEMENT_SYS_TOLD.indexOf("drawn ONLY from the DEFINING MOMENTS and the hero's recorded trait, flaw and motivation")<0)return "the closing instruction is not sourced";
+    if(DENOUEMENT_SYS.indexOf("invent no failing")<0||DENOUEMENT_SYS_TOLD.indexOf("invent no failing")<0)return "the closing instruction does not forbid an invented failing";
+    /* the keepsake: fileDenouement saves the memento itself when signed in */
+    var calls=0,_sm=(typeof saveNarrativeMemento==="function")?saveNarrativeMemento:undefined,_sa=storageAdapter,_st=showToast;showToast=function(){};
+    saveNarrativeMemento=function(){calls++;};
+    try{
+      storageAdapter={hasToken:function(){return false;}};delete worldState.ended;fileDenouement("The fog died.\n\nThe walk changed him.");if(calls!==0)return "memento saved while signed out";
+      storageAdapter={hasToken:function(){return true;}};delete worldState.ended;fileDenouement("The fog died.\n\nThe walk changed him.");if(calls!==1)return "memento not saved once when signed in: "+calls;
+      if(!worldState.ended||!worldState.transcript.some(function(e){return e.den;}))return "the ending itself no longer files";
+    }finally{storageAdapter=_sa;showToast=_st;if(_sm)saveNarrativeMemento=_sm;else saveNarrativeMemento=undefined;}
+    return true;
+  });
   t("#376 one act-label formatter: actLabel keeps an authored \"Act …\" title as written and prefixes any other; the quest panel compass, the session bar and the GM's skeleton block all use it, so an act titled 'Act 2: The Severing of Bloodlines' reads once on every surface and a bare title still gets its number (byte-identical to before)",function(){
     if(actLabel(2,"Act 2: The Severing of Bloodlines")!=="Act 2: The Severing of Bloodlines"||actLabel(2,"ACT II — Blood")!=="ACT II — Blood"||actLabel(3,"The Gilded Mortuary")!=="Act 3: The Gilded Mortuary"||actLabel(1,"Action Stations")!=="Act 1: Action Stations"||actLabel(1,"")!=="Act 1: ")return "actLabel table";
     makeWorld();worldState.turn=40;worldState.skeleton={premise:"p",acts:[{title:"Act 1: The Hollow",status:"completed",goal:"g",arcs:[]},{title:"Act 2: The Severing of Bloodlines",status:"active",goal:"g2",turningPoint:"tp",arcs:[{title:"The Gilded Mortuary of House Morne",objective:"o",status:"active"}]}]};delete worldState.spineComplete;
