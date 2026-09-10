@@ -3250,7 +3250,7 @@ function deathSceneChoose(choice){
     if(worldState.respawnNote)worldState.respawnNote.gift=gift;
   }
   if(typeof saveAll==="function")saveAll();
-  if(typeof rebuildNarrativeFromTranscript==="function"){try{rebuildNarrativeFromTranscript(true);}catch(e){}}
+  if(typeof rebuildNarrativeFromTranscript==="function"){try{rebuildNarrativeFromTranscript(20,true);}catch(e){}}/* #206b: was (true) — a boolean count painted exactly ONE entry after a respawn */
   if(typeof syncUI==="function"){try{syncUI();}catch(e){}}
   if(typeof showRespawnModal==="function")showRespawnModal(r,cause);
   if(typeof carNotify==="function")carNotify("respawn","You wake again at "+r.camp+". Respawn "+r.respawn+" of "+RESPAWNS_PER_CAMPAIGN+".");

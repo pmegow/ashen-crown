@@ -348,15 +348,28 @@ function rebuildNarrativeFromTranscript(maxEntries,clearFirst){
   if(!worldState.transcript.length)return false;
   var story=document.getElementById("story-narrative");if(!story)return false;
   if(clearFirst)story.innerHTML="";
-  var tr=worldState.transcript.filter(function(e){return e&&!e.bk;}),n=maxEntries||20,start=Math.max(0,tr.length-n),i,lastNar=null;
+  var tr=worldState.transcript.filter(function(e){return e&&!e.bk;}),n=(typeof maxEntries==="number"&&maxEntries>0)?maxEntries:20,start=Math.max(0,tr.length-n),i,lastNar=null;_storyShown=n;/* #206b: a non-number (the old checkpoint call passed true) means the default, never one entry */
   if(!tr.length)return true;/* typed bookkeeping exists, so suppress sessionLog fallback; there is simply no story row to paint */
-  if(start>0)addMsg("system","… "+start+" earlier entr"+(start===1?"y":"ies")+" omitted — the full story lives in the transcript.");
+  /* #206b (owner, 2026-09-09: "I can only scroll back to turn 137"): the omitted line is a CONTROL — earlier frames must
+     exist in the page before their Render button can. Loads STORY_EARLIER_STEP more entries per press, keeps the reader's place. */
+  if(typeof _storyDomAllow!=="undefined"&&n>STORY_DOM_CAP)_storyDomAllow=n;/* #206b: a deliberate deeper rebuild is not trimmed back to the base cap on its own appends */
   for(i=start;i<tr.length;i++){var e=tr[i];
-    if(e.r==="player")addMsg("player",escHtml(e.x));
+    if(e.r==="player")addMsg("player",escHtml(e.x),{rebuild:true});/* #206b: a rebuilt player line is not live play */
     else lastNar=addMsg("narrator","<p>"+escProse(e.x)+"</p>",{replayText:e.x,turn:e.t,sp:e.sp,ck:e.ck});/* #9: sp rides the entry, so a rebuilt old turn replays with its original voices *//* transcript is model/user text — escape on replay (audit E11) */
   }
   if(lastNar&&worldState.lastActions){var bd=document.createElement("div");bd.innerHTML=buildActionButtons(worldState.lastActions);if(bd.firstChild)lastNar.appendChild(bd.firstChild);}
+  if(typeof storyEarlierNote==="function")storyEarlierNote();/* #206b */
   story.scrollTop=story.scrollHeight;
+  return true;
+}
+var _storyShown=20,STORY_EARLIER_STEP=60;
+function showEarlierTurns(step){
+  var story=document.getElementById("story-narrative");if(!story||!worldState)return false;
+  var oldH=story.scrollHeight,oldTop=story.scrollTop,n=_storyShown+((typeof step==="number"&&step>0)?step:STORY_EARLIER_STEP);
+  if(typeof _storyDomAllow!=="undefined")_storyDomAllow=n;/* #206b: lift the cap to what the reader asked for BEFORE the rebuild appends */
+  if(!rebuildNarrativeFromTranscript(n,true))return false;
+  if(typeof restoreSavedRenders==="function"){try{restoreSavedRenders();}catch(e){}}/* saved images re-attach to their frames by turn */
+  story.scrollTop=Math.max(0,story.scrollHeight-oldH+oldTop);/* the reader stays on the frame they were reading */
   return true;
 }
 function initReplaySession(){

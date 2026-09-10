@@ -175,9 +175,28 @@ function showChar(){
 // Piper wasm heap. Display-only: worldState.transcript / rebuildNarrativeFromTranscript untouched,
 // so reload/memento fidelity can't regress from this.
 var STORY_DOM_CAP=30;
+/* #206b: the reader may load earlier frames on purpose (Show earlier turns) — the allowance lifts the cap to what
+   they asked for; a LIVE player action drops it back to the base cap, so a marathon session still trims. */
+var _storyDomAllow=0;
+function storyDomCap(story){return (story&&story.id==="story-narrative")?Math.max(STORY_DOM_CAP,_storyDomAllow):STORY_DOM_CAP;}
+/* #206b: the story's ONE "earlier" note — the count of transcript entries not in the page and the control that loads
+   them. Not class "msg" (immune to the cap). Owned here so the trimmer and the rebuild paint the same line. */
+function storyEarlierNote(){
+  var story=document.getElementById("story-narrative");if(!story||typeof worldState==="undefined"||!worldState||!(worldState.transcript instanceof Array))return null;
+  var total=0,i,tr=worldState.transcript;for(i=0;i<tr.length;i++)if(tr[i]&&!tr[i].bk)total++;
+  var shown=story.querySelectorAll(".msg.narrator[data-turn],.msg.player").length,hidden=Math.max(0,total-shown);
+  var note=document.getElementById("story-earlier-note");
+  if(hidden<=0){if(note)note.remove();return null;}
+  if(!note){note=document.createElement("div");note.id="story-earlier-note";note.style.cssText="align-self:center;font-size:11px;color:var(--t2);opacity:.8;padding:4px 0;text-transform:uppercase;letter-spacing:.04em;width:auto;text-align:center;";}
+  note.innerHTML="";note.appendChild(document.createTextNode("\u2026 "+hidden+" earlier entr"+(hidden===1?"y":"ies")+" not shown "));
+  var b=document.createElement("button");b.className="ib show-earlier";b.textContent="Show earlier turns";b.title="Load earlier entries into the story";b.onclick=function(){if(typeof showEarlierTurns==="function")showEarlierTurns();};note.appendChild(b);
+  if(story.firstChild!==note)story.insertBefore(note,story.firstChild);
+  return note;
+}
 function trimStoryDom(story){
-  var msgs=story.querySelectorAll(".msg");
-  if(msgs.length<=STORY_DOM_CAP)return;
+  var msgs=story.querySelectorAll(".msg"),cap=storyDomCap(story);
+  if(msgs.length<=cap)return;
+  if(story.id==="story-narrative"){while(story.querySelectorAll(".msg").length>cap){var _o=story.querySelector(".msg");if(!_o)break;story.removeChild(_o);}storyEarlierNote();return;}/* #206b: the story keeps its one note */
   var noteId=(story.id==="story-tabletalk"?"tt-trim-note":"story-trim-note");
   var note=document.getElementById(noteId);
   if(!note){
@@ -191,7 +210,7 @@ function trimStoryDom(story){
   // Eviction happens at append-time, when normal play has the view pinned to scrollTop=story.scrollHeight
   // (set just before this runs), so the jump is invisible in practice; a mid-scroll reader could see
   // the viewport shift — accepted.
-  while(story.querySelectorAll(".msg").length>STORY_DOM_CAP){
+  while(story.querySelectorAll(".msg").length>cap){
     var oldest=story.querySelector(".msg");
     if(!oldest)break;
     story.removeChild(oldest);
@@ -237,7 +256,7 @@ function stickStoryBottomAfterPanel(){
   if(rp)rp.addEventListener("transitionend",onEnd);
   setTimeout(apply,300);   // > the .2s width transition; harmless if transitionend already fired
 }
-function addMsg(type,html,opts){var isTTMsg=(type==="tabletalk");var story=document.getElementById(isTTMsg?"story-tabletalk":"story-narrative");var div=document.createElement("div");div.className="msg "+type;
+function addMsg(type,html,opts){var isTTMsg=(type==="tabletalk");if(type==="player"&&!(opts&&opts.rebuild))_storyDomAllow=0;/* #206b: live play resumes the base cap */var story=document.getElementById(isTTMsg?"story-tabletalk":"story-narrative");var div=document.createElement("div");div.className="msg "+type;
 if(type==="narrator"&&opts&&opts.turn!=null){
   /* #106b: pair the turn marker with the in-world moment — "Turn 1204 | Day 1, 4:15 pm". Reads
      as orientation, not bookkeeping. Sourced from opts.ck (the absolute clock stamped on the

@@ -1119,6 +1119,12 @@ function runEngineTests(R){
     if(shell.indexOf("frame-render")<0||shell.indexOf("doRender({turn:")<0)return "the per-frame Render button is not wired in addMsg";
     if(!/callGM\(rp,[^;]*\{noHistory:true[^;]*\}\)/.test(gs))return "the historical writer call must pass noHistory:true (or every button paints the CURRENT scene)";
     if(gs.indexOf("saveRenderImage(blob,fname,_rt)")<0||!/var _rt=[^;]*ctx[^;]*;/.test(gs))return "the save funnel must stamp the FRAME's turn, not the newest";
+    /* #206b: earlier frames must be reachable — the omitted line is a control, the count is never a boolean */
+    var boot=__fsForTests.readFileSync(__rootForTests+"/ui-boot.js","utf8");if(boot.indexOf("function showEarlierTurns")<0||shell.indexOf('className="ib show-earlier"')<0||!/story\.scrollTop=Math\.max\(0,story\.scrollHeight-oldH\+oldTop\)/.test(boot))return "the show-earlier control is not wired (or loses the reader's place)";
+    if(shell.indexOf("function storyDomCap")<0||shell.indexOf("Math.max(STORY_DOM_CAP,_storyDomAllow)")<0||boot.indexOf("_storyDomAllow=n;")<0)return "the DOM cap must become an allowance the control raises, or the trimmer evicts what the reader just loaded";
+    if(shell.indexOf('if(type==="player"&&!(opts&&opts.rebuild))_storyDomAllow=0;')<0||boot.indexOf('addMsg("player",escHtml(e.x),{rebuild:true})')<0)return "a live player action must drop the allowance back to the base cap (and a rebuilt player line must not)";
+    if(/rebuildNarrativeFromTranscript\(true\)/.test(gs))return "the checkpoint path still passes a boolean as the entry count (paints one entry)";
+    if(!/n=\(typeof maxEntries==="number"&&maxEntries>0\)\?maxEntries:20/.test(boot))return "a non-number entry count must mean the default";
     return true;
   });
   t("#376 one act-label formatter: actLabel keeps an authored \"Act …\" title as written and prefixes any other; the quest panel compass, the session bar and the GM's skeleton block all use it, so an act titled 'Act 2: The Severing of Bloodlines' reads once on every surface and a bare title still gets its number (byte-identical to before)",function(){
