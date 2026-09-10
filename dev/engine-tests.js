@@ -895,6 +895,29 @@ function runEngineTests(R){
     var off=waresOfferedHere(memory.map.nodes["High Spire"],[]);if(off.length!==1||off[0].item!=="Halberd polish")return "note-names-the-place limb: "+JSON.stringify(off);
     var g=buildGeoBlock();return /FOR SALE HERE/.test(g)&&/seller or their shop is in the scene/i.test(g)?true:"geo line does not tell the GM: "+g.slice(g.indexOf("FOR SALE"),g.indexOf("FOR SALE")+260);
   });
+  t("#392 a seller last seen at ANOTHER sub-location of the same town is not in the scene: no buy button, the suggestion gate rejects the buy, and the seller stepping into the active frame's observed list re-opens both (The Long Walk t105–t132: smelling salts offered at the family gate for thirty turns)",function(){
+    makeWorld();var c=worldState.character;c.hp=14;c.maxHp=14;c.inventory=[];c.gold=40;worldState.questLog=[];worldState.turn=100;
+    worldState.world.location="High Reach";worldState.world.sublocation="The Bleeding Lily Apothecary";
+    memory.map.nodes["High Reach"]={firstVisit:90,visits:2,description:null,parent:null,npcs:[],items:[],size:"small"};
+    memory.map.nodes["High Reach|The Bleeding Lily Apothecary"]={firstVisit:100,visits:1,description:null,parent:"High Reach",npcs:[],items:[]};
+    worldState.npcs.push({name:"Galindel Ashvane",status:"",statusTurn:100,rel:"neutral",met:100,pronouns:"he/him"});memory.npcs["Galindel Ashvane"]={attitude:"",knowledge:[],events:[],lastSeenAt:"High Reach|The Bleeding Lily Apothecary",lastSeenTurn:104};
+    applyMuts("[WARES:Smelling salts of powdered skull|12 gp|Galindel Ashvane at The Bleeding Lily]");
+    var a=engineFourthAction();if(!a||a.kind!=="buy")return "at the shop the buy should be offered: "+JSON.stringify(a);
+    /* the party walks to the inn, then the family gate — same town, other sub-locations; Galindel stays behind */
+    worldState.turn=108;worldState.world.sublocation="The Sapphire Penthouse";memory.map.nodes["High Reach|The Sapphire Penthouse"]={firstVisit:108,visits:1,description:null,parent:"High Reach",npcs:[],items:[]};
+    var man=buildSceneManifest();if(man.npcs.indexOf("Galindel Ashvane")<0)return "the manifest's same-town rule should still list him for authorization (unchanged)";
+    if(!(man.local instanceof Array)||man.local.indexOf("Galindel Ashvane")>=0)return "the manifest's LOCAL list must not carry a seller seen elsewhere in town: "+JSON.stringify(man.local);
+    a=engineFourthAction();if(a&&a.kind==="buy")return "buy offered a mile from the shop: "+JSON.stringify(a);
+    var v=validateSuggestion("Buy the Smelling salts of powdered skull (12 gp).",man);if(!v||v.rule!=="buy-without-seller")return "the suggestion gate let the buy through: "+JSON.stringify(v);
+    /* Galindel turns up at the inn — the frame OBSERVES him ([SAY:]/[SCENE_CAST:] evidence) → the buy is honest again */
+    worldState.sceneRefs={active:_sceneRefFresh(locResolve("High Reach|The Sapphire Penthouse"),1)};worldState.sceneRefs.active.observed.push({entity:"Galindel Ashvane",channel:"say",firstTurn:108,lastTurn:108,turns:1});
+    man=buildSceneManifest();if(man.local.indexOf("Galindel Ashvane")<0)return "an observed seller is local: "+JSON.stringify(man.local);
+    a=engineFourthAction();if(!a||a.kind!=="buy")return "observed seller but no buy: "+JSON.stringify(a);
+    if(validateSuggestion("Buy the Smelling salts of powdered skull (12 gp).",man))return "observed seller but the suggestion was rejected";
+    /* the exact-spot limb survives: a seller whose last-seen stamp IS the current sub-location is local without a frame */
+    delete worldState.sceneRefs;memory.npcs["Galindel Ashvane"].lastSeenAt="High Reach|The Sapphire Penthouse";man=buildSceneManifest();if(man.local.indexOf("Galindel Ashvane")<0)return "exact-spot seller must be local";
+    return true;
+  });
   t("questBearing (owner call 2026-09-03): the quest panel's compass — act number + title, and the active arc's ordinal/count + title (titles only, never the objective); act-only between arcs; null with no skeleton or no active act; the panel renders it above the quests",function(){
     makeWorld();if(questBearing()!==null)return "no skeleton should be null";
     worldState.skeleton={premise:"p",acts:[

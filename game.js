@@ -171,7 +171,7 @@ function engineFourthAction(){
   var wounded=typeof c.hp==="number"&&c.hp<c.maxHp,hurtOrAfflicted=wounded||((c.conditions||[]).length>0);
   if(hurtOrAfflicted&&typeof itemLookup==="function"){for(i=0;i<(c.inventory||[]).length;i++){var it=c.inventory[i],e=itemLookup(it);if(e&&e.category==="consumable"&&e.effect&&e.effect!=="N/A")return {kind:"use",text:"Use your "+(typeof _invBase==="function"?_invBase(it):it)+"."};}}
   var q=worldState.questLog||[];for(i=0;i<q.length;i++)if(q[i]&&q[i].status==="offered")return {kind:"accept",text:"Accept the offer: "+q[i].title+"."};
-  if((c.gold||0)>0&&memory&&memory.map&&worldState.world&&worldState.world.location){var key=worldState.world.location;if(typeof locResolve==="function")key=locResolve(key);var node=memory.map.nodes[key];var live=(node&&typeof waresOfferedHere==="function")?waresOfferedHere(node,buildSceneManifest().npcs):[];/* a seller or their shop must be IN the scene (2026-09-03) */if(live.length)return {kind:"buy",text:"Buy the "+live[0].item+" ("+live[0].price+")."};}
+  if((c.gold||0)>0&&memory&&memory.map&&worldState.world&&worldState.world.location){var key=worldState.world.location;if(typeof locResolve==="function")key=locResolve(key);var node=memory.map.nodes[key];var live=(node&&typeof waresOfferedHere==="function")?waresOfferedHere(node,buildSceneManifest().local):[];/* a seller or their shop must be IN the scene (2026-09-03); #392: the SCENE, not the town */if(live.length)return {kind:"buy",text:"Buy the "+live[0].item+" ("+live[0].price+")."};}
   if(montageDue())return {kind:"montage",text:"Skip ahead — a montage to the next real decision."};/* #308 */
   if(typeof WILDCARD_EVERY==="number"&&WILDCARD_EVERY>0&&worldState.turn>0&&worldState.turn%WILDCARD_EVERY===0)return {kind:"wild",text:"Do something reckless."};
   return null;
@@ -273,8 +273,13 @@ function suggestionInvokesCap(text,capName){
 // The scene-local manifest: who is PRESENT, where the exits lead, what the active character can
 // actually use — pure derivation from existing state, no new bookkeeping, no model involvement.
 function buildSceneManifest(){
-  var man={npcs:[],exits:[],caps:[]},i,seen={};
+  var man={npcs:[],local:[],exits:[],caps:[]},i,seen={},seenLocal={};
   function addNpc(nm){var k=String(nm).toLowerCase();if(!seen[k]){seen[k]=1;man.npcs.push(nm);}}
+  /* #392: local = the SCENE, not the town. npcs keeps the #156B same-world rule (an NPC seen anywhere in this
+     settlement may be addressed); local holds only those whose last-seen stamp IS this exact node/sub-location or
+     who are OBSERVED in the active frame. The wares gate reads local: a seller a mile away is not a stall in front
+     of the player (The Long Walk t105–t132 — smelling salts offered at the family gate for thirty turns). */
+  function addLocal(nm){var k=String(nm).toLowerCase();if(!seenLocal[k]){seenLocal[k]=1;man.local.push(nm);}}
   var loc=(worldState.world&&worldState.world.location)||"";
   var sub=(worldState.world&&worldState.world.sublocation)||null;
   var nodeKey=sub?loc+"|"+sub:loc;
@@ -292,6 +297,7 @@ function buildSceneManifest(){
        node's merged alias is HERE. Same-world test runs on the RESOLVED keys. */
     var rls=ls?locResolve(ls):"",rLoc=locResolve(loc),rNode=locResolve(nodeKey);
     if(rls&&(rls===rNode||rls===rLoc||rls.indexOf(rLoc+"|")===0))addNpc(n.name);
+    if(rls&&rls===rNode)addLocal(n.name);/* #392: the exact spot only */
   }
   // #283 (Sol brief 35①): presence by STRUCTURED observation only — the active scene frame's
   // observed[] list (#194: [SAY:] speakers, combat-named rostered NPCs, [SCENE_CAST:] members,
@@ -310,7 +316,7 @@ function buildSceneManifest(){
     for(i=0;i<_frame.observed.length;i++){
       var _ob=_frame.observed[i]&&_frame.observed[i].entity;if(!_ob)continue;
       var _obNm=(typeof resolveNpcName==="function")?resolveNpcName(_ob):_ob;
-      for(var _oj=0;_oj<npcs.length;_oj++){if(npcs[_oj].name===_obNm&&!npcs[_oj].dead){addNpc(npcs[_oj].name);break;}}
+      for(var _oj=0;_oj<npcs.length;_oj++){if(npcs[_oj].name===_obNm&&!npcs[_oj].dead){addNpc(npcs[_oj].name);addLocal(npcs[_oj].name);/* #392: observed = in the scene */break;}}
     }
   }
   // B24: world-map edges are connectivity at WORLD-NODE grain only. Inside a sub-location the
@@ -505,7 +511,7 @@ function validateSuggestion(text,man){
   // ⑦ (2026-09-03, the High Spire lift terminal): a purchase of a recorded ware with neither the seller
   // nor their shop in the scene — the settlement's market record is not a stall in front of the player.
   if(/^(buy|purchase|haggle for|pay for)\b/i.test(t)&&typeof waresOfferedHere==="function"&&typeof memory!=="undefined"&&memory&&memory.map&&worldState.world&&worldState.world.location){
-    var _bk=worldState.world.location;if(typeof locResolve==="function")_bk=locResolve(_bk);var _bn=memory.map.nodes[_bk],_bl=(_bn&&typeof nodeWaresLive==="function")?nodeWaresLive(_bn):[],_bo=_bn?waresOfferedHere(_bn,man.npcs):[],_bi;
+    var _bk=worldState.world.location;if(typeof locResolve==="function")_bk=locResolve(_bk);var _bn=memory.map.nodes[_bk],_bl=(_bn&&typeof nodeWaresLive==="function")?nodeWaresLive(_bn):[],_bo=_bn?waresOfferedHere(_bn,man.local||man.npcs):[],_bi;/* #392 */
     for(_bi=0;_bi<_bl.length;_bi++){var _bw=_bl[_bi];if(!new RegExp("\\b"+suggestionNameAlt(_bw.item)+"\\b","i").test(t))continue;
       if(_bo.some(function(o){return o.item===_bw.item;}))break;
       return {rule:"buy-without-seller",detail:_bw.item+" is on the settlement's record but neither its seller nor its shop is in the scene"};}
