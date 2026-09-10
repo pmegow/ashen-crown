@@ -563,6 +563,9 @@ function buildMoneyNote(){
   var c=worldState.character;if(!c||!(c.gold>0))return"";
   var key=worldState.world.location;if(typeof locResolve==="function")key=locResolve(key);var node=memory.map.nodes[key];if(!node||!node.size)return"";
   var every=(typeof MONEY_EVERY==="number")?MONEY_EVERY:24,ma=worldState.moneyAsk;if(ma&&typeof ma.turn==="number"&&worldState.turn-ma.turn<every)return"";
+  /* #375b (owner, 2026-09-10: "right away a highwayman is asking for a handout"): the FIRST ask waits for a record to draw from —
+     MONEY_EVERY turns played and at least one decision on file. A price with no reason behind it is the tax the ruling forbids. */
+  if((worldState.turn||0)<every||!((memory.keyDecisions||[]).length))return"";
   var foes=sceneAntagonists();if(typeof codaState==="function"&&codaState()&&!foes.length)return"";
   var dec=(memory.keyDecisions||[]).slice(-4).map(function(d){return "t"+d.turn+": "+d.desc;}),carry=(c.inventory||[]).slice(0,6).map(function(x){return (typeof _invBase==="function")?_invBase(x):String(x);});
   var label=(typeof locDisplayLeaf==="function")?locDisplayLeaf(key):key;

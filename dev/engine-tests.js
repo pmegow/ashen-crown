@@ -1160,6 +1160,8 @@ function runEngineTests(R){
     makeWorld();worldState.turn=60;var c=worldState.character;c.gold=40;c.inventory=["Weeping willow signet ring","mace"];worldState.world.location="Sandpoint";worldState.world.sublocation=null;
     memory.map.nodes["Sandpoint"]={firstVisit:1,visits:3,description:null,parent:null,npcs:[],items:[],size:"medium"};
     memory.keyDecisions=[{turn:50,desc:"Spared the raider captain"},{turn:55,desc:"Burned the toll bridge"}];delete worldState.moneyAsk;delete worldState.spineComplete;worldState.skeleton=null;
+    /* #375b: the first ask waits for a record — turn one of a new campaign is never a shakedown */
+    worldState.turn=3;if(buildMoneyNote()!=="")return "fired on turn 3 of a fresh campaign";worldState.turn=60;var _kd=memory.keyDecisions;memory.keyDecisions=[];if(buildMoneyNote()!=="")return "fired with no decision on record";memory.keyDecisions=_kd;
     var n=buildMoneyNote();if(!/MONEY AT STAKE/.test(n)||n.indexOf("[GOLD:-N]")<0||!/never a tax/i.test(n)||n.indexOf("toll bridge")<0||n.indexOf("signet ring")<0||n.indexOf("Sandpoint")<0)return "note: "+n.slice(0,400);
     if(!worldState.moneyAsk||worldState.moneyAsk.turn!==60)return "latch not set";
     if(buildMoneyNote()!=="")return "fired twice inside the window";
