@@ -170,11 +170,15 @@ tAsync("a marked campaign PUSHES before the reconcile GET is even issued", funct
       return ok({ worldState: { turn: 999, campId: CAMP, character: { name: "Korrag" }, npcs: [] }, campaignId: CAMP });
     };
     storageAdapter.load(function () {});
-    // The push is in flight and its response is deliberately delayed: nothing else may have fired.
-    if (calls.length !== 1) return "expected the push alone in flight, got " + calls.length + " request(s)";
-    if (calls[0].method !== "POST") return "first request was " + calls[0].method + " " + calls[0].url + " — the adopt path ran before the push";
+    // #377: the turn PROBE (GET /api/campaigns, metadata only) may precede the push; nothing else may. It adopts nothing.
+    if (calls.length !== 1) return "expected the turn probe alone in flight, got " + calls.length + " request(s)";
+    if (calls[0].method !== "GET" || calls[0].url !== "https://unit.test/api/campaigns") return "first request was " + calls[0].method + " " + calls[0].url + " — only the metadata probe may precede the push";
+    if (worldState.turn !== 412) return "the probe touched worldState";
     return settle().then(function () {
       if (!postSeen) return "no push fired";
+      var stateGetBeforePost = false, seenPost = false, q;
+      for (q = 0; q < calls.length; q++) { if (calls[q].method === "POST") seenPost = true; else if (!seenPost && calls[q].url === "https://unit.test/api/state") stateGetBeforePost = true; }
+      if (stateGetBeforePost) return "a /api/state GET ran before the push — the adopt path outran the dirty turns";
       var getAt = -1, k;
       for (k = 0; k < calls.length; k++) { if (calls[k].method === "GET" && calls[k].url === "https://unit.test/api/state") { getAt = k; break; } }
       if (getAt < 0) return "the reconcile never ran after the push";
@@ -241,6 +245,44 @@ tAsync("no marker → load() reconciles exactly as before (one GET, no push)", f
     return gets.length === 1 ? true : "expected exactly one reconcile GET, got " + gets.length;
   });
 });
+
+tAsync("#377 the boot push's turn probe seeds the CAS base when the server is not ahead (no 409 round trip), leaves it at -1 when the server IS ahead, and adopts nothing either way", function () {
+  seedCampaign(80, 80); resetAll();
+  storageAdapter.syncNow(true);
+  return settle().then(function () {
+    calls.length = 0;
+    responder = function (url, opts) {
+      if ((opts.method || "GET") === "POST") return ok({});
+      if (url === "https://unit.test/api/campaigns") return ok([{ id: CAMP, turn: 80 }]);
+      return ok({ worldState: { turn: 80, campId: CAMP, character: { name: "Korrag" }, npcs: [] }, campaignId: CAMP });
+    };
+    storageAdapter.load(function () {});
+    return settle().then(function () {
+      var post = null, k; for (k = 0; k < calls.length; k++) if (calls[k].method === "POST") { post = calls[k]; break; }
+      if (!post) return "no push fired";
+      var base = JSON.parse(post.body).baseTurn; if (base !== 80) return "the probe did not seed the base (baseTurn " + base + ")";
+      if (worldState.turn !== 80) return "the probe adopted state";
+      /* the server is AHEAD: the base must stay -1 so the CAS guard answers as it always has */
+      seedCampaign(80, 80); resetAll(); storageAdapter.syncNow(true);
+      return settle().then(function () {
+        calls.length = 0;
+        responder = function (url, opts) {
+          if ((opts.method || "GET") === "POST") return ok({});
+          if (url === "https://unit.test/api/campaigns") return ok([{ id: CAMP, turn: 999 }]);
+          return ok({ worldState: { turn: 80, campId: CAMP, character: { name: "Korrag" }, npcs: [] }, campaignId: CAMP });
+        };
+        storageAdapter.load(function () {});
+        return settle().then(function () {
+          var p2 = null, j; for (j = 0; j < calls.length; j++) if (calls[j].method === "POST") { p2 = calls[j]; break; }
+          if (!p2) return "no push fired (server ahead)";
+          if (JSON.parse(p2.body).baseTurn !== -1) return "a server that is ahead must leave the base at -1";
+          return worldState.turn === 80 ? true : "the probe adopted the newer server turn";
+        });
+      });
+    });
+  });
+});
+
 
 // ── report ───────────────────────────────────────────────────────────────────
 chain.then(function () {

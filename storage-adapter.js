@@ -734,6 +734,16 @@ var storageAdapter = (function() {
     // either way (a failed push must never wedge the campaign offline) — it is only DEFERRED.
     var _dirtyAt = flushDirtyTurn();
     if (_dirtyAt == null) { _reconcileFromServer(localOk); return; }
+    /* #377 (Fable adjudication 2026-09-10): the boot push is the ONE path that POSTs before any GET, so its CAS base is
+       always -1 and the server always answers 409 (then the client heals) — Chrome prints the red POST 409 line every
+       time. A METADATA probe first (the campaign list's turn number, an existing endpoint) seeds the base when the server
+       is not ahead. The probe adopts NOTHING: worldState and the dirty marker are untouched, the push still precedes
+       any /api/state GET, and a server that IS ahead leaves the base at -1 so the 409/conflict path runs exactly as before.
+       JP0-11's intent (dirty local turns reach the server before its copy can be adopted) is preserved and re-pinned. */
+    var _dirtyCamp = (typeof getActiveCampId === "function") ? getActiveCampId() : null;
+    getServerCampaignTurn(_dirtyCamp, function (st) {
+      var _localTurn = (typeof worldState !== "undefined" && worldState) ? (worldState.turn || 0) : 0;
+      if (typeof st === "number" && st <= _localTurn && _lastAckTurn < 0) _lastAckTurn = st;/* the server is not ahead: this is the base the 409 heal would have found */
     console.info("[storage] unsynced final turns from a previous session (turn " + _dirtyAt + ", page-hide flush was over the keepalive limit) — pushing before any server adopt.");/* #377: the expected path for a large campaign; the FAILED branch below stays a warning */
     _syncNow(false, false, function(err) {
       if (err) console.warn("[storage] the unsynced-turn push FAILED (" + err + ") — the marker stays set and retries at the next launch.");
@@ -743,6 +753,7 @@ var storageAdapter = (function() {
       }
       _reconcileFromServer(localOk);
     });
+    });/* #377 probe */
   }
 
   function _reconcileFromServer(localOk) {
