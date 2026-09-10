@@ -178,7 +178,8 @@ var STORY_DOM_CAP=30;
 /* #206b: the reader may load earlier frames on purpose (Show earlier turns) — the allowance lifts the cap to what
    they asked for; a LIVE player action drops it back to the base cap, so a marathon session still trims. */
 var _storyDomAllow=0;
-function storyDomCap(story){return (story&&story.id==="story-narrative")?Math.max(STORY_DOM_CAP,_storyDomAllow):STORY_DOM_CAP;}
+var STORY_DOM_HEADROOM=10;/* #206c: markers and images appended under a loaded frame must not evict the frames above it */
+function storyDomCap(story){return (story&&story.id==="story-narrative")?Math.max(STORY_DOM_CAP,_storyDomAllow+STORY_DOM_HEADROOM):STORY_DOM_CAP;}
 /* #206b: the story's ONE "earlier" note — the count of transcript entries not in the page and the control that loads
    them. Not class "msg" (immune to the cap). Owned here so the trimmer and the rebuild paint the same line. */
 function storyEarlierNote(){
@@ -276,7 +277,7 @@ if(opts&&opts.replayText&&typeof TTS!=="undefined"){(function(text){var rb=docum
    sizing). Passes the frame's turn; doRender decides live vs historical. Skipped where the topbar button is hidden. */
 if(type==="narrator"&&opts&&opts.turn!=null&&typeof doRender==="function"){(function(turn){var fb=document.createElement("button");fb.className="ib frame-render";fb.title="Paint this scene";fb.textContent="Render";fb.onclick=function(ev){ev.stopPropagation();doRender({turn:turn});};div.appendChild(fb);})(opts.turn);}
 /* #312 ③: a reader scrolled back up keeps their place when narration lands (the panel-collapse path already had this guard); the player's own line and the thinking marker always pin to the end */
-var _wasBottom=storyAtBottom(story)||type==="player"||type==="thinking"||type==="tabletalk";story.appendChild(div);if(_wasBottom)story.scrollTop=story.scrollHeight;trimStoryDom(story);if(isTTMsg&&activeChatTab!=="tabletalk"){var badge=document.getElementById("tab-tt-badge");if(badge)badge.className="tab-badge on";}
+var _wasBottom=!(opts&&opts.keepPlace)&&(storyAtBottom(story)||type==="player"||type==="thinking"||type==="tabletalk");/* #206c: a historical render's marker and image land under THEIR frame — never yank the reader to the end */story.appendChild(div);if(_wasBottom)story.scrollTop=story.scrollHeight;trimStoryDom(story);if(isTTMsg&&activeChatTab!=="tabletalk"){var badge=document.getElementById("tab-tt-badge");if(badge)badge.className="tab-badge on";}
 // Bidirectional badge (audit E68 / CLAUDE.md §14): flag the STORY tab when narration arrives while
 // the player is on Table Talk. The narrative tab has no static badge element, so create one lazily.
 if(type==="narrator"&&activeChatTab==="tabletalk"){var tnb=document.getElementById("tab-narrative");if(tnb){var _nb=tnb.querySelector(".tab-narr-badge");if(!_nb){_nb=document.createElement("span");tnb.appendChild(_nb);}_nb.className="tab-badge on tab-narr-badge";}}

@@ -2986,19 +2986,22 @@ function buildSeedLegend(names,omitted){
   return s;
 }
 async function doRender(rOpts){
-  if(!worldState||_rendering)return;_rendering=true;var th=addMsg("thinking","Composing scene...");
+  if(!worldState||_rendering)return;_rendering=true;
+  /* #206: a per-frame button passes {turn}; a past turn renders from ITS frame (own prose, place, clock, weather rule,
+     party), with NO history on the writer call. The current turn and the topbar button take the live path unchanged. */
+  var ctx=(rOpts&&typeof rOpts.turn==="number")?renderContextForTurn(rOpts.turn):null,hist=!!(ctx&&!ctx.live);
+  var _frame=(hist&&typeof document!=="undefined")?document.querySelector('[data-turn="'+ctx.turn+'"]'):null;
+  var th=addMsg("thinking","Composing scene...",hist?{keepPlace:true}:undefined);/* #206c: the marker sits under the frame being painted, the reader stays put */
+  if(_frame&&th&&_frame.parentNode===th.parentNode)_frame.parentNode.insertBefore(th,_frame.nextSibling);
   try{
     var c=worldState.character,w=worldState.world;
-    /* #206: a per-frame button passes {turn}; a past turn renders from ITS frame (own prose, place, clock, weather rule,
-       party), with NO history on the writer call. The current turn and the topbar button take the live path unchanged. */
-    var ctx=(rOpts&&typeof rOpts.turn==="number")?renderContextForTurn(rOpts.turn):null,hist=!!(ctx&&!ctx.live);
     var party=hist?partyForRender(ctx):livingPartyCompanions();
     var rp=hist?buildSceneRenderRequest(c,party,{location:ctx.location,region:w.region,weather:ctx.weather},{scene:ctx.prose,timeText:(ctx.ck!=null&&typeof clockStamp==="function")?clockStamp(ctx.ck):null,sublocation:ctx.sublocation,weatherInProse:ctx.weatherInProse}):buildSceneRenderRequest(c,party,w);
     var _wsys="You are an image prompt writer for a dark fantasy RPG. Output ONLY the image generation prompt. Describe EVERY listed character's exact physical appearance with full specificity — gender, colouring, build — never invent or alter them. No narration, no tags.";
     var resp=hist?await callGM(rp,_wsys,undefined,null,{noHistory:true}):await callGM(rp,_wsys);
     th.remove();
-    var div=addMsg("render-out","");
-    if(hist&&typeof document!=="undefined"){var _fr=document.querySelector('.msg[data-turn="'+ctx.turn+'"], [data-turn="'+ctx.turn+'"]');if(_fr&&_fr.parentNode===div.parentNode)_fr.parentNode.insertBefore(div,_fr.nextSibling);}/* #206: the image sits under ITS frame */
+    var div=addMsg("render-out","",hist?{keepPlace:true}:undefined);
+    if(_frame&&_frame.parentNode===div.parentNode)_frame.parentNode.insertBefore(div,_frame.nextSibling);/* #206: the image sits under ITS frame */
     div.style.whiteSpace="normal";div.style.fontFamily="inherit";
     var imageUrl="",promptShown=false,sceneImg=null;
 
