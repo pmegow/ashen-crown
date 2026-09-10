@@ -2831,7 +2831,29 @@ var _rendering=false;
 // (male) cleric. Same mechanism as the retired STYLE sentence cap: hard counts make the model
 // cram and drop. The party budget is now a PER-CHARACTER FLOOR (one full sentence each, scene
 // after), and the spell-out line demands gender explicitly so compression can never shed it.
-function buildSceneRenderRequest(c,party,w){
+// ── #206: render any past frame, not just the current scene (owner request 2026-08-21; rulings 2026-09-09) ──
+// The one correctness trap: the writer call normally rides the live sessionLog (that is how "the current scene"
+// reaches it implicitly). A past frame must go with noHistory:true and its OWN prose, location and clock, or
+// every button paints the CURRENT scene. Weather: omitted unless the frame's prose names it (stamped entries carry
+// it). Party: the stamp when present; otherwise the current party filtered to members the prose names.
+var WEATHER_WORDS=/\b(rain|rains|raining|drizzle|downpour|snow|snowing|sleet|hail|fog|mist|misty|storm|thunder|lightning|wind|gale|gust|overcast|cloud|clouds|cloudless|sunlight|sunshine|sunny|blazing sun|clear sky|starry|moonlit|frost|blizzard|humid|sweltering|heat haze)\b/i;
+function weatherInProse(x){return WEATHER_WORDS.test(String(x||""));}
+function renderContextForTurn(turn){
+  if(!worldState||typeof turn!=="number")return null;var tr=worldState.transcript||[],i,e=null;
+  for(i=tr.length-1;i>=0;i--){var q=tr[i];if(q&&q.r==="gm"&&q.t===turn&&!q.bk&&!q.rf){e=q;break;}}
+  if(!e)return null;
+  if(turn===worldState.turn)return {live:true,turn:turn};
+  return {live:false,turn:turn,prose:String(e.x||""),ck:(typeof e.ck==="number"?e.ck:null),location:e.l||(worldState.world&&worldState.world.location)||"",sublocation:e.sl||null,weather:e.w||null,weatherInProse:weatherInProse(e.x),partyNames:(e.p instanceof Array)?e.p.slice():null};
+}
+function partyForRender(ctx){
+  if(!ctx||ctx.live)return livingPartyCompanions();
+  var all=(typeof partyCompanionsWithSheets==="function")?partyCompanionsWithSheets(true):livingPartyCompanions(),i,out=[];
+  if(ctx.partyNames){for(i=0;i<all.length;i++)if(ctx.partyNames.indexOf(all[i].name)>=0)out.push(all[i]);return out;}
+  var live=livingPartyCompanions(),low=String(ctx.prose||"").toLowerCase();
+  for(i=0;i<live.length;i++){var nm=String(live[i].name||""),first=nm.split(/\s+/)[0];if(nm&&(low.indexOf(nm.toLowerCase())>=0||(first.length>2&&new RegExp("\\b"+first.replace(/[.*+?^${}()|[\]\\]/g,"\\$&")+"\\b","i").test(low))))out.push(live[i]);}
+  return out;
+}
+function buildSceneRenderRequest(c,party,w,opts){
   var gw=genderWord(c.gender);/* #11③: shared mapping (local renamed — the old `var genderWord` would shadow the helper) */
   var charDesc=c.name+", a "+gw+" "+c.age+" "+c.ancestry+" "+c.cls+", "+c.appear+(c.mark?", "+c.mark:"")+(typeof attireRenderText==="function"&&attireRenderText(c)?", "+attireRenderText(c):"");/* #388: the sheet's attire reaches the painter (a robe, bare, in full scale) */
   var compDescs=[],pi;
@@ -2847,7 +2869,9 @@ function buildSceneRenderRequest(c,party,w){
     +"Protagonist (describe exactly as written, do not invent appearance): "+charDesc+". "
     +(hasParty?"Party members also present — include every one, describe each exactly as written, do not invent appearance: "+compDescs.join("; ")+". ":"")
     +"Spell out each character's gender, hair colour, skin tone, clothing and visible gear explicitly — never omit or change a character's stated gender; eye colour and face words belong ONLY to a character whose pose clause shows the face (see A DESCRIBED FACE IS A SHOWN FACE). "/* #390b: eye colour was demanded for everyone, which turned every rear view into a face view */
-    +"Scene: "+w.location+", "+w.region+", "+worldTimeDisplay()+", "+w.weather+". "
+    +(opts&&opts.scene?"THE SCENE TO PAINT is a PAST moment, given here in the story's own words — paint exactly what this text describes and nothing that happened later: \u00ab"+String(opts.scene).replace(/\s+/g," ").trim()+"\u00bb ":"")/* #206 */
+    +"Scene: "+w.location+(opts&&opts.sublocation?", "+opts.sublocation:"")+", "+w.region+", "+(opts&&opts.timeText?opts.timeText:worldTimeDisplay())+(w.weather?", "+w.weather:"")+". "
+    +(opts&&!w.weather?(opts.weatherInProse?"Weather: only as the scene text describes it. ":"Weather: the record names none for this moment — paint no weather, only the place and its light. "):"")/* #206: omit unless the prose names it */
     +(hasParty?"All "+(compDescs.length+1)+" party members must be present and individually recognizable in the scene. ":"")
     +"Freeze the scene's CURRENT action at its most dramatic instant — mid-motion, never the calm after it. "
     /* Abstract dynamism ("natural, dynamic poses") renders as a polite tableau — image models act
@@ -2961,15 +2985,20 @@ function buildSeedLegend(names,omitted){
   s+=" The scene contains EXACTLY "+total+" "+(total===1?"person":"people")+": one body per named character, never the same face twice"+(omitted&&omitted.length?"; described-only names must still appear":"")+".";
   return s;
 }
-async function doRender(){
+async function doRender(rOpts){
   if(!worldState||_rendering)return;_rendering=true;var th=addMsg("thinking","Composing scene...");
   try{
     var c=worldState.character,w=worldState.world;
-    var party=livingPartyCompanions();
-    var rp=buildSceneRenderRequest(c,party,w);
-    var resp=await callGM(rp,"You are an image prompt writer for a dark fantasy RPG. Output ONLY the image generation prompt. Describe EVERY listed character's exact physical appearance with full specificity — gender, colouring, build — never invent or alter them. No narration, no tags.");
+    /* #206: a per-frame button passes {turn}; a past turn renders from ITS frame (own prose, place, clock, weather rule,
+       party), with NO history on the writer call. The current turn and the topbar button take the live path unchanged. */
+    var ctx=(rOpts&&typeof rOpts.turn==="number")?renderContextForTurn(rOpts.turn):null,hist=!!(ctx&&!ctx.live);
+    var party=hist?partyForRender(ctx):livingPartyCompanions();
+    var rp=hist?buildSceneRenderRequest(c,party,{location:ctx.location,region:w.region,weather:ctx.weather},{scene:ctx.prose,timeText:(ctx.ck!=null&&typeof clockStamp==="function")?clockStamp(ctx.ck):null,sublocation:ctx.sublocation,weatherInProse:ctx.weatherInProse}):buildSceneRenderRequest(c,party,w);
+    var _wsys="You are an image prompt writer for a dark fantasy RPG. Output ONLY the image generation prompt. Describe EVERY listed character's exact physical appearance with full specificity — gender, colouring, build — never invent or alter them. No narration, no tags.";
+    var resp=hist?await callGM(rp,_wsys,undefined,null,{noHistory:true}):await callGM(rp,_wsys);
     th.remove();
     var div=addMsg("render-out","");
+    if(hist&&typeof document!=="undefined"){var _fr=document.querySelector('.msg[data-turn="'+ctx.turn+'"], [data-turn="'+ctx.turn+'"]');if(_fr&&_fr.parentNode===div.parentNode)_fr.parentNode.insertBefore(div,_fr.nextSibling);}/* #206: the image sits under ITS frame */
     div.style.whiteSpace="normal";div.style.fontFamily="inherit";
     var imageUrl="",promptShown=false,sceneImg=null;
 
@@ -2996,7 +3025,7 @@ async function doRender(){
     var saveBtn=mkBtn("↓ Save","Save image (Photos on a phone, campaign folder on desktop)");
     saveBtn.addEventListener("click",function(){
       if(!imageUrl)return;
-      var _rt=worldState?worldState.turn:0;
+      var _rt=hist?ctx.turn:(worldState?worldState.turn:0);/* #206: the pointer stamps the FRAME's turn, so the image re-attaches to it on reload */
       fetch(imageUrl).then(function(r){return r.blob();}).then(function(blob){
         var fname=buildFilename("render");
         if(typeof saveRenderImage==="function")return saveRenderImage(blob,fname,_rt);

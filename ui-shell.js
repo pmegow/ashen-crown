@@ -253,6 +253,9 @@ if(opts&&opts.replayText&&typeof TTS!=="undefined"){(function(text){var rb=docum
   var vm=(div._sp&&typeof speakerVoiceMap==="function")?speakerVoiceMap(div._sp,text):null;
   requestSpeak(text,vm);
 };div.appendChild(rb);})(opts.replayText);}
+/* #206: every GM frame can be painted — a small Render in the frame's corner (about 90% of the topbar button, owner
+   sizing). Passes the frame's turn; doRender decides live vs historical. Skipped where the topbar button is hidden. */
+if(type==="narrator"&&opts&&opts.turn!=null&&typeof doRender==="function"){(function(turn){var fb=document.createElement("button");fb.className="ib frame-render";fb.title="Paint this scene";fb.textContent="Render";fb.onclick=function(ev){ev.stopPropagation();doRender({turn:turn});};div.appendChild(fb);})(opts.turn);}
 /* #312 ③: a reader scrolled back up keeps their place when narration lands (the panel-collapse path already had this guard); the player's own line and the thinking marker always pin to the end */
 var _wasBottom=storyAtBottom(story)||type==="player"||type==="thinking"||type==="tabletalk";story.appendChild(div);if(_wasBottom)story.scrollTop=story.scrollHeight;trimStoryDom(story);if(isTTMsg&&activeChatTab!=="tabletalk"){var badge=document.getElementById("tab-tt-badge");if(badge)badge.className="tab-badge on";}
 // Bidirectional badge (audit E68 / CLAUDE.md §14): flag the STORY tab when narration arrives while

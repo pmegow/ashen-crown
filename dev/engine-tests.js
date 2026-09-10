@@ -1085,6 +1085,42 @@ function runEngineTests(R){
     }finally{storageAdapter=_sa;showToast=_st;if(_sm)saveNarrativeMemento=_sm;else saveNarrativeMemento=undefined;}
     return true;
   });
+  t("#206 per-scene render: new GM entries are stamped with location, sub-location, weather and party; renderContextForTurn reads a past frame (stamps when present, prose-named party and no weather when absent, live for the current turn); the request embeds the frame's prose and time and omits weather unless the prose names it; the live request is unchanged",function(){
+    makeWorld();worldState.turn=30;var c=worldState.character;c.name="Silas Morne";
+    worldState.world.location="High Reach";worldState.world.sublocation="The Gilded Rest";worldState.world.region="the Weeping Bog";worldState.world.weather="gray sleet";
+    worldState.npcs.push({name:"Nyla Lorrath",partyMember:true,status:"steady",charSheet:{name:"Nyla Lorrath",cls:"Rogue",level:3,hp:20,maxHp:20,stats:{},abilities:[],spells:[],inventory:[],gender:"F",ancestry:"Human",age:"24",appear:"gaunt"}});
+    worldState.npcs.push({name:"Bruvak Ulvane",partyMember:true,status:"steady",charSheet:{name:"Bruvak Ulvane",cls:"Warrior",level:2,hp:1,maxHp:20,stats:{},abilities:[],spells:[],inventory:[],gender:"M",ancestry:"Human",age:"40",appear:"scarred"}});
+    worldState.transcript=[];
+    /* the stamp going forward (owner ruling 2026-09-09) */
+    logTranscript("gm","Sleet rakes the promenade as you and Nyla shoulder into the inn.","Sleet rakes the promenade. [SCENE_CAST:Nyla Lorrath]");var e=worldState.transcript[worldState.transcript.length-1];
+    if(e.l!=="High Reach"||e.sl!=="The Gilded Rest"||e.w!=="gray sleet"||!e.p||e.p.join("|")!=="Nyla Lorrath|Bruvak Ulvane")return "gm entry not stamped: "+JSON.stringify({l:e.l,sl:e.sl,w:e.w,p:e.p});
+    logTranscript("player","Go in.");var pe=worldState.transcript[worldState.transcript.length-1];if(pe.l!==undefined||pe.w!==undefined||pe.p!==undefined)return "a player entry must carry no stamps";
+    /* a frame from before the stamps existed: no weather unless the prose names it; the party is whoever the prose names */
+    worldState.transcript=[{t:10,r:"gm",x:"Rain hammers the graveyard. Nyla crouches by the open grave while you read the stone.",ck:1000},{t:10,r:"player",x:"Read it."},
+      {t:20,r:"gm",x:"The cistern echoes. Bruvak hauls the chain.",ck:2000,l:"High Reach",sl:"The Alabaster Cistern",w:"still air",p:["Bruvak Ulvane"]},{t:20,r:"player",x:"Help him."},
+      {t:30,r:"gm",x:"The gate.",ck:3000,l:"High Reach",w:"gray sleet",p:["Nyla Lorrath","Bruvak Ulvane"]}];
+    var x10=renderContextForTurn(10);if(!x10||x10.live||x10.turn!==10||x10.ck!==1000||x10.weather!==null||!x10.weatherInProse||x10.location!=="High Reach"||!/open grave/.test(x10.prose))return "t10 context: "+JSON.stringify(x10);
+    var p10=partyForRender(x10).map(function(n){return n.name;});if(p10.join("|")!=="Nyla Lorrath")return "t10 party should be the prose-named companion only: "+JSON.stringify(p10);
+    var x20=renderContextForTurn(20);if(!x20||x20.weather!=="still air"||x20.sublocation!=="The Alabaster Cistern"||x20.location!=="High Reach")return "t20 stamps not read: "+JSON.stringify(x20);
+    worldState.npcs[1].dead=true;var p20=partyForRender(x20).map(function(n){return n.name;});if(p20.join("|")!=="Bruvak Ulvane")return "t20 party must follow the stamp even for a companion dead since: "+JSON.stringify(p20);
+    var x30=renderContextForTurn(30);if(!x30||!x30.live)return "the current turn is the live path: "+JSON.stringify(x30);
+    if(renderContextForTurn(99)!==null)return "a turn with no GM entry must be null";
+    if(weatherInProse("A dry room.")||!weatherInProse("Fog curls under the door."))return "weatherInProse";
+    /* the request: the frame's prose and time ride it, the weather is omitted unless named, the live request is untouched */
+    var w10={location:"High Reach",region:"the Weeping Bog",weather:null};
+    var rq=buildSceneRenderRequest(c,[],w10,{scene:x10.prose,timeText:"Day 1, 10:40 am",sublocation:"the graveyard",weatherInProse:true});
+    if(rq.indexOf("THE SCENE TO PAINT")<0||rq.indexOf("open grave")<0||rq.indexOf("Day 1, 10:40 am")<0||/undefined|null/.test(rq))return "historical request: "+rq.slice(0,600);
+    if(rq.indexOf("Scene: High Reach, the graveyard, the Weeping Bog, Day 1, 10:40 am. ")<0)return "scene line: "+rq.slice(rq.indexOf("Scene:"),rq.indexOf("Scene:")+120);
+    if(rq.indexOf("only as the scene text describes it")<0)return "the weather rule for a prose-named sky is missing";
+    var rq2=buildSceneRenderRequest(c,[],w10,{scene:"A dry room.",timeText:"Day 1, noon",weatherInProse:false});if(rq2.indexOf("paint no weather")<0)return "the no-weather rule is missing";
+    var live=buildSceneRenderRequest(c,[],{location:"X",region:"Y",weather:"mist"});if(/SCENE TO PAINT|scene text describes|paint no weather/.test(live)||live.indexOf("Scene: X, Y, ")<0||live.indexOf(", mist. ")<0)return "the live request changed: "+live.slice(live.indexOf("Scene:"),live.indexOf("Scene:")+80);
+    /* the seams: every GM frame carries the button, the historical writer call sends no history, the image attaches to ITS frame */
+    var shell=__fsForTests.readFileSync(__rootForTests+"/ui-shell.js","utf8"),gs=__fsForTests.readFileSync(__rootForTests+"/game.js","utf8");
+    if(shell.indexOf("frame-render")<0||shell.indexOf("doRender({turn:")<0)return "the per-frame Render button is not wired in addMsg";
+    if(!/callGM\(rp,[^;]*\{noHistory:true[^;]*\}\)/.test(gs))return "the historical writer call must pass noHistory:true (or every button paints the CURRENT scene)";
+    if(gs.indexOf("saveRenderImage(blob,fname,_rt)")<0||!/var _rt=[^;]*ctx[^;]*;/.test(gs))return "the save funnel must stamp the FRAME's turn, not the newest";
+    return true;
+  });
   t("#376 one act-label formatter: actLabel keeps an authored \"Act …\" title as written and prefixes any other; the quest panel compass, the session bar and the GM's skeleton block all use it, so an act titled 'Act 2: The Severing of Bloodlines' reads once on every surface and a bare title still gets its number (byte-identical to before)",function(){
     if(actLabel(2,"Act 2: The Severing of Bloodlines")!=="Act 2: The Severing of Bloodlines"||actLabel(2,"ACT II — Blood")!=="ACT II — Blood"||actLabel(3,"The Gilded Mortuary")!=="Act 3: The Gilded Mortuary"||actLabel(1,"Action Stations")!=="Act 1: Action Stations"||actLabel(1,"")!=="Act 1: ")return "actLabel table";
     makeWorld();worldState.turn=40;worldState.skeleton={premise:"p",acts:[{title:"Act 1: The Hollow",status:"completed",goal:"g",arcs:[]},{title:"Act 2: The Severing of Bloodlines",status:"active",goal:"g2",turningPoint:"tp",arcs:[{title:"The Gilded Mortuary of House Morne",objective:"o",status:"active"}]}]};delete worldState.spineComplete;

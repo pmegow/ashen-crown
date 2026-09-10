@@ -356,6 +356,11 @@ function logTranscript(role,text,raw,taMin,meta){var _bk=!!(meta&&meta.bookkeepi
      .ck is WHEN it was (the display anchor). Entries older than this field simply render with
      no timestamp — the caption degrades to the bare turn number rather than guessing. */
   if(role==="gm"&&typeof clockNow==="function")_e.ck=clockNow();
+  /* #206 (owner ruling 2026-09-09: "stamp both going forward"): where the frame was, what the sky did, who was
+     there — so a past scene can be painted from its own facts instead of today's. l/sl/w only when set; p = the
+     living party's names. Entries older than these fields approximate (renderContextForTurn, game.js). */
+  if(role==="gm"&&!_bk&&worldState.world){if(worldState.world.location)_e.l=worldState.world.location;if(worldState.world.sublocation)_e.sl=worldState.world.sublocation;if(worldState.world.weather)_e.w=worldState.world.weather;
+    if(typeof livingPartyCompanions==="function"){var _pp=livingPartyCompanions().map(function(n){return n.name;});if(_pp.length)_e.p=_pp;}}
   if(role==="gm"&&typeof APP_VERSION!=="undefined")_e.v=APP_VERSION;/* #45b: engine version per turn — "what version was the phone on?" is now answerable from any export */
   if(role==="gm"&&/\[RETCON:/i.test(String(raw||""))){_e.rc=1;
     /* #187④a (v1.618): the tag is TURN-ADDRESSED when its payload ends in |<number> —
