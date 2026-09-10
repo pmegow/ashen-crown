@@ -1131,6 +1131,66 @@ function runEngineTests(R){
     if(!/n=\(typeof maxEntries==="number"&&maxEntries>0\)\?maxEntries:20/.test(boot))return "a non-number entry count must mean the default";
     return true;
   });
+  t("#393 the sub-location left: inside a sub-location, two narrations that read as leaving it (an exit cue or a sibling sub-location named, party sentence, no veto, dialogue stripped) arm subLeavePing; a location tag clears the watch; the nudge names the sub-location and the cue, once; registry wired",function(){
+    makeWorld();worldState.turn=124;worldState.world.location="High Reach";worldState.world.sublocation="The Sapphire Penthouse";
+    memory.map.nodes["High Reach"]={firstVisit:90,visits:2,description:null,parent:null,npcs:[],items:[],size:"small"};
+    memory.map.nodes["High Reach|The Sapphire Penthouse"]={firstVisit:108,visits:1,description:null,parent:"High Reach",npcs:[],items:[]};
+    memory.map.nodes["High Reach|The Gilded Rest"]={firstVisit:105,visits:1,description:null,parent:"High Reach",npcs:[],items:[]};
+    delete worldState.subLeaveWatch;delete worldState.subLeavePing;
+    observeDriftAxes("x","\"If we step out onto the balcony we die,\" Nyla says. You sit by the hearth.");if(worldState.subLeaveWatch)return "dialogue must not count";
+    observeDriftAxes("x","If you stepped out onto the avenue now, the watch would see you.");if(worldState.subLeaveWatch)return "a hypothetical must not count";
+    observeDriftAxes("x","A courier steps out past the doors onto the avenue and is gone.");if(worldState.subLeaveWatch)return "a bystander leaving is not the party leaving";
+    observeDriftAxes("x","You step out past the brass-studded front doors and hit the carriage avenue.");var w=worldState.subLeaveWatch;if(!w||w.count!==1||!/step out|carriage avenue|front doors/.test(w.cue))return "first exit cue not watched: "+JSON.stringify(w);
+    if(worldState.subLeavePing)return "one cue must not ping";
+    worldState.turn=125;observeDriftAxes("x","You cross the frost-rimed causeway toward the chained gate.");if(!worldState.subLeavePing||worldState.subLeavePing.sub!=="The Sapphire Penthouse")return "second cue must ping: "+JSON.stringify(worldState.subLeavePing);
+    var n=buildSubLeaveNudge();if(n.indexOf("SUB-LOCATION LEFT")<0||n.indexOf("The Sapphire Penthouse")<0||n.indexOf("[SUBLOCATION_LEAVE]")<0||n.indexOf("[SUBLOCATION:")<0)return "nudge: "+n.slice(0,300);
+    if(worldState.subLeavePing||buildSubLeaveNudge()!=="")return "the nudge must be one-shot";
+    /* a sibling sub-location named counts as a cue on its own */
+    delete worldState.subLeaveWatch;worldState.turn=126;observeDriftAxes("x","You push through into The Gilded Rest and its warm lobby.");if(!worldState.subLeaveWatch||!/Gilded Rest/.test(worldState.subLeaveWatch.cue))return "a sibling sub-location must be a cue: "+JSON.stringify(worldState.subLeaveWatch);
+    /* a location tag in the same response clears everything */
+    observeDriftAxes("[SUBLOCATION_LEAVE]","You are outside.");if(worldState.subLeaveWatch||worldState.subLeavePing)return "a location tag must clear the watch";
+    worldState.turn=127;observeDriftAxes("x","You step out past the doors onto the avenue.");worldState.turn=128;observeDriftAxes("x","You cross the causeway toward the gate.");if(!worldState.subLeavePing)return "fixture: no ping to clear";
+    observeDriftAxes("[SUBLOCATION:The Chained Gate]","You cross onto the causeway.");if(worldState.subLeavePing||worldState.subLeaveWatch)return "a location tag must clear a PENDING ping (the GM already filed the move)";
+    /* outside any sub-location nothing is watched */
+    worldState.world.sublocation=null;observeDriftAxes("x","You step out past the doors onto the avenue.");if(worldState.subLeaveWatch)return "no sub-location, no watch";
+    if(NOTE_BUILDERS.indexOf(buildSubLeaveNudge)<0||!NOTE_SHAPES.buildSubLeaveNudge||NOTE_LATCH_FIELDS.indexOf("subLeavePing")<0)return "registry not wired";
+    return true;
+  });
+  t("#375 money at stake: the note fires once per MONEY_EVERY window at a sized settlement with coin to lose, drawn from the record, settled by [GOLD:-N], never a tax; silent in combat, unsized, broke, and in a coda unless an antagonist is in the scene; registry wired",function(){
+    makeWorld();worldState.turn=60;var c=worldState.character;c.gold=40;c.inventory=["Weeping willow signet ring","mace"];worldState.world.location="Sandpoint";worldState.world.sublocation=null;
+    memory.map.nodes["Sandpoint"]={firstVisit:1,visits:3,description:null,parent:null,npcs:[],items:[],size:"medium"};
+    memory.keyDecisions=[{turn:50,desc:"Spared the raider captain"},{turn:55,desc:"Burned the toll bridge"}];delete worldState.moneyAsk;delete worldState.spineComplete;worldState.skeleton=null;
+    var n=buildMoneyNote();if(!/MONEY AT STAKE/.test(n)||n.indexOf("[GOLD:-N]")<0||!/never a tax/i.test(n)||n.indexOf("toll bridge")<0||n.indexOf("signet ring")<0||n.indexOf("Sandpoint")<0)return "note: "+n.slice(0,400);
+    if(!worldState.moneyAsk||worldState.moneyAsk.turn!==60)return "latch not set";
+    if(buildMoneyNote()!=="")return "fired twice inside the window";
+    worldState.turn=60+MONEY_EVERY;if(buildMoneyNote()==="")return "did not fire again after the window";
+    delete worldState.moneyAsk;worldState.combat={round:1};if(buildMoneyNote()!=="")return "fired in combat";worldState.combat=null;
+    c.gold=0;if(buildMoneyNote()!=="")return "fired with no coin to lose";c.gold=40;
+    memory.map.nodes["Sandpoint"].size=null;if(buildMoneyNote()!=="")return "fired at an unsized node";memory.map.nodes["Sandpoint"].size="medium";
+    worldState.spineComplete={turn:40};if(buildMoneyNote()!=="")return "fired in a coda with no antagonist present";
+    worldState.npcs.push({name:"Brother Tuck",status:"hunting you with a knife",statusTurn:59,rel:"hostile",met:30,pronouns:"he/him"});memory.npcs["Brother Tuck"]={attitude:"murderous, hunting",knowledge:[],events:[],lastSeenAt:"Sandpoint"};
+    if(!/MONEY AT STAKE/.test(buildMoneyNote()))return "an antagonist in the scene must re-open the ask in a coda";
+    if(NOTE_BUILDERS.indexOf(buildMoneyNote)<0||!NOTE_SHAPES.buildMoneyNote||NOTE_LATCH_FIELDS.indexOf("moneyAsk")<0||NOTE_SHAPES.buildMoneyNote.combat!=="silent")return "registry not wired";
+    return true;
+  });
+  t("#373 after the spine a companion's want may be OFFERED as a quest — only in a coda, only with an anchoring defining moment or story beat within AGENDA_OFFER_ANCHOR_TURNS naming the companion or the want's subject, only with no quest open; the note asks for [QUEST:…|offered], once per want; registry wired",function(){
+    makeWorld();worldState.turn=130;var c=worldState.character;c.coreMemories=[];c.storyBeats=[];worldState.questLog=[];
+    worldState.spineComplete={turn:100};worldState.skeleton={acts:[{title:"A",status:"completed"}]};delete worldState.ended;worldState.combat=null;delete worldState.agendaOfferAsk;
+    worldState.npcs.push({name:"Nyla Lorrath",partyMember:true,status:"steady",charSheet:{name:"Nyla Lorrath",cls:"Rogue",level:3,hp:20,maxHp:20,stats:{},abilities:[],spells:[],inventory:[],agenda:{want:"find her brother in the salt mines of Korr",kind:"peaceful",since:80}}});
+    if(!codaState())return "fixture is not a coda";
+    if(buildAgendaOfferNote()!=="")return "fired with no anchor";
+    c.storyBeats=[{text:"Nyla swore over Aldus's grave she would go south.",turn:60,camp:"X"}];if(buildAgendaOfferNote()!=="")return "an anchor older than the window must not count";
+    c.storyBeats=[{text:"A salt-mine overseer's letter names a Lorrath among the indentured.",turn:120,camp:"X"}];/* names the want's subject, not the companion */
+    var n=buildAgendaOfferNote();if(!/WANT MAY BECOME THE STORY/.test(n)||n.indexOf("Nyla Lorrath")<0||n.indexOf("salt mines")<0||n.indexOf("[QUEST:")<0||n.indexOf("|offered]")<0||n.indexOf("overseer's letter")<0||n.indexOf("Never file it active yourself")<0)return "note: "+n.slice(0,500);
+    if(!worldState.agendaOfferAsk||worldState.agendaOfferAsk.name!=="Nyla Lorrath")return "latch not set";
+    if(buildAgendaOfferNote()!=="")return "asked twice for the same want";
+    var cs=findCompanionChar("Nyla Lorrath");cs.agenda.want="see the sea";c.coreMemories=[{text:"Nyla Lorrath said she had never seen the sea.",turn:128,kind:"gm",who:"Nyla Lorrath"}];if(!/see the sea/.test(buildAgendaOfferNote()))return "a NEW want with its own anchor must be asked";
+    delete worldState.agendaOfferAsk;worldState.questLog=[{title:"Open thread",status:"active",desc:"",objectives:[],started:1}];if(buildAgendaOfferNote()!=="")return "fired with a quest open";worldState.questLog=[];
+    delete worldState.agendaOfferAsk;worldState.skeleton={acts:[{title:"A",status:"active"}]};delete worldState.spineComplete;if(buildAgendaOfferNote()!=="")return "fired outside a coda";worldState.skeleton={acts:[{title:"A",status:"completed"}]};worldState.spineComplete={turn:100};
+    delete worldState.agendaOfferAsk;worldState.combat={round:1};if(buildAgendaOfferNote()!=="")return "fired in combat";worldState.combat=null;
+    if(NOTE_BUILDERS.indexOf(buildAgendaOfferNote)<0||!NOTE_SHAPES.buildAgendaOfferNote||NOTE_LATCH_FIELDS.indexOf("agendaOfferAsk")<0)return "registry not wired";
+    return true;
+  });
   t("#376 one act-label formatter: actLabel keeps an authored \"Act …\" title as written and prefixes any other; the quest panel compass, the session bar and the GM's skeleton block all use it, so an act titled 'Act 2: The Severing of Bloodlines' reads once on every surface and a bare title still gets its number (byte-identical to before)",function(){
     if(actLabel(2,"Act 2: The Severing of Bloodlines")!=="Act 2: The Severing of Bloodlines"||actLabel(2,"ACT II — Blood")!=="ACT II — Blood"||actLabel(3,"The Gilded Mortuary")!=="Act 3: The Gilded Mortuary"||actLabel(1,"Action Stations")!=="Act 1: Action Stations"||actLabel(1,"")!=="Act 1: ")return "actLabel table";
     makeWorld();worldState.turn=40;worldState.skeleton={premise:"p",acts:[{title:"Act 1: The Hollow",status:"completed",goal:"g",arcs:[]},{title:"Act 2: The Severing of Bloodlines",status:"active",goal:"g2",turningPoint:"tp",arcs:[{title:"The Gilded Mortuary of House Morne",objective:"o",status:"active"}]}]};delete worldState.spineComplete;

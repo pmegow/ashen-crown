@@ -125,6 +125,16 @@ var WHISPERS_EVERY=15;
 // many turns after one such act the prompt says "not again this soon"; the record is worldState.companionInitiatives.
 var COMPANION_INITIATIVE_EVERY=12;
 var WHISPERS_CAP=12;
+// #375 (owner ruling 2026-09-08): money at stake — every MONEY_EVERY turns at a sized settlement with coin to lose, the
+// engine lets the fiction put gold at risk (a bribe, a fine, a shakedown, a ruined item), settled through [GOLD:-N];
+// never a tax, upkeep or ledger. Whispers-order cooldown; latch worldState.moneyAsk={node,turn}.
+var MONEY_EVERY=24;
+// #373 (owner ruling 2026-09-07): in a coda, a companion's want may be OFFERED as a quest — only when a defining moment
+// or story beat within this many turns names the companion or the want's subject. Never from left field.
+var AGENDA_OFFER_ANCHOR_TURNS=40;
+// #393: inside a sub-location, this many consecutive narrations that read as LEAVING it (an exit cue or a sibling
+// sub-location named) arm the one-shot SUB-LOCATION LEFT nudge. Two, not one — a step onto the balcony is still the suite.
+var SUBLEAVE_TURNS=2;
 // #319 plot armor (owner ruling 2026-09-03): a load-bearing NPC gets this many refused deaths (staged
 // escapes) before the armor is spent and the author's fallback carries the story.
 var PLOT_ARMOR_ESCAPES=2;
@@ -390,7 +400,7 @@ var PROVIDERS={
   }
 };
 var carMode=false;
-var APP_VERSION="v1.883";
+var APP_VERSION="v1.884";
 // #290: the home page's one-shot blueprint handoff — home.html writes {bp,at} here and navigates to
 // the game; initState (no save) / newGame consume it into _applyBlueprint. ONE name for both sides.
 // #307: the home page's QUICK START handoff — a pre-made hero + a curated blueprint, consumed at boot by

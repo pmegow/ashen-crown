@@ -1782,6 +1782,21 @@ function detectLocationFilingCue(clean){
   }
   return null;
 }
+/* #393: "the prose left the room". Inside a sub-location, a party sentence (no veto, dialogue stripped) that either
+   carries an EXIT cue (out past the doors, onto the avenue, across the causeway…) or NAMES a sibling sub-location of
+   the current world node is a leave cue. Returns the matched snippet or null. Pure over the map. */
+var _SUB_EXIT_RE=/\b(?:step(?:s|ped|ping)?\s+(?:out|outside|onto|off)|walk(?:s|ed|ing)?\s+(?:out|outside|onto)|head(?:s|ed|ing)?\s+(?:out|outside|down\s+to\s+the\s+(?:street|lobby|road))|leav(?:e|es|ing)\s+(?:the\s+)?(?:room|suite|inn|shop|house|hall|chamber|building|tavern|temple|penthouse)|out\s+(?:past|through)\s+the\s+[^.!?]{0,40}\bdoors?\b|(?:onto|along|across|down|up|cross(?:es|ed|ing)?)\s+the\s+(?:[a-z-]+\s+){0,2}(?:street|avenue|road|causeway|promenade|square|bridge|quay|highway|lane|alley|boulevard|courtyard|gate|gates)|out\s+into\s+the\s+(?:street|cold|night|rain|sleet|fog|open|courtyard|yard))\b/i;
+function detectSubLeaveCue(clean){
+  if(!worldState||!worldState.world||!worldState.world.sublocation)return null;
+  var s=String(clean||"").replace(/"[^"]*"/g," ").replace(/\u201c[^\u201d]*\u201d/g," ");if(!s)return null;
+  var sents=s.match(/[^.!?]+[^.!?]*[.!?]*/g)||[s],si,sent,sub=String(worldState.world.sublocation).toLowerCase();
+  var nodes=(memory&&memory.map&&memory.map.nodes)||{},wkey=(typeof locResolve==="function")?locResolve(worldState.world.location):worldState.world.location,ks=Object.keys(nodes),sibs=[],i;
+  for(i=0;i<ks.length;i++){var nd=nodes[ks[i]];if(nd&&nd.parent&&locResolve(nd.parent)===wkey){var leaf=(typeof locDisplayLeaf==="function")?locDisplayLeaf(ks[i]):ks[i];if(String(leaf).toLowerCase()!==sub)sibs.push(leaf);}}
+  for(si=0;si<sents.length;si++){sent=sents[si];if(_LOC_CUE_VETO.test(sent)||!_LOC_CUE_PARTY.test(sent))continue;
+    var m=sent.match(_SUB_EXIT_RE);if(m)return m[0].trim();
+    for(i=0;i<sibs.length;i++){if(new RegExp("\\b"+_driftEsc(sibs[i])+"\\b","i").test(sent))return sibs[i];}}
+  return null;
+}
 function _driftNumber(v){var s=String(v||"").toLowerCase();return /^\d+$/.test(s)?parseInt(s,10):((typeof FUTURE_NUMBER_WORDS!=="undefined"&&FUTURE_NUMBER_WORDS[s])||0);}
 function detectTravelPrice(clean){
   var s=String(clean||"");if(/\b(?:teleport|portal|instant(?:ly)?|magical shortcut)\b/i.test(s))return null;
@@ -1821,6 +1836,12 @@ function observeDriftAxes(raw,clean){
     else if(lw){lw.lastTurn=turn;lw.count=(lw.count||1)+1;}/* P4b: counting related-but-unnamed turns is the FEATURE (the ratified fixture: an entry survives eight untagged turns) — weak cues are killed at the SOURCE by the sentence discipline above */
     if(lw&&lw.count>=LOCATION_FILING_TURNS){worldState.locationFilingPing={place:lw.place,firstTurn:lw.firstTurn,turn:turn};delete worldState.locationFilingWatch;}
   }
+  /* #393: the sub-location axis — a location tag settles it; otherwise two consecutive leave cues arm the nudge */
+  if(hasLoc||!worldState.world||!worldState.world.sublocation){delete worldState.subLeaveWatch;if(hasLoc)delete worldState.subLeavePing;}
+  else{var sc=detectSubLeaveCue(clean),sw=worldState.subLeaveWatch;
+    if(sc){if(!sw||sw.sub!==worldState.world.sublocation)sw=worldState.subLeaveWatch={sub:worldState.world.sublocation,cue:sc,firstTurn:turn,count:1};else{sw.count=(sw.count||1)+1;sw.cue=sc;sw.lastTurn=turn;}
+      if(sw.count>=SUBLEAVE_TURNS){worldState.subLeavePing={sub:sw.sub,cue:sw.cue,turn:turn};delete worldState.subLeaveWatch;}}
+    else if(sw)delete worldState.subLeaveWatch;/* a narration that stays put breaks the streak */}
   if(typeof registerFile==="function")registerFile(clean,turn);/* #355: clerical-register census on the CLEANED narration */
   var price=detectTravelPrice(clean);
   if(price&&price.days>0)worldState.travelPriceWatch={destination:price.destination,expected:price.days*MIN_PER_DAY,startMin:clockNow(),startTurn:turn};

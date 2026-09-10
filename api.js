@@ -547,6 +547,54 @@ function buildWhispersNote(){
   var said=(worldState.whispers||[]).slice(-3).map(function(w){return String(w.text||"").slice(0,160);}).filter(function(s){return !!s;});
   return "[ENGINE NOTE — WHISPERS (not a player action): "+label+" is a place where people talk. Let ONE character in the scene mention what is said about the party — a rumour, a reputation, a name garbled in the telling — in one or two lines, in character, drawn ONLY from these facts: "+(dec.length?"decisions — "+dec.join("; ")+". ":"")+(qs.length?"finished quests — "+qs.join("; ")+". ":"")+(last?"defining moment — "+last+" ":"")+"Rumour distorts: it may exaggerate, blame the wrong person, or get a name wrong, but it never invents an event that did not happen. Emit [WHISPER:one sentence of what is said] so the engine remembers the rumour as rumour. If no one here would have heard anything, say nothing and emit nothing."+(said.length?" Already said, in words or substance — do not repeat: \""+said.join("\" / \"")+"\". A new rumour, or nothing.":"")+"]";
 }
+/* #375 (owner ruling 2026-09-08): MONEY AT STAKE. The world never named a price in a hundred turns; the only outflows
+   were typed by the player. On the whispers shape — sized settlement, latch + MONEY_EVERY, combat-silent — one line lets
+   the fiction put coin at risk, drawn from the record, settled by [GOLD:-N], NEVER a tax, upkeep or ledger (the
+   no-ledgers ruling). In a coda (#366) only when an antagonist is in the scene. No toast: the fiction is the toast. */
+var _ANTAGONIST_RE=/hostil|enem|hunt|vengeful|murder|threat|loath|hate|rival|wants? (?:you|him|her|them) dead|out for blood|sworn against/i;
+function sceneAntagonists(){
+  var man=(typeof buildSceneManifest==="function")?buildSceneManifest():null,names=(man&&man.local)||[],out=[],i;
+  for(i=0;i<names.length;i++){var nm=names[i],n=(typeof wsNpcByName==="function")?wsNpcByName(nm):null,mn=(memory&&memory.npcs&&memory.npcs[nm])||{};if(n&&n.partyMember)continue;
+    if(_ANTAGONIST_RE.test(String((n&&n.status)||""))||_ANTAGONIST_RE.test(String((n&&n.rel)||""))||_ANTAGONIST_RE.test(String(mn.attitude||"")))out.push(nm);}
+  return out;
+}
+function buildMoneyNote(){
+  if(!worldState||worldState.combat||!worldState.world||!worldState.world.location||typeof memory==="undefined"||!memory||!memory.map)return"";
+  var c=worldState.character;if(!c||!(c.gold>0))return"";
+  var key=worldState.world.location;if(typeof locResolve==="function")key=locResolve(key);var node=memory.map.nodes[key];if(!node||!node.size)return"";
+  var every=(typeof MONEY_EVERY==="number")?MONEY_EVERY:24,ma=worldState.moneyAsk;if(ma&&typeof ma.turn==="number"&&worldState.turn-ma.turn<every)return"";
+  var foes=sceneAntagonists();if(typeof codaState==="function"&&codaState()&&!foes.length)return"";
+  var dec=(memory.keyDecisions||[]).slice(-4).map(function(d){return "t"+d.turn+": "+d.desc;}),carry=(c.inventory||[]).slice(0,6).map(function(x){return (typeof _invBase==="function")?_invBase(x):String(x);});
+  var label=(typeof locDisplayLeaf==="function")?locDisplayLeaf(key):key;
+  worldState.moneyAsk={turn:worldState.turn,node:key};
+  return "[ENGINE NOTE \u2014 MONEY AT STAKE (not a player action): the party carries "+c.gold+" gp at "+label+" and nothing has cost them coin in a long while. Let THIS scene put some of it at risk, in the fiction and from the record: a bribe demanded, a fine, a shakedown, a ransom, a debt called in, a ruined thing to replace"+(foes.length?" \u2014 "+foes.join(", ")+" is in the scene and has cause":"")+(dec.length?". What they did lately: "+dec.join("; "):"")+(carry.length?". What they carry: "+carry.join(", "):"")+". Settle it through [GOLD:-N] only if they pay; a refused demand is a scene too. NEVER a tax, upkeep, rent, ledger or bookkeeping \u2014 a price with a face and a reason, once. Never mention this note.]\n";
+}
+/* #373 (owner ruling 2026-09-07): after the spine, a companion's want may become an OFFERED quest \u2014 only in a coda
+   (#366), only with no quest open, only when a defining moment or a story beat within AGENDA_OFFER_ANCHOR_TURNS names the
+   companion or the want's subject (never from left field), once per want. Offered is not active (#191): the player accepts
+   or ignores; the [QUEST:|offered] path already toasts. Never manufactures a want (#347). */
+function _agendaAnchor(cs,want){
+  var c=worldState.character,win=(typeof AGENDA_OFFER_ANCHOR_TURNS==="number")?AGENDA_OFFER_ANCHOR_TURNS:40,now=worldState.turn||0,i,j;
+  var nm=String(cs.name||""),first=nm.split(/\s+/)[0],last=nm.split(/\s+/).slice(-1)[0];
+  var subj=String(want||"").toLowerCase().split(/[^a-z]+/).filter(function(w){return w.length>=5&&!/^(their|there|about|where|which|would|could|should|these|those|being|after|before|again|still|never|every|other)$/.test(w);});
+  var pool=[];(c.coreMemories||[]).forEach(function(m){pool.push(m);});(cs.coreMemories||[]).forEach(function(m){pool.push(m);});(c.storyBeats||[]).forEach(function(b){pool.push(b);});
+  for(i=pool.length-1;i>=0;i--){var m=pool[i];if(!m||typeof m.turn!=="number"||now-m.turn>win)continue;var t=String(m.text||"");
+    var nameHit=(nm&&t.indexOf(nm)>=0)||(first.length>2&&new RegExp("\\b"+first.replace(/[.*+?^${}()|[\]\\]/g,"\\$&")+"\\b").test(t))||(last.length>2&&last!==first&&new RegExp("\\b"+last.replace(/[.*+?^${}()|[\]\\]/g,"\\$&")+"\\b").test(t));
+    var subjHit=false;for(j=0;j<subj.length&&!subjHit;j++)if(new RegExp("\\b"+subj[j].replace(/s$/,"")+"\\w*","i").test(t))subjHit=true;
+    if(nameHit||subjHit)return {text:t,turn:m.turn};}
+  return null;
+}
+function buildAgendaOfferNote(){
+  if(!worldState||worldState.combat||typeof codaState!=="function"||!codaState())return"";
+  var ql=worldState.questLog||[],i;for(i=0;i<ql.length;i++)if(ql[i]&&(ql[i].status==="active"||ql[i].status==="offered"))return"";
+  var party=(typeof livingPartyCompanions==="function")?livingPartyCompanions():[],ask=worldState.agendaOfferAsk;
+  for(i=0;i<party.length;i++){var cs=party[i].charSheet;if(!cs||!cs.agenda||!cs.agenda.want)continue;var want=String(cs.agenda.want);
+    if(ask&&ask.name===cs.name&&ask.want===want)continue;
+    var a=_agendaAnchor(cs,want);if(!a)continue;
+    worldState.agendaOfferAsk={name:cs.name,want:want,turn:worldState.turn};
+    return "[ENGINE NOTE \u2014 A COMPANION'S WANT MAY BECOME THE STORY (not a player action): the spine is told and no quest is open. "+cs.name+" still wants \u201c"+want+"\u201d, and the record ties it to this: \u201c"+a.text.slice(0,200)+"\u201d (t"+a.turn+"). If the scene can carry it, let "+cs.name+" put it to the player in character as an OFFER \u2014 what they ask, and why now \u2014 and emit [QUEST:a short title|offered]. Offered is not accepted: the player takes it up or lets it lie. Never file it active yourself, never invent a want that is not on their sheet, and never mention this note.]\n";}
+  return"";
+}
 // #319: the after-the-fact half — a death the engine refused must become an exit in the NEXT response.
 // One-shot: plotArmorRefuse arms worldState.plotArmorPing; building the note clears it.
 function buildPlotArmorNote(){
@@ -1499,6 +1547,11 @@ var buildPhaseMismatchNudge=oneShotPing("phaseMismatch",{name:"buildPhaseMismatc
 var buildLocationFilingNudge=oneShotPing("locationFilingPing",{name:"buildLocationFilingNudge",text:function(q){
   return "[ENGINE NOTE — LOCATION FILING GAP (not a player action): the story entered or remained inside '"+q.place+"' for several committed turns without a location tag. If this is a new world location, emit [LOCATION:"+q.place+"]; if it is an interior of the current world location, emit [SUBLOCATION:"+q.place+"]. If neither is true, leave location state unchanged. Never acknowledge this check in prose.]";
 }});
+/* #393: the party walked out and the record stayed in the room (The Long Walk t108–t132: the penthouse through the balcony,
+   the causeway and the chained gate). One-shot, armed by the observer after SUBLEAVE_TURNS leave cues. */
+var buildSubLeaveNudge=oneShotPing("subLeavePing",{name:"buildSubLeaveNudge",text:function(q){
+  return "[ENGINE NOTE \u2014 SUB-LOCATION LEFT? (not a player action): the record still places the party inside '"+q.sub+"', but the last narrations read as leaving it (\u201c"+q.cue+"\u201d). If they have left, emit [SUBLOCATION_LEAVE] (open ground in the settlement) or [SUBLOCATION:the place they stand in now] in THIS response. If they are still inside '"+q.sub+"', say so in the prose and emit nothing. Never mention this check.]\n";
+}});
 var buildTravelPriceNudge=oneShotPing("travelPricePing",{name:"buildTravelPriceNudge",text:function(q){
   return "[ENGINE NOTE — TRAVEL TIME GAP (not a player action): the journey to "+q.destination+" was priced in days, but arrival landed after only "+q.elapsed+" clock minutes. If the travel really consumed the stated duration, emit [TIME_ADVANCE:"+q.shortfall+"m] for ONLY the missing shortfall. If the earlier duration was only an estimate, a shortcut occurred, or the route changed, leave the clock unchanged and keep the current fiction. Never auto-correct story text.]";
 }});
@@ -1780,7 +1833,7 @@ function buildArcWallNudge(){
 // per companion) and questLog[].staleNudged (buildQuestStaleNudge — entry-30 ruling 2026-08-29:
 // the NARROW title-keyed snapshot, never questLog wholesale in the flat registry, which would
 // silently revert any future mid-flight quest write and deep-copy the whole log per turn).
-var NOTE_LATCH_FIELDS=["checkWithdrawnPing",/* #391 */"suggestMissPing",/* #344 */"registerPing",/* #355 */"agendaBirth","agendaAnnounce",/* #330 */"hoursAsk",/* #207 ③ */"plotArmorPing",/* #319 */"whisperAsk",/* #317 */"montagePing","wrapUpPing",/* #308 */"recklessPing",/* #305 */"deathScene",/* #301 */"respawnNote",/* #300 */"marketAsk",/* #303 */"arcDriftNudged","arcQuestNudged","arcStaged","arcWallWarned","castAsk","combatStalePing","commitmentPing","consumableChecks","consumableNudged","consumablePending","deadStatusConflicts","deathEvidenceNudged","deathEvidencePing","deityDriftNudged","dupItemPending","futureResolveHints","hpZero","canonContraNudged","canonContradiction","recurringNameNudged","recurringNamePing","identityConflictOverflow","identityConflicts","itemDefAsked","itemDefCandidate","itemMisPing","lastConditionAudit","lastMoodAudit","lastPresenceAudit","lastRelAudit","locDescNudged","locationFilingPing","locationTwinConflicts","mergeConfirmArmed","mergeHintNudged","mpEnded","orphanCombat","personDrift","pendingLocState","pendingMergeHints","pendingReunion","phaseMismatch","playerSplitPing","presencePing","principalNudged","provisionalNudged","reciprocityNudged","reconcileSkip","relAuditDue","relAxisChoices","relAxisReviewFired","relBondChanges","relDowngrades","travelPricePing"];/* #168 W7: relationship decision queues and migrated-review cooldowns are restored when a provider turn fails. */
+var NOTE_LATCH_FIELDS=["subLeavePing",/* #393 */"moneyAsk",/* #375 */"agendaOfferAsk",/* #373 */"checkWithdrawnPing",/* #391 */"suggestMissPing",/* #344 */"registerPing",/* #355 */"agendaBirth","agendaAnnounce",/* #330 */"hoursAsk",/* #207 ③ */"plotArmorPing",/* #319 */"whisperAsk",/* #317 */"montagePing","wrapUpPing",/* #308 */"recklessPing",/* #305 */"deathScene",/* #301 */"respawnNote",/* #300 */"marketAsk",/* #303 */"arcDriftNudged","arcQuestNudged","arcStaged","arcWallWarned","castAsk","combatStalePing","commitmentPing","consumableChecks","consumableNudged","consumablePending","deadStatusConflicts","deathEvidenceNudged","deathEvidencePing","deityDriftNudged","dupItemPending","futureResolveHints","hpZero","canonContraNudged","canonContradiction","recurringNameNudged","recurringNamePing","identityConflictOverflow","identityConflicts","itemDefAsked","itemDefCandidate","itemMisPing","lastConditionAudit","lastMoodAudit","lastPresenceAudit","lastRelAudit","locDescNudged","locationFilingPing","locationTwinConflicts","mergeConfirmArmed","mergeHintNudged","mpEnded","orphanCombat","personDrift","pendingLocState","pendingMergeHints","pendingReunion","phaseMismatch","playerSplitPing","presencePing","principalNudged","provisionalNudged","reciprocityNudged","reconcileSkip","relAuditDue","relAxisChoices","relAxisReviewFired","relBondChanges","relDowngrades","travelPricePing"];/* #168 W7: relationship decision queues and migrated-review cooldowns are restored when a provider turn fails. */
 // #309: nested latches the flat registry cannot name — declared so the shape registry can cite them.
 var NOTE_NESTED_LATCHES=["questLog[].staleNudged","charSheet.splitLoc.audited","charSheet.agenda.lastBeat",/* #330; the agendaAsked latch retired with the recruitment ask (#347) */"conditions[].until","memory.futureEvents[]._asked","memory.futureEvents[]._askPending","sessionLog"];
 function snapshotNoteLatches(){
@@ -1825,7 +1878,7 @@ function restoreNoteLatches(snap){
     for(j=0;j<ql2.length;j++){if(ql2[j]&&ql2[j].title===qr.title){
       if(qr.staleNudged===undefined)delete ql2[j].staleNudged;else ql2[j].staleNudged=qr.staleNudged;}}}
 }
-var NOTE_BUILDERS=[buildDeathSceneNote,/* #301 */buildPlotArmorNote,/* #319 */buildDownedNote,buildRespawnNote,buildRecklessNote,/* #305 */buildRegisterNote,/* #355 */buildSuggestMissNote,/* #344 */buildCheckWithdrawnNote,/* #391 */buildMontageNote,buildWrapUpNote,/* #308 */buildWhispersNote,/* #317 *//* #300: consequence first — nothing outranks a hero at 0 HP */buildArcWallNudge,buildOrphanCombatNudge,buildCombatStaleNudge,buildUndefinedItemNudge,buildQuestEscalation,buildQuestObjectiveNudge,buildQuestStaleNudge,buildSplitAudit,buildReunionNote,buildPresenceAudit,buildStayBehindNudge,buildPlayerSplitNudge,buildDeityDriftNudge,buildReconcileSkipNudge,buildPhaseMismatchNudge,buildLocationFilingNudge,buildTravelPriceNudge,buildCommitmentNudge,buildFutureResolveNudge,buildLocationTwinNudge,buildLocationDescNudge,buildMarketNote,buildHoursNote,/* #207 ③ */buildLocationStateNudge,buildScheduleEscalation,buildExpiredThreadNudge,buildConditionAudit,buildHpZeroNudge,buildReciprocityNudge,buildArcQuestNudge,buildArcStagingNudge,buildPrincipalStageNudge,buildArcDriftNudge,buildRelationshipAxisNudge,buildRelationshipDowngradeNudge,buildRelationshipAudit,buildAgendaBirthNote,buildAgendaAnnounceNote,buildAgendaBeatNote,/* #330: character colour yields to every audit above */buildDeathEvidenceNudge,buildIdentityConflictNudge,buildMergeConfirmNudge,buildProvisionalNudge,buildDupItemNudge,buildItemMisNudge,buildConsumableNudge,buildDeadStatusNudge,buildMpEndNote,buildMoodAudit,buildSayComplianceNudge,buildSceneCastNote,buildPersonDriftNudge,buildCanonContradictionNudge,buildRecurringNameNudge];/* #168 W7: axis decisions precede the legacy downgrade compatibility note. #194: the death-evidence fork note sits BEFORE the conflict nudge (one ask per refusal); the cast ask rides after the SAY compliance sibling. */
+var NOTE_BUILDERS=[buildDeathSceneNote,/* #301 */buildPlotArmorNote,/* #319 */buildDownedNote,buildRespawnNote,buildRecklessNote,/* #305 */buildRegisterNote,/* #355 */buildSuggestMissNote,/* #344 */buildCheckWithdrawnNote,/* #391 */buildSubLeaveNudge,/* #393 */buildMoneyNote,/* #375 */buildAgendaOfferNote,/* #373 */buildMontageNote,buildWrapUpNote,/* #308 */buildWhispersNote,/* #317 *//* #300: consequence first — nothing outranks a hero at 0 HP */buildArcWallNudge,buildOrphanCombatNudge,buildCombatStaleNudge,buildUndefinedItemNudge,buildQuestEscalation,buildQuestObjectiveNudge,buildQuestStaleNudge,buildSplitAudit,buildReunionNote,buildPresenceAudit,buildStayBehindNudge,buildPlayerSplitNudge,buildDeityDriftNudge,buildReconcileSkipNudge,buildPhaseMismatchNudge,buildLocationFilingNudge,buildTravelPriceNudge,buildCommitmentNudge,buildFutureResolveNudge,buildLocationTwinNudge,buildLocationDescNudge,buildMarketNote,buildHoursNote,/* #207 ③ */buildLocationStateNudge,buildScheduleEscalation,buildExpiredThreadNudge,buildConditionAudit,buildHpZeroNudge,buildReciprocityNudge,buildArcQuestNudge,buildArcStagingNudge,buildPrincipalStageNudge,buildArcDriftNudge,buildRelationshipAxisNudge,buildRelationshipDowngradeNudge,buildRelationshipAudit,buildAgendaBirthNote,buildAgendaAnnounceNote,buildAgendaBeatNote,/* #330: character colour yields to every audit above */buildDeathEvidenceNudge,buildIdentityConflictNudge,buildMergeConfirmNudge,buildProvisionalNudge,buildDupItemNudge,buildItemMisNudge,buildConsumableNudge,buildDeadStatusNudge,buildMpEndNote,buildMoodAudit,buildSayComplianceNudge,buildSceneCastNote,buildPersonDriftNudge,buildCanonContradictionNudge,buildRecurringNameNudge];/* #168 W7: axis decisions precede the legacy downgrade compatibility note. #194: the death-evidence fork note sits BEFORE the conflict nudge (one ask per refusal); the cast ask rides after the SAY compliance sibling. */
 // #309: THE SHAPE REGISTRY (owner ruling 2026-09-03 — one-in-one-out was REJECTED after the
 // 49-builder catalog, audits/RECORD_309_note_builder_catalog.md: builders are six shapes, not
 // fungible units). Every builder declares its shape, the latch fields it burns (declared in
@@ -1842,6 +1895,9 @@ var NOTE_SHAPES={
   buildRegisterNote:{shape:"one-shot-ask",latch:["registerPing"],combat:"silent",ack:["none"]},/* #355 */
   buildSuggestMissNote:{shape:"one-shot-ask",latch:["suggestMissPing"],combat:"fires",ack:["SUGGEST"]},/* #344 */
   buildCheckWithdrawnNote:{shape:"one-shot-ask",latch:["checkWithdrawnPing"],combat:"fires",ack:[]},/* #391 */
+  buildSubLeaveNudge:{shape:"one-shot-ask",latch:["subLeavePing"],combat:"silent",ack:["SUBLOCATION","SUBLOCATION_LEAVE","LOCATION"]},/* #393 */
+  buildMoneyNote:{shape:"cooldown-reminder",latch:["moneyAsk"],combat:"silent",ack:["GOLD"]},/* #375 */
+  buildAgendaOfferNote:{shape:"one-shot-ask",latch:["agendaOfferAsk"],combat:"silent",ack:["QUEST"]},/* #373 */
   buildMontageNote:{shape:"one-shot-ask",latch:["montagePing"],combat:"fires",ack:["TIME_ADVANCE"]},
   buildWhispersNote:{shape:"cooldown-reminder",latch:["whisperAsk"],combat:"silent",ack:["WHISPER"]},
   buildWrapUpNote:{shape:"one-shot-ask",latch:["wrapUpPing"],combat:"fires",ack:["none"]},
