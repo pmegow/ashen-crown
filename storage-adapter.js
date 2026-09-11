@@ -438,6 +438,20 @@ var storageAdapter = (function() {
     });
   }
 
+  // #377 (v1.889): the AUTHORITATIVE turn probe — a turn-only read of the STATE row (Astra's server
+  // endpoint GET /api/campaigns/:id/turn → {campaignId, turn}, no-store), distinct from getServerCampaignTurn
+  // whose value comes from the /api/campaigns LIST and is list metadata that can lag the state row. The v1.885
+  // boot-push 409 still fired in the field because the list turn did not match the CAS guard's /api/state turn;
+  // this reads the same turn the guard compares. Returns null on 404 (endpoint not yet deployed) so the boot
+  // push degrades to EXACTLY the pre-probe behaviour — no regression before the server PR ships the route.
+  function getServerStateTurn(id, cb) {
+    cb = cb || function(){};
+    if (!id || !_serverUrl || !_token) { cb(null); return; }
+    _apiJson("/api/campaigns/" + encodeURIComponent(id) + "/turn", "GET", null, function(err, data){
+      cb((!err && data && typeof data.turn === "number") ? data.turn : null);
+    });
+  }
+
   function markPortraitDirty() {
     _portraitDirty = true;
     // #3: bump a version counter so a portrait change propagates cross-device even without a turn advance.
@@ -741,9 +755,9 @@ var storageAdapter = (function() {
        any /api/state GET, and a server that IS ahead leaves the base at -1 so the 409/conflict path runs exactly as before.
        JP0-11's intent (dirty local turns reach the server before its copy can be adopted) is preserved and re-pinned. */
     var _dirtyCamp = (typeof getActiveCampId === "function") ? getActiveCampId() : null;
-    getServerCampaignTurn(_dirtyCamp, function (st) {
+    getServerStateTurn(_dirtyCamp, function (st) {
       var _localTurn = (typeof worldState !== "undefined" && worldState) ? (worldState.turn || 0) : 0;
-      if (typeof st === "number" && st <= _localTurn && _lastAckTurn < 0) _lastAckTurn = st;/* the server is not ahead: this is the base the 409 heal would have found */
+      if (typeof st === "number" && st <= _localTurn && _lastAckTurn < 0) _lastAckTurn = st;/* the server is not ahead: this is the base the 409 heal would have found. null (404 before deploy) leaves base -1 and the 409/heal path runs exactly as it did pre-probe */
     console.info("[storage] unsynced final turns from a previous session (turn " + _dirtyAt + ", page-hide flush was over the keepalive limit) — pushing before any server adopt.");/* #377: the expected path for a large campaign; the FAILED branch below stays a warning */
     _syncNow(false, false, function(err) {
       if (err) console.warn("[storage] the unsynced-turn push FAILED (" + err + ") — the marker stays set and retries at the next launch.");
@@ -1111,6 +1125,7 @@ var storageAdapter = (function() {
     syncNow:               syncNow,
     syncStatus:            syncStatus,
     getServerCampaignTurn: getServerCampaignTurn,
+    getServerStateTurn:    getServerStateTurn,
     resetSyncState:        resetSyncState,
     putCheckpoint:         putCheckpoint,         // #300: the server camp slot
     getCheckpoint:         getCheckpoint,

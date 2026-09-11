@@ -170,9 +170,9 @@ tAsync("a marked campaign PUSHES before the reconcile GET is even issued", funct
       return ok({ worldState: { turn: 999, campId: CAMP, character: { name: "Korrag" }, npcs: [] }, campaignId: CAMP });
     };
     storageAdapter.load(function () {});
-    // #377: the turn PROBE (GET /api/campaigns, metadata only) may precede the push; nothing else may. It adopts nothing.
+    // #377: the AUTHORITATIVE turn probe (GET /api/campaigns/:id/turn, turn only) may precede the push; nothing else may. It adopts nothing.
     if (calls.length !== 1) return "expected the turn probe alone in flight, got " + calls.length + " request(s)";
-    if (calls[0].method !== "GET" || calls[0].url !== "https://unit.test/api/campaigns") return "first request was " + calls[0].method + " " + calls[0].url + " — only the metadata probe may precede the push";
+    if (calls[0].method !== "GET" || calls[0].url !== "https://unit.test/api/campaigns/" + CAMP + "/turn") return "first request was " + calls[0].method + " " + calls[0].url + " — only the turn probe may precede the push";
     if (worldState.turn !== 412) return "the probe touched worldState";
     return settle().then(function () {
       if (!postSeen) return "no push fired";
@@ -253,7 +253,7 @@ tAsync("#377 the boot push's turn probe seeds the CAS base when the server is no
     calls.length = 0;
     responder = function (url, opts) {
       if ((opts.method || "GET") === "POST") return ok({});
-      if (url === "https://unit.test/api/campaigns") return ok([{ id: CAMP, turn: 80 }]);
+      if (url === "https://unit.test/api/campaigns/" + CAMP + "/turn") return ok({ campaignId: CAMP, turn: 80 });
       return ok({ worldState: { turn: 80, campId: CAMP, character: { name: "Korrag" }, npcs: [] }, campaignId: CAMP });
     };
     storageAdapter.load(function () {});
@@ -268,7 +268,7 @@ tAsync("#377 the boot push's turn probe seeds the CAS base when the server is no
         calls.length = 0;
         responder = function (url, opts) {
           if ((opts.method || "GET") === "POST") return ok({});
-          if (url === "https://unit.test/api/campaigns") return ok([{ id: CAMP, turn: 999 }]);
+          if (url === "https://unit.test/api/campaigns/" + CAMP + "/turn") return ok({ campaignId: CAMP, turn: 999 });
           return ok({ worldState: { turn: 80, campId: CAMP, character: { name: "Korrag" }, npcs: [] }, campaignId: CAMP });
         };
         storageAdapter.load(function () {});
