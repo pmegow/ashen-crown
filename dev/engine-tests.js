@@ -16905,7 +16905,7 @@ t("genderLabel: F→Female, NB→Non-binary, else Male (incl. unset)",function()
     ws.spineComplete={turn:70};row=stakesRow();if(row.level!=='ok'||row.detail.indexOf('coda: yes')<0||row.hint)return 'coda: '+JSON.stringify(row);
     ws.skeleton={acts:[{status:'active'}]};row=stakesRow();if(row.level!=='warn'||row.detail.indexOf('coda: no')<0)return 'active act: '+JSON.stringify(row);
     delete ws.spineComplete;ws.skeleton.acts[0].status='completed';row=stakesRow();if(row.level!=='ok'||row.detail.indexOf('coda: yes')<0)return 'derived coda: '+JSON.stringify(row);
-    ws.ended=true;row=stakesRow();if(row.level!=='warn')return 'ended campaign counted as coda';
+    ws.ended={turn:100,cause:"the tale is told"};row=stakesRow();if(row.level!=='na'||row.detail.indexOf('campaign ended (t100)')<0||/coda:/.test(row.detail))return 'a finished campaign must read as ended, never as a quiet stretch to watch (#374b): '+JSON.stringify(row);
     delete ws.ended;ws.skeleton=null;ws.tagLog[20]={t:81,tags:['HP'],m:['Took 1 damage']};row=stakesRow();if(row.level!=='ok'||row.detail.indexOf('19 turns')<0)return '19-turn boundary: '+JSON.stringify(row);
     stakesWorld(100,2);row=stakesRow();return row.level==='na'&&!row.hint?true:'young: '+JSON.stringify(row);
   });

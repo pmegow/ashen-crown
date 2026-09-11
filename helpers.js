@@ -2082,9 +2082,12 @@ function healthIndicators(ws,mem,withGrowth){
   var dr=diceOutcomeRatio(ws);
   if(dr.filed<3)push("dice","Rolled outcomes","na","too few filed rolls to judge ("+dr.filed+")");
   else push("dice","Rolled outcomes",(dr.failures===0&&dr.filed>=8)?"warn":"ok",dr.successes+" of the last "+dr.filed+" filed rolls succeeded"+(dr.failures===0?" — not one failure on record":""));
-  var riskRead=turnsSinceRisk(ws),inCoda=codaState();
-  push("stakes","At risk",stakesFiledTurns(ws)<3?"na":(inCoda||riskRead.turns<20?"ok":"warn"),
-    riskRead.turns+(riskRead.capped?"+":"")+" turns since recorded risk"+(riskRead.kind?" ("+riskRead.kind+")":" — retained record only")+"; coda: "+(inCoda?"yes":"no"));
+  var riskRead=turnsSinceRisk(ws),inCoda=codaState(),ended=!!(ws&&ws.ended);
+  /* #374b (owner, the finished Long Walk read "38 turns since recorded risk; coda: no — WATCH"): a finished campaign is
+     not a coda by the predicate (the campaign is closed), so the ending read as a suspicious quiet stretch. A story that
+     is over has nothing to watch — it is its own reading, never a warning. */
+  push("stakes","At risk",ended?"na":(stakesFiledTurns(ws)<3?"na":(inCoda||riskRead.turns<20?"ok":"warn")),
+    riskRead.turns+(riskRead.capped?"+":"")+" turns since recorded risk"+(riskRead.kind?" ("+riskRead.kind+")":" — retained record only")+"; "+(ended?"campaign ended (t"+(ws.ended.turn||ws.turn||0)+")":"coda: "+(inCoda?"yes":"no")));
   var HINTS={
     rag:{bad:"Past scenes aren't reaching the GM — memory questions get invented answers. Submit a report if this stays red.",
          warn:"Past scenes aren't reaching the GM lately. Watch it — submit a report if it goes red."},
