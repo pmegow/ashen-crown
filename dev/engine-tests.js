@@ -1332,7 +1332,7 @@ function runEngineTests(R){
     if(v1.indexOf("Wearing: shield | Outfit (t113): nothing — armor and road clothes out for laundry")<0)return "player Wearing line missing: "+v1.slice(v1.indexOf("Inventory:")-20,v1.indexOf("Inventory:")+400);
     if(v1.indexOf("Wearing: dagger | Outfit (t113): a borrowed swan-down robe")<0)return "companion Wearing line missing";
     applyMuts("[ITEM_LOST:shield][COMPANION_ITEM_LOST:Nyla Lorrath|dagger]");if(c.worn.length!==0||cs.worn.length!==0)return "ITEM_LOST did not prune worn: "+JSON.stringify([c.worn,cs.worn]);
-    var v2=buildSysPrompt().volatile;if(v2.indexOf("Wearing: nothing | Outfit (t113)")<0)return "empty worn with an outfit should read 'Wearing: nothing': "+v2.slice(v2.indexOf("Wearing"),v2.indexOf("Wearing")+80);
+    var v2=buildSysPrompt().volatile;if(v2.indexOf("Wearing: no gear | Outfit (t113)")<0)return "empty worn with an outfit should read 'Wearing: no gear' (never 'nothing' — that reads as naked): "+v2.slice(v2.indexOf("Wearing"),v2.indexOf("Wearing")+80);
     applyMuts("[ITEM_GAINED:iron ring][WORN:Silas Morne|iron ring|on]");if(c.worn.join("|")!=="iron ring")return "gain-then-wear in one response failed: "+JSON.stringify(c.worn);applyMuts("[ITEM_RENAMED:iron ring|ring of the drowned]");if(c.worn.join("|")!=="ring of the drowned")return "rename did not follow into worn: "+JSON.stringify(c.worn);
     delete c.worn;delete c.outfit;delete cs.worn;delete cs.outfit;c.inventory=["mace","scale armor","shield","holy symbol"];cs.inventory=["dagger","stolen breeches"];
     if(buildSysPrompt().volatile!==v0)return "clearing attire did not restore the byte-identical prompt";

@@ -2754,7 +2754,7 @@ function outfitSet(cs,text,turn){if(!cs)return null;var t=String(text||"").repla
 function isWorn(cs,item){return !!(cs&&cs.worn&&_wornIdx(cs.worn,item)>=0);}
 // The ONE prompt/sheet/render line. "" when nothing was ever set — the prompt stays byte-identical for every
 // campaign that never touches attire (engine-tested). Worn empty but an outfit on file reads "Wearing: nothing".
-function attireLine(cs){if(!cs)return "";var w=(cs.worn||[]).filter(function(x){return !!x;}),o=cs.outfit&&cs.outfit.text?cs.outfit:null;if(!w.length&&!o)return "";return "Wearing: "+(w.length?w.join(", "):"nothing")+(o?" | Outfit (t"+(o.turn||0)+"): "+o.text:"");}
+function attireLine(cs){if(!cs)return "";var w=(cs.worn||[]).filter(function(x){return !!x;}),o=cs.outfit&&cs.outfit.text?cs.outfit:null;if(!w.length&&!o)return "";return "Wearing: "+(w.length?w.join(", "):"no gear")+(o?" | Outfit (t"+(o.turn||0)+"): "+o.text:"");/* #388b (owner, 2026-09-10: "Wearing: nothing" read as naked — the outfit half is the clothes) */}
 function attireRenderText(cs){if(!cs)return "";var w=(cs.worn||[]).filter(function(x){return !!x;}),o=cs.outfit&&cs.outfit.text?cs.outfit.text:"";if(!w.length&&!o)return "";return "currently wearing: "+(w.length?w.join(", "):"no gear")+(o?"; "+o:"");}
 // P14: a quantity baked into an item TAG ("Rope x3") means N of the base item, not one item
 // literally named "Rope x3" — without this, gaining "Rope x3" onto an existing "Rope" stack
