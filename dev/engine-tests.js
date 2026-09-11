@@ -484,8 +484,13 @@ function runEngineTests(R){
     makeWorld();worldState.turn=40;worldState.world.location="Sandpoint";
     memory.map.nodes["Sandpoint"]={firstVisit:1,visits:3,description:null,parent:null,npcs:[],items:[],size:"medium"};
     memory.keyDecisions=[{turn:30,desc:"Spared the raider captain"},{turn:35,desc:"Burned the toll bridge"}];memory.quests={"The Bell Below":{status:"completed",desc:"Rang it"}};
+    /* #396: a whisper needs a source who has been elsewhere — a companion at the player's side is not one */
+    worldState.npcs.push({name:"Daeris",partyMember:true,status:"steady",charSheet:{name:"Daeris",cls:"Cleric",level:2,hp:10,maxHp:10,stats:{},abilities:[],spells:[],inventory:[]}});memory.npcs["Daeris"]={attitude:"",knowledge:[],events:[],lastSeenAt:"Sandpoint"};
+    if(buildWhispersNote()!==""||worldState.whisperAsk)return "a scene with only party members must not ask (and must not spend the window)";
+    worldState.pendingReunion={names:["Daeris"],node:"Sandpoint",turn:40};var nr=buildWhispersNote();if(!/WHISPERS/.test(nr)||nr.indexOf("Daeris")<0)return "a companion who just rejoined is a source: "+nr.slice(0,200);delete worldState.pendingReunion;delete worldState.whisperAsk;
+    worldState.npcs.push({name:"Old Maud",status:"",statusTurn:0,rel:"neutral",met:1,pronouns:"she/her"});memory.npcs["Old Maud"]={attitude:"",knowledge:[],events:[],lastSeenAt:"Sandpoint"};
     var n=buildWhispersNote();
-    if(!/WHISPERS/.test(n)||!/toll bridge/.test(n)||!/Bell Below/.test(n)||!/\[WHISPER:/.test(n))return "note: "+n;
+    if(!/WHISPERS/.test(n)||!/toll bridge/.test(n)||!/Bell Below/.test(n)||!/\[WHISPER:/.test(n)||n.indexOf("Old Maud")<0||!/NEVER a companion/.test(n))return "note: "+n;
     if(buildWhispersNote()!=="")return "fired twice inside the window";
     worldState.turn+=WHISPERS_EVERY;if(buildWhispersNote()==="")return "did not re-fire after the window";
     worldState.combat={round:1,engaged:null,foes:[{name:"Rat",hp:1,maxHp:1}]};worldState.turn+=WHISPERS_EVERY;if(buildWhispersNote()!=="")return "fired in combat";worldState.combat=null;
@@ -1271,7 +1276,7 @@ function runEngineTests(R){
     return itemProg({bible:{"a":{category:"weapons"},"b":{category:"armor"},"c":{category:"weapons"}}})==="3 entries · 2 categories"?true:"item progress text";
   });
   t("#384 the whispers note carries the last three rumours already served so the GM cannot re-serve one; an empty ring leaves the note byte-identical",function(){
-    makeWorld();worldState.turn=40;worldState.world.location="High Reach";memory.map.nodes["High Reach"]={size:"medium",visits:3};memory.keyDecisions=[{turn:12,desc:"Smashed the Mortuary angel"}];delete worldState.whisperAsk;worldState.whispers=[];
+    makeWorld();worldState.turn=40;worldState.world.location="High Reach";memory.map.nodes["High Reach"]={size:"medium",visits:3};memory.keyDecisions=[{turn:12,desc:"Smashed the Mortuary angel"}];delete worldState.whisperAsk;worldState.whispers=[];worldState.npcs.push({name:"Galindel Ashvane",status:"",statusTurn:0,rel:"neutral",met:1,pronouns:"he/him"});memory.npcs["Galindel Ashvane"]={attitude:"",knowledge:[],events:[],lastSeenAt:"High Reach"};/* #396: a source in the scene */
     var bare=buildWhispersNote();if(!bare||/Already said/.test(bare))return "empty ring must not add the clause: "+bare;
     delete worldState.whisperAsk;worldState.whispers=[{text:"one",turn:1},{text:"Word is that a pale ghost-child with a fluted mace has been smashing up bone-binders.",turn:19},{text:"a bog-witch stripped a tax clerk",turn:34},{text:"the Morne nursery ghost rose",turn:49}];
     var n=buildWhispersNote();if(!n||n.indexOf("Already said, in words or substance")<0)return "clause missing: "+n;
@@ -15556,6 +15561,7 @@ t("genderLabel: F→Female, NB→Non-binary, else Male (incl. unset)",function()
     makeWorld();worldState.turn=40;worldState.world.location="Sandpoint";delete worldState.whisperAsk;
     memory.map.nodes["Sandpoint"]={firstVisit:1,visits:3,description:null,parent:null,npcs:[],items:[],size:"medium"};
     memory.keyDecisions=[{turn:30,desc:"Spared the raider captain"}];memory.quests={};
+    worldState.npcs.push({name:"Old Maud",status:"",statusTurn:0,rel:"neutral",met:1,pronouns:"she/her"});memory.npcs["Old Maud"]={attitude:"",knowledge:[],events:[],lastSeenAt:"Sandpoint"};/* #396: a source in the scene */
     worldState.reconcileSkip={label:"dawn",turn:39,delta:540};
     if(buildWhispersNote()!==""||worldState.whisperAsk)return "whispers must yield while reconcileSkip is armed";
     delete worldState.reconcileSkip;if(!/WHISPERS/.test(buildWhispersNote()))return "whispers must fire again once the repair lands";

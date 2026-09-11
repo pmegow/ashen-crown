@@ -541,11 +541,19 @@ function buildWhispersNote(){
   var qs=[],qk=Object.keys(memory.quests||{}),i;for(i=qk.length-1;i>=0&&qs.length<3;i--){var q=memory.quests[qk[i]];if(q&&(q.status==="completed"||q.status==="failed"))qs.push(qk[i]+" ("+q.status+")");}
   var cm=(worldState.character&&worldState.character.coreMemories)||[],last=cm.length?cm[cm.length-1].text:"";
   if(!dec.length&&!qs.length&&!last)return"";
+  /* #396 (owner, 2026-09-10: "you've been with me the whole time, where are you getting 'word on the street'"): a whisper needs a
+     SOURCE who has been elsewhere — a non-party character in the scene, or a party member who rejoined this turn or last
+     (pendingReunion, stamped by the fold). A companion at the player's side has heard nothing the player has not. No source,
+     no ask and no latch: the window stays open for the next scene with someone in it. */
+  var _wsrc=[],_wman=(typeof buildSceneManifest==="function")?buildSceneManifest():null,_wi;
+  var _wloc=(_wman&&_wman.local)||[];for(_wi=0;_wi<_wloc.length;_wi++){var _wn=(typeof wsNpcByName==="function")?wsNpcByName(_wloc[_wi]):null;if(_wn&&!_wn.partyMember&&!_wn.dead&&_wsrc.indexOf(_wn.name)<0)_wsrc.push(_wn.name);}
+  var _wre=worldState.pendingReunion;if(_wre&&_wre.names instanceof Array&&typeof _wre.turn==="number"&&worldState.turn-_wre.turn<=1)for(_wi=0;_wi<_wre.names.length;_wi++)if(_wsrc.indexOf(_wre.names[_wi])<0)_wsrc.push(_wre.names[_wi]);
+  if(!_wsrc.length)return"";
   worldState.whisperAsk={turn:worldState.turn,node:key};
   var label=(typeof locDisplayLeaf==="function")?locDisplayLeaf(key):key;
   /* #384: the last three rumours already served ride the note so the GM cannot re-serve one (The Long Walk t64 repeated t19 verbatim) */
   var said=(worldState.whispers||[]).slice(-3).map(function(w){return String(w.text||"").slice(0,160);}).filter(function(s){return !!s;});
-  return "[ENGINE NOTE — WHISPERS (not a player action): "+label+" is a place where people talk. Let ONE character in the scene mention what is said about the party — a rumour, a reputation, a name garbled in the telling — in one or two lines, in character, drawn ONLY from these facts: "+(dec.length?"decisions — "+dec.join("; ")+". ":"")+(qs.length?"finished quests — "+qs.join("; ")+". ":"")+(last?"defining moment — "+last+" ":"")+"Rumour distorts: it may exaggerate, blame the wrong person, or get a name wrong, but it never invents an event that did not happen. Emit [WHISPER:one sentence of what is said] so the engine remembers the rumour as rumour. If no one here would have heard anything, say nothing and emit nothing."+(said.length?" Already said, in words or substance — do not repeat: \""+said.join("\" / \"")+"\". A new rumour, or nothing.":"")+"]";
+  return "[ENGINE NOTE — WHISPERS (not a player action): "+label+" is a place where people talk. Let ONE of these mention what is said about the party — "+_wsrc.join(" or ")+" (someone who has been elsewhere; NEVER a companion who has been at the player's side, they have heard nothing the player has not) — a rumour, a reputation, a name garbled in the telling — in one or two lines, in character, drawn ONLY from these facts: "+(dec.length?"decisions — "+dec.join("; ")+". ":"")+(qs.length?"finished quests — "+qs.join("; ")+". ":"")+(last?"defining moment — "+last+" ":"")+"Rumour distorts: it may exaggerate, blame the wrong person, or get a name wrong, but it never invents an event that did not happen. Emit [WHISPER:one sentence of what is said] so the engine remembers the rumour as rumour. If no one here would have heard anything, say nothing and emit nothing."+(said.length?" Already said, in words or substance — do not repeat: \""+said.join("\" / \"")+"\". A new rumour, or nothing.":"")+"]";
 }
 /* #375 (owner ruling 2026-09-08): MONEY AT STAKE. The world never named a price in a hundred turns; the only outflows
    were typed by the player. On the whispers shape — sized settlement, latch + MONEY_EVERY, combat-silent — one line lets
